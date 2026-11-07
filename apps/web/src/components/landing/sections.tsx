@@ -256,7 +256,7 @@ export function RolesDetailed({ l, lang }: { l: L; lang: Locale }) {
 
 // One real photo per agent (Unsplash licence), in the order of the agents list.
 const AGENT_PHOTOS = [
-  "finance",
+  "finance-desk",
   "strategy",
   "legal",
   "cyber",
