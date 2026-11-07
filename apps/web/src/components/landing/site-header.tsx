@@ -6,6 +6,7 @@ import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 
 import { Brand } from "./brand";
+import { NavLinks } from "./nav-links";
 
 export function SiteHeader({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   const links = [
@@ -19,17 +20,19 @@ export function SiteHeader({ dict, lang }: { dict: Dictionary; lang: Locale }) {
       <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
         <Brand href={`/${lang}`} label={dict.nav.home} />
 
-        <nav aria-label={dict.nav.menu} className="hidden items-center gap-8 text-sm text-muted lg:flex">
-          {links.map((l) => (
-            <Link key={l.href} href={l.href} className="transition-colors hover:text-ink">
-              {l.label}
-            </Link>
-          ))}
+        <nav
+          aria-label={dict.nav.menu}
+          className="hidden items-center gap-8 text-sm text-muted lg:flex"
+        >
+          <NavLinks links={links} home={`/${lang}`} variant="desktop" />
         </nav>
 
         <div className="hidden items-center gap-4 lg:flex">
           <LocaleSwitcher current={lang} label={dict.nav.language} />
-          <Link href={`/${lang}/login`} className="text-sm text-muted transition-colors hover:text-ink">
+          <Link
+            href={`/${lang}/login`}
+            className="text-sm text-muted transition-colors hover:text-ink"
+          >
             {dict.nav.login}
           </Link>
           <Link
@@ -51,15 +54,7 @@ export function SiteHeader({ dict, lang }: { dict: Dictionary; lang: Locale }) {
           </summary>
           <div className="absolute right-0 top-14 w-[min(20rem,calc(100vw-2rem))] rounded-2xl border border-line bg-abyss p-5 shadow-2xl shadow-black/50">
             <nav aria-label={dict.nav.menu} className="flex flex-col gap-1">
-              {links.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  className="rounded-lg px-3 py-3 text-ink transition-colors hover:bg-white/5"
-                >
-                  {l.label}
-                </Link>
-              ))}
+              <NavLinks links={links} home={`/${lang}`} variant="mobile" />
               <Link
                 href={`/${lang}/login`}
                 className="rounded-lg px-3 py-3 text-ink transition-colors hover:bg-white/5"
