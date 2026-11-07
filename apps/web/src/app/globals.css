@@ -160,7 +160,7 @@ body {
   animation: dg-dash 1.8s linear infinite;
 }
 
-/* Owl emblem: hidden until its flight starts; revealed anyway if scripts never run. */
+/* Owl emblem: hidden until its arrival starts; revealed anyway if scripts never run. */
 @keyframes owl-reveal {
   to {
     opacity: 1;

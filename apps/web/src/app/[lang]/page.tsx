@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AnalysisFlow } from "@/components/landing/analysis-flow";
-import { OwlFlight } from "@/components/landing/owl-flight";
+import { OwlArrival } from "@/components/landing/owl-arrival";
 import { RiskDossier } from "@/components/landing/risk-dossier";
 import {
   container,
@@ -68,7 +68,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
           {/* Signature: the owl keeps watch over a real decision file. */}
           <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
             <div className="relative mx-auto -mb-12 w-[70%] max-w-[400px] sm:-mb-20">
-              <OwlFlight sizes="(min-width: 1024px) 400px, 70vw" />
+              <OwlArrival sizes="(min-width: 1024px) 400px, 70vw" />
             </div>
             <div className="relative">
               <RiskDossier d={L.dossier} />
