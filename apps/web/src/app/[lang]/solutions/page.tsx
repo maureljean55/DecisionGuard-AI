@@ -15,7 +15,6 @@ import { notFound } from "next/navigation";
 
 import {
   container,
-  CtaBand,
   PageShell,
   RolesDetailed,
   SectionTitle,
@@ -218,8 +217,6 @@ export default async function Page({ params }: PageProps<"/[lang]/solutions">) {
           </div>
         </div>
       </section>
-
-      <CtaBand l={L} lang={lang} />
     </PageShell>
   );
 }
