@@ -13,7 +13,6 @@ export function SiteHeader({ dict, lang }: { dict: Dictionary; lang: Locale }) {
     { href: `/${lang}/solutions`, label: dict.nav.roles },
     { href: `/${lang}/methode`, label: dict.nav.method },
     { href: `/${lang}/agents`, label: dict.nav.agents },
-    { href: `/${lang}/securite`, label: dict.nav.security },
   ];
 
   return (
