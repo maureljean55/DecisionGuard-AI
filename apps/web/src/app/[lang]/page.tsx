@@ -10,9 +10,7 @@ import {
   CtaBand,
   PageShell,
   SectionHead,
-  MoreLink,
-  SectionTitle,
-  SecurityCards,
+  SecurityBand,
 } from "@/components/landing/sections";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -110,19 +108,12 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         aria-labelledby="security-title"
         className="border-t border-line"
       >
-        <div
-          className={`${container} grid gap-10 py-16 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-14 lg:py-20`}
-        >
-          <div className="lg:pt-2">
-            <SectionTitle id="security-title">{H.securityTitle}</SectionTitle>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
-              {H.securityIntro}
-            </p>
-            <div className="mt-6">
-              <MoreLink href={`/${lang}/securite`}>{H.securityMore}</MoreLink>
-            </div>
-          </div>
-          <SecurityCards l={L} />
+        <div className={`${container} py-12 lg:py-14`}>
+          <SecurityBand
+            l={L}
+            title={H.securityTitle}
+            more={{ href: `/${lang}/securite`, label: H.securityMore }}
+          />
         </div>
       </section>
 

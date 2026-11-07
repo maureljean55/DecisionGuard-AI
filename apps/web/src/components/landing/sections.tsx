@@ -286,26 +286,57 @@ export function EpistemicList({ l }: { l: L }) {
 
 // ------------------------------------------------------------------ security
 
-export function SecurityStrip({ l }: { l: L }) {
+export function SecurityBand({
+  l,
+  title,
+  more,
+}: {
+  l: L;
+  title: string;
+  more: { href: string; label: string };
+}) {
   return (
-    <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line lg:grid-cols-4">
-      {l.security.items.map((s, idx) => {
-        const Icon = SECURITY_ICONS[idx];
-        return (
-          <li
-            key={s.title}
-            className="flex items-center gap-3 bg-night px-4 py-4 text-sm font-medium text-ink sm:px-5"
+    <div className="rounded-2xl bg-gradient-to-r from-teal/50 via-iris/40 to-violet/50 p-px">
+      <div className="grid gap-6 rounded-[15px] bg-abyss px-5 py-6 sm:px-7 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] lg:items-center lg:gap-8 lg:py-7">
+        <div>
+          <h2
+            id="security-title"
+            className="font-display text-[1.65rem] font-medium leading-[1.1] text-ink"
           >
-            <Icon className="size-4 shrink-0 text-teal" aria-hidden />
-            {s.title}
-          </li>
-        );
-      })}
-    </ul>
+            {title}
+          </h2>
+          <div className="mt-3">
+            <MoreLink href={more.href}>{more.label}</MoreLink>
+          </div>
+        </div>
+        <ul className="grid grid-cols-2 gap-y-5 lg:grid-cols-4 lg:gap-y-0 lg:divide-x lg:divide-line">
+          {l.security.items.map((s, idx) => {
+            const Icon = SECURITY_ICONS[idx];
+            return (
+              <li
+                key={s.title}
+                className="flex items-start gap-3 pr-3 lg:px-5 lg:first:pl-0"
+              >
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-teal/30 bg-teal/10">
+                  <Icon className="size-4 text-teal" aria-hidden />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold leading-snug text-ink">
+                    {s.title}
+                  </p>
+                  <p className="mt-1 font-mono text-[0.64rem] leading-snug text-teal/85">
+                    {s.tag}
+                  </p>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
   );
 }
 
-/** Home version: four cards, each with a short explanation and a factual proof tag. */
 export function SecurityCards({ l }: { l: L }) {
   return (
     <ul className="grid gap-4 sm:grid-cols-2">
