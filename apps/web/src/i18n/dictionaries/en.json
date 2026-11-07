@@ -15,7 +15,8 @@
     "menu": "Menu",
     "cta": "Request pilot access",
     "home": "DecisionGuard AI home",
-    "roles": "Who it's for"
+    "roles": "Who it's for",
+    "homeLink": "Home"
   },
   "status": {
     "label": "System status",

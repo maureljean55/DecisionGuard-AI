@@ -15,7 +15,8 @@
     "menu": "Menu",
     "cta": "Demander un accès pilote",
     "home": "Accueil DecisionGuard AI",
-    "roles": "Pour qui"
+    "roles": "Pour qui",
+    "homeLink": "Accueil"
   },
   "status": {
     "label": "État du système",
