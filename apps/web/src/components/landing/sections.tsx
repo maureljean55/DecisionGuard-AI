@@ -175,7 +175,7 @@ export function RolesCompact({ l, lang }: { l: L; lang: Locale }) {
 }
 
 const ROLE_ICONS = [Building2, Landmark, ServerCog];
-const ROLE_PHOTOS = ["leadership", "finance", "it"];
+const ROLE_PHOTOS = ["leader-suit", "finance-tablet", "it-screens"];
 
 export function RolesDetailed({ l, lang }: { l: L; lang: Locale }) {
   const R = l.roles;
