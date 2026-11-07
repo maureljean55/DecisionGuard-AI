@@ -10,7 +10,7 @@
     "language": "Langue",
     "register": "Créer un compte",
     "method": "Méthode",
-    "agents": "Les agents",
+    "agents": "Agents",
     "security": "Sécurité",
     "menu": "Menu",
     "cta": "Demander un accès pilote",
@@ -162,7 +162,7 @@
         "fx": "Parité fixe XAF/EUR"
       },
       "seal": "Vérifié par l'agent d'audit",
-      "sealNote": "3 hypothèses à confirmer avant décision"
+      "sealNote": "2 hypothèses à confirmer avant décision"
     },
     "agents": {
       "title": "Huit agents, un seul dossier.",
@@ -351,6 +351,38 @@
       "report": "Votre rapport",
       "reportNote": "Vous décidez",
       "srSummary": "Votre décision est analysée en parallèle par sept agents : finance, stratégie, juridique, cybersécurité, équipes, opérations et scénarios. Leurs risques sont notés par le moteur de calcul (probabilité × impact), puis contrôlés par l'auditeur, qui renvoie aux agents tout ce qui n'est pas étayé. Le rapport final vous est remis : la décision reste la vôtre."
+    },
+    "home": {
+      "rolesTitle": "Pour qui ?",
+      "rolesMore": "Voir les cas d'usage",
+      "flowTitle": "Comment ça marche",
+      "flowMore": "Voir la méthode complète",
+      "agentsMore": "Découvrir les 8 agents",
+      "securityTitle": "Vos décisions restent les vôtres.",
+      "securityMore": "En savoir plus sur la sécurité"
+    }
+  },
+  "pages": {
+    "back": "Accueil",
+    "solutions": {
+      "meta": "Pour qui · DecisionGuard AI",
+      "title": "Une même décision, trois façons de la regarder.",
+      "intro": "Les risques qui inquiètent un directeur général ne sont pas ceux qui empêchent un DAF de dormir. DecisionGuard part de votre rôle."
+    },
+    "method": {
+      "meta": "Méthode · DecisionGuard AI",
+      "title": "Du premier brouillon au rapport que vous signez.",
+      "intro": "Six étapes, toujours les mêmes. Les agents analysent, le moteur calcule, l'auditeur vérifie, et vous décidez."
+    },
+    "agents": {
+      "meta": "Les agents · DecisionGuard AI",
+      "title": "Huit agents, un seul dossier.",
+      "intro": "Chacun reste dans son domaine et pose ses propres questions. Aucune conclusion ne sort sans être passée par l'auditeur."
+    },
+    "security": {
+      "meta": "Sécurité · DecisionGuard AI",
+      "title": "Vos décisions restent les vôtres.",
+      "intro": "Vos dossiers contiennent ce que votre entreprise a de plus sensible. Voici comment nous les protégeons."
     }
   }
 }

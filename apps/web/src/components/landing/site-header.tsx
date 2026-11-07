@@ -9,22 +9,22 @@ import { Brand } from "./brand";
 
 export function SiteHeader({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   const links = [
-    { href: "#pour-qui", label: dict.nav.roles },
-    { href: "#methode", label: dict.nav.method },
-    { href: "#agents", label: dict.nav.agents },
-    { href: "#securite", label: dict.nav.security },
+    { href: `/${lang}/solutions`, label: dict.nav.roles },
+    { href: `/${lang}/methode`, label: dict.nav.method },
+    { href: `/${lang}/agents`, label: dict.nav.agents },
+    { href: `/${lang}/securite`, label: dict.nav.security },
   ];
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-night/75 backdrop-blur-xl">
-      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
         <Brand href={`/${lang}`} label={dict.nav.home} />
 
         <nav aria-label={dict.nav.menu} className="hidden items-center gap-8 text-sm text-muted lg:flex">
           {links.map((l) => (
-            <a key={l.href} href={l.href} className="transition-colors hover:text-ink">
+            <Link key={l.href} href={l.href} className="transition-colors hover:text-ink">
               {l.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -53,13 +53,13 @@ export function SiteHeader({ dict, lang }: { dict: Dictionary; lang: Locale }) {
           <div className="absolute right-0 top-14 w-[min(20rem,calc(100vw-2rem))] rounded-2xl border border-line bg-abyss p-5 shadow-2xl shadow-black/50">
             <nav aria-label={dict.nav.menu} className="flex flex-col gap-1">
               {links.map((l) => (
-                <a
+                <Link
                   key={l.href}
                   href={l.href}
                   className="rounded-lg px-3 py-3 text-ink transition-colors hover:bg-white/5"
                 >
                   {l.label}
-                </a>
+                </Link>
               ))}
               <Link
                 href={`/${lang}/login`}

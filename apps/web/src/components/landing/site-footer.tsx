@@ -14,7 +14,7 @@ export function SiteFooter({ dict, lang }: { dict: Dictionary; lang: Locale }) {
 
   return (
     <footer className="relative border-t border-line bg-night">
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
+      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
         <div className="max-w-sm">
           <Brand href={`/${lang}`} label={dict.nav.home} size={36} />
           <p className="mt-5 text-sm leading-relaxed text-muted">{f.tagline}</p>
@@ -25,10 +25,10 @@ export function SiteFooter({ dict, lang }: { dict: Dictionary; lang: Locale }) {
             {f.product}
           </h2>
           <ul className="mt-4 space-y-3">
-            <li><a href="#pour-qui" className={linkClass}>{dict.nav.roles}</a></li>
-            <li><a href="#methode" className={linkClass}>{dict.nav.method}</a></li>
-            <li><a href="#agents" className={linkClass}>{dict.nav.agents}</a></li>
-            <li><a href="#securite" className={linkClass}>{dict.nav.security}</a></li>
+            <li><Link href={`/${lang}/solutions`} className={linkClass}>{dict.nav.roles}</Link></li>
+            <li><Link href={`/${lang}/methode`} className={linkClass}>{dict.nav.method}</Link></li>
+            <li><Link href={`/${lang}/agents`} className={linkClass}>{dict.nav.agents}</Link></li>
+            <li><Link href={`/${lang}/securite`} className={linkClass}>{dict.nav.security}</Link></li>
           </ul>
         </nav>
 
@@ -44,7 +44,7 @@ export function SiteFooter({ dict, lang }: { dict: Dictionary; lang: Locale }) {
       </div>
 
       <div className="border-t border-line">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-6 text-xs text-muted sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div className="mx-auto flex max-w-6xl flex-col gap-5 px-4 py-6 text-xs text-muted sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <p className="max-w-2xl leading-relaxed">{dict.footer.disclaimer}</p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
             <Suspense fallback={<SystemStatusFallback />}>

@@ -10,7 +10,7 @@
     "language": "Language",
     "register": "Create account",
     "method": "Method",
-    "agents": "The agents",
+    "agents": "Agents",
     "security": "Security",
     "menu": "Menu",
     "cta": "Request pilot access",
@@ -162,7 +162,7 @@
         "fx": "Fixed XAF/EUR peg"
       },
       "seal": "Verified by the audit agent",
-      "sealNote": "3 assumptions to confirm before deciding"
+      "sealNote": "2 assumptions to confirm before deciding"
     },
     "agents": {
       "title": "Eight agents, one file.",
@@ -351,6 +351,38 @@
       "report": "Your report",
       "reportNote": "You decide",
       "srSummary": "Your decision is analysed in parallel by seven agents: finance, strategy, legal, cybersecurity, people, operations and scenarios. Their risks are scored by the engine (probability × impact), then checked by the auditor, who sends anything unsupported back to the agents. The final report is handed to you: the decision stays yours."
+    },
+    "home": {
+      "rolesTitle": "Who it's for",
+      "rolesMore": "See use cases",
+      "flowTitle": "How it works",
+      "flowMore": "See the full method",
+      "agentsMore": "Meet the 8 agents",
+      "securityTitle": "Your decisions stay yours.",
+      "securityMore": "More about security"
+    }
+  },
+  "pages": {
+    "back": "Home",
+    "solutions": {
+      "meta": "Who it's for · DecisionGuard AI",
+      "title": "One decision, three ways of looking at it.",
+      "intro": "The risks that worry a CEO are not the ones that keep a CFO up at night. DecisionGuard starts from your role."
+    },
+    "method": {
+      "meta": "Method · DecisionGuard AI",
+      "title": "From the first draft to the report you sign.",
+      "intro": "Six steps, always the same. Agents analyse, the engine scores, the auditor checks, and you decide."
+    },
+    "agents": {
+      "meta": "The agents · DecisionGuard AI",
+      "title": "Eight agents, one file.",
+      "intro": "Each stays in its own field and asks its own questions. No conclusion leaves without going through the auditor."
+    },
+    "security": {
+      "meta": "Security · DecisionGuard AI",
+      "title": "Your decisions stay yours.",
+      "intro": "Your files hold your company's most sensitive information. Here is how we protect them."
     }
   }
 }

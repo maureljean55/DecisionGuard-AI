@@ -16,13 +16,12 @@ function levelOf(score: number): Level {
 }
 
 // Illustrative example only. Probability and impact on the 1–5 scale.
-const RISKS: { p: number; i: number; category: Category; status: Status; note?: "fx" }[] = [
-  { p: 4, i: 5, category: "operations", status: "hypothesis" },
-  { p: 4, i: 4, category: "finance", status: "estimate" },
-  { p: 4, i: 3, category: "legal", status: "hypothesis" },
-  { p: 3, i: 4, category: "people", status: "estimate" },
-  { p: 2, i: 5, category: "cyber", status: "hypothesis" },
-  { p: 1, i: 3, category: "finance", status: "fact", note: "fx" },
+// `label` indexes the localized risk titles (dictionary: landing.dossier.risks).
+const RISKS: { label: number; p: number; i: number; category: Category; status: Status; note?: "fx" }[] = [
+  { label: 0, p: 4, i: 5, category: "operations", status: "hypothesis" },
+  { label: 1, p: 4, i: 4, category: "finance", status: "estimate" },
+  { label: 2, p: 4, i: 3, category: "legal", status: "hypothesis" },
+  { label: 5, p: 1, i: 3, category: "finance", status: "fact", note: "fx" },
 ];
 
 const LEVEL_DOT: Record<Level, string> = {
@@ -71,9 +70,9 @@ export function RiskDossier({ d }: { d: Dictionary["landing"]["dossier"] }) {
         </span>
       </figcaption>
 
-      <div className="grid items-start gap-6 p-5 sm:p-6 md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)]">
+      <div className="grid items-start gap-6 p-5 sm:p-6 md:grid-cols-[minmax(0,12rem)_minmax(0,1fr)]">
         {/* 5×5 matrix — probability on the vertical axis, impact on the horizontal one. */}
-        <div className="mx-auto flex w-full max-w-[17rem] gap-2" aria-hidden>
+        <div className="mx-auto flex w-full max-w-[15rem] gap-2" aria-hidden>
           <span className="flex items-center pb-6 font-mono text-[0.6rem] uppercase tracking-[0.18em] text-muted [writing-mode:vertical-rl] rotate-180">
             {d.probability} →
           </span>
@@ -129,7 +128,7 @@ export function RiskDossier({ d }: { d: Dictionary["landing"]["dossier"] }) {
                   {idx + 1}
                 </span>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium leading-snug text-ink">{d.risks[idx]}</p>
+                  <p className="text-sm font-medium leading-snug text-ink">{d.risks[r.label]}</p>
                   <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.7rem] text-muted">
                     <span>{d.categories[r.category]}</span>
                     <span

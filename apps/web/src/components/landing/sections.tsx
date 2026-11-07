@@ -1,0 +1,292 @@
+/**
+ * Marketing sections, shared by the home page (compact versions) and the detail pages.
+ */
+import {
+  ArrowRight,
+  Check,
+  Compass,
+  GitBranch,
+  Landmark,
+  Lock,
+  MapPin,
+  Scale,
+  ScanEye,
+  ScrollText,
+  ShieldAlert,
+  Truck,
+  UserCheck,
+  Users,
+} from "lucide-react";
+import Link from "next/link";
+import type { ReactNode } from "react";
+
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries";
+
+import { SiteFooter } from "./site-footer";
+import { SiteHeader } from "./site-header";
+
+type L = Dictionary["landing"];
+
+const AGENT_ICONS = [Landmark, Compass, Scale, ShieldAlert, Users, Truck, GitBranch];
+const SECURITY_ICONS = [MapPin, Lock, ScrollText, UserCheck];
+const EPISTEMIC_STYLE: Record<string, string> = {
+  fact: "border-teal/40 text-teal",
+  estimate: "border-iris/50 text-[#9aa6ff]",
+  hypothesis: "border-violet/50 text-violet",
+  ai: "border-white/20 text-ink/80 border-dashed",
+};
+
+export const container = "mx-auto max-w-6xl px-4 sm:px-6 lg:px-8";
+
+// ------------------------------------------------------------------ building blocks
+
+export function PageShell({
+  dict,
+  lang,
+  children,
+}: {
+  dict: Dictionary;
+  lang: Locale;
+  children: ReactNode;
+}) {
+  return (
+    <div className="theme-night flex min-h-dvh flex-col overflow-x-clip">
+      <SiteHeader dict={dict} lang={lang} />
+      <main className="flex-1">{children}</main>
+      <SiteFooter dict={dict} lang={lang} />
+    </div>
+  );
+}
+
+export function SectionTitle({ children, id }: { children: ReactNode; id?: string }) {
+  return (
+    <h2
+      id={id}
+      className="max-w-2xl font-display text-[2rem] font-medium leading-[1.1] tracking-tight text-ink sm:text-[2.6rem]"
+    >
+      {children}
+    </h2>
+  );
+}
+
+export function MoreLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="group inline-flex items-center gap-1.5 text-sm font-medium text-teal hover:text-ink"
+    >
+      {children}
+      <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+    </Link>
+  );
+}
+
+/** Title row of a home section: heading on the left, link to the detail page on the right. */
+export function SectionHead({
+  id,
+  title,
+  more,
+}: {
+  id: string;
+  title: string;
+  more?: { href: string; label: string };
+}) {
+  return (
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <SectionTitle id={id}>{title}</SectionTitle>
+      {more && <MoreLink href={more.href}>{more.label}</MoreLink>}
+    </div>
+  );
+}
+
+export function PageIntro({ title, intro, lang, back }: { title: string; intro: string; lang: Locale; back: string }) {
+  return (
+    <header className="border-b border-line">
+      <div className={`${container} py-16 sm:py-20`}>
+        <Link href={`/${lang}`} className="text-sm text-muted hover:text-ink">
+          ← {back}
+        </Link>
+        <h1 className="mt-6 max-w-3xl font-display text-[2.6rem] font-medium leading-[1.05] text-ink sm:text-6xl">
+          {title}
+        </h1>
+        <p className="mt-6 max-w-2xl leading-relaxed text-muted">{intro}</p>
+      </div>
+    </header>
+  );
+}
+
+const ctaPrimary =
+  "group inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-night transition-colors hover:bg-white";
+
+// ------------------------------------------------------------------ roles
+
+function quote(text: string, lang: Locale) {
+  return lang === "fr" ? `« ${text} »` : `“${text}”`;
+}
+
+export function RolesCompact({ l, lang }: { l: L; lang: Locale }) {
+  return (
+    <div className="grid gap-4 md:grid-cols-3">
+      {l.roles.list.map((r) => (
+        <article key={r.role} className="rounded-xl border border-line bg-abyss/70 p-5">
+          <h3 className="font-display text-xl font-semibold text-ink">{r.role}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted">{r.scope}</p>
+          <p className="mt-4 border-t border-line pt-4 font-display text-lg italic leading-snug text-ink/90">
+            {quote(r.example, lang)}
+          </p>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+export function RolesDetailed({ l, lang }: { l: L; lang: Locale }) {
+  return (
+    <div className="grid gap-5 lg:grid-cols-3">
+      {l.roles.list.map((r) => (
+        <article key={r.role} className="flex flex-col rounded-xl border border-line bg-abyss/70 p-6">
+          <h2 className="font-display text-2xl font-semibold text-ink">{r.role}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted">{r.scope}</p>
+          <ul className="mt-5 space-y-3 text-sm text-ink/90">
+            {r.points.map((p) => (
+              <li key={p} className="flex gap-3">
+                <Check className="mt-0.5 size-4 shrink-0 text-teal" aria-hidden />
+                <span className="leading-relaxed">{p}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-auto pt-6">
+            <div className="border-t border-line pt-4">
+              <p className="text-xs text-muted">{l.roles.exampleLabel}</p>
+              <p className="mt-1 font-display text-lg italic text-ink">{quote(r.example, lang)}</p>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+// ------------------------------------------------------------------ agents, method, labels
+
+export function AgentsGrid({ l }: { l: L }) {
+  return (
+    <div className="grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+      {l.agents.list.map((a, idx) => {
+        const Icon = AGENT_ICONS[idx];
+        return (
+          <article key={a.name} className="bg-night p-6">
+            <Icon className="size-5 text-muted" aria-hidden />
+            <h2 className="mt-4 font-display text-xl font-semibold text-ink">{a.name}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted">{a.body}</p>
+          </article>
+        );
+      })}
+      <article className="border-l-[3px] border-teal bg-night p-6">
+        <ScanEye className="size-5 text-teal" aria-hidden />
+        <h2 className="mt-4 font-display text-xl font-semibold text-ink">{l.agents.auditName}</h2>
+        <p className="mt-2 text-sm leading-relaxed text-ink/80">{l.agents.auditBody}</p>
+      </article>
+    </div>
+  );
+}
+
+export function MethodSteps({ l }: { l: L }) {
+  return (
+    <ol className="grid gap-x-10 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+      {l.method.steps.map((s, idx) => (
+        <li key={s.title} className="border-t border-line pt-5">
+          <span className="font-mono text-xs text-teal">{idx + 1}</span>
+          <h3 className="mt-2 font-display text-[1.45rem] font-semibold leading-tight text-ink">
+            {s.title}
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+export function EpistemicList({ l }: { l: L }) {
+  return (
+    <dl className="divide-y divide-line border-y border-line">
+      {l.epistemic.items.map((e) => (
+        <div key={e.key} className="grid gap-3 py-4 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:items-baseline">
+          <dt>
+            <span
+              className={`inline-block rounded-full border px-3 py-1 font-mono text-[0.68rem] uppercase tracking-wider ${EPISTEMIC_STYLE[e.key]}`}
+            >
+              {e.name}
+            </span>
+          </dt>
+          <dd className="text-sm leading-relaxed text-muted">{e.body}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+// ------------------------------------------------------------------ security
+
+export function SecurityStrip({ l }: { l: L }) {
+  return (
+    <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line lg:grid-cols-4">
+      {l.security.items.map((s, idx) => {
+        const Icon = SECURITY_ICONS[idx];
+        return (
+          <li key={s.title} className="flex items-center gap-3 bg-night px-4 py-4 text-sm font-medium text-ink sm:px-5">
+            <Icon className="size-4 shrink-0 text-teal" aria-hidden />
+            {s.title}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+export function SecurityDetailed({ l }: { l: L }) {
+  return (
+    <div className="grid gap-x-10 gap-y-10 sm:grid-cols-2">
+      {l.security.items.map((s, idx) => {
+        const Icon = SECURITY_ICONS[idx];
+        return (
+          <div key={s.title} className="border-t border-line pt-5">
+            <Icon className="size-5 text-teal" aria-hidden />
+            <h2 className="mt-4 text-lg font-semibold text-ink">{s.title}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ------------------------------------------------------------------ call to action
+
+export function CtaBand({ l, lang }: { l: L; lang: Locale }) {
+  return (
+    <section aria-labelledby="cta-title" className="border-t border-line">
+      <div className={`${container} flex flex-col gap-8 py-16 lg:flex-row lg:items-center lg:justify-between`}>
+        <div>
+          <h2 id="cta-title" className="font-display text-3xl font-medium leading-tight text-ink sm:text-4xl">
+            {l.cta.title}
+          </h2>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">{l.cta.body}</p>
+        </div>
+        <div className="flex shrink-0 flex-col gap-4 sm:flex-row sm:items-center">
+          <Link href={`/${lang}/register`} className={ctaPrimary}>
+            {l.cta.button}
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+          </Link>
+          <Link
+            href={`/${lang}/login`}
+            className="text-center text-sm text-muted underline-offset-4 hover:text-ink hover:underline"
+          >
+            {l.cta.login}
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
