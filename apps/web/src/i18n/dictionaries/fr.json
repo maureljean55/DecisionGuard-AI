@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "title": "DecisionGuard AI — Intelligence des risques décisionnels",
+    "description": "Analysez, anticipez et surveillez les risques de vos décisions stratégiques grâce à une IA multi-agents vérifiée."
+  },
+  "nav": {
+    "features": "Fonctionnalités",
+    "pricing": "Tarifs",
+    "login": "Connexion",
+    "language": "Langue"
+  },
+  "hero": {
+    "eyebrow": "Intelligence décisionnelle pour entreprises",
+    "title": "Sachez ce qui peut mal tourner, avant de décider.",
+    "subtitle": "DecisionGuard AI examine chaque décision sous huit angles — financier, stratégique, juridique, cyber, humain, opérationnel, prospectif — puis vérifie ses propres conclusions avant de vous les présenter.",
+    "cta": "Demander un accès pilote",
+    "secondary": "Voir la méthodologie"
+  },
+  "pillars": {
+    "verified": {
+      "title": "Conclusions vérifiées",
+      "body": "Un agent d'audit indépendant contrôle la cohérence, les calculs et les sources de chaque analyse."
+    },
+    "reproducible": {
+      "title": "Scores reproductibles",
+      "body": "Les scores de risque sont calculés par un moteur déterministe, jamais improvisés par l'IA."
+    },
+    "transparent": {
+      "title": "Faits ≠ hypothèses",
+      "body": "Chaque élément est étiqueté : fait vérifié, hypothèse, estimation ou piste générée par l'IA."
+    }
+  },
+  "status": {
+    "label": "État du système",
+    "ok": "Opérationnel",
+    "degraded": "Dégradé",
+    "unreachable": "API injoignable"
+  },
+  "footer": {
+    "disclaimer": "Les analyses de DecisionGuard AI sont une aide à la décision. Elles ne remplacent ni un conseil juridique, ni un conseil financier professionnel."
+  }
+}

@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/* DecisionGuard brand tokens — deep navy, charcoal, muted blue, controlled risk colors. */
+:root {
+  --bg: #f7f8fb;
+  --surface: #ffffff;
+  --ink: #0e1726;
+  --muted: #5b6678;
+  --line: #e3e7ef;
+  --navy-950: #070d1a;
+  --navy-900: #0b1630;
+  --navy-700: #1c3261;
+  --blue-500: #3f6fd8;
+  --risk-low: #2f9e6e;
+  --risk-moderate: #d9a521;
+  --risk-high: #e07b2a;
+  --risk-critical: #c8344a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #070d1a;
+    --surface: #0d1628;
+    --ink: #e8ecf4;
+    --muted: #93a0b6;
+    --line: #1e2a42;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-navy-950: var(--navy-950);
+  --color-navy-900: var(--navy-900);
+  --color-navy-700: var(--navy-700);
+  --color-blue-500: var(--blue-500);
+  --color-risk-low: var(--risk-low);
+  --color-risk-moderate: var(--risk-moderate);
+  --color-risk-high: var(--risk-high);
+  --color-risk-critical: var(--risk-critical);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-display);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+}

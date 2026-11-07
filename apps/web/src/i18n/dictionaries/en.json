@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "title": "DecisionGuard AI — Decision risk intelligence",
+    "description": "Analyze, anticipate and monitor the risks of your strategic decisions with verified multi-agent AI."
+  },
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "login": "Log in",
+    "language": "Language"
+  },
+  "hero": {
+    "eyebrow": "Decision intelligence for companies",
+    "title": "Know what could go wrong, before you decide.",
+    "subtitle": "DecisionGuard AI examines every decision from eight angles — financial, strategic, legal, cyber, human, operational, predictive — then verifies its own conclusions before presenting them.",
+    "cta": "Request pilot access",
+    "secondary": "See the methodology"
+  },
+  "pillars": {
+    "verified": {
+      "title": "Verified conclusions",
+      "body": "An independent audit agent checks the consistency, calculations and sources of every analysis."
+    },
+    "reproducible": {
+      "title": "Reproducible scores",
+      "body": "Risk scores are computed by a deterministic engine, never improvised by the AI."
+    },
+    "transparent": {
+      "title": "Facts ≠ assumptions",
+      "body": "Every finding is labelled: verified fact, assumption, estimate or AI-generated hypothesis."
+    }
+  },
+  "status": {
+    "label": "System status",
+    "ok": "Operational",
+    "degraded": "Degraded",
+    "unreachable": "API unreachable"
+  },
+  "footer": {
+    "disclaimer": "DecisionGuard AI analyses support decision-making. They do not replace professional legal or financial advice."
+  }
+}
