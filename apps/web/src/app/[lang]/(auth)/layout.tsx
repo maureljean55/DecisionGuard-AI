@@ -17,7 +17,7 @@ export default async function AuthLayout({ children, params }: LayoutProps<"/[la
       <aside className="relative hidden overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-navy-700 p-12 text-white lg:flex lg:flex-col lg:justify-between">
         <Link href={`/${lang}`} className="flex items-center gap-2 font-semibold tracking-tight">
           <ShieldCheck className="size-5 text-blue-500" aria-hidden />
-          DecisionGuard <span className="text-blue-500">AI</span>
+          DecisionGuard
         </Link>
         <div className="max-w-md">
           <h2 className="font-display text-3xl leading-tight">{dict.auth.panelTitle}</h2>
@@ -41,7 +41,7 @@ export default async function AuthLayout({ children, params }: LayoutProps<"/[la
             className="flex items-center gap-2 font-semibold tracking-tight lg:invisible"
           >
             <ShieldCheck className="size-5 text-blue-500" aria-hidden />
-            DecisionGuard <span className="text-blue-500">AI</span>
+            DecisionGuard
           </Link>
           <LocaleSwitcher current={lang} label={dict.nav.language} />
         </header>

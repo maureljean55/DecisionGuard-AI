@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     )
 
     environment: Environment = "development"
-    app_name: str = "DecisionGuard AI"
+    app_name: str = "DecisionGuard"
     log_level: str = "INFO"
     log_json: bool = True
 
@@ -67,7 +67,7 @@ class Settings(BaseSettings):
     smtp_username: str | None = None
     smtp_password: SecretStr | None = None
     smtp_use_tls: bool = False
-    email_from: str = "DecisionGuard AI <no-reply@decisionguard.local>"
+    email_from: str = "DecisionGuard <no-reply@decisionguard.local>"
     # Send after the HTTP response (long-running server) or inline (serverless platforms,
     # where work after the response is not guaranteed to run).
     email_background: bool = True

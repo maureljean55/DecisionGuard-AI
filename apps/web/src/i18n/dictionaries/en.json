@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "DecisionGuard AI · Risk analysis before you decide",
+    "title": "DecisionGuard · Risk analysis before you decide",
     "description": "Analyze, anticipate and monitor the risks of your strategic decisions with verified multi-agent AI."
   },
   "nav": {
@@ -14,7 +14,7 @@
     "security": "Security",
     "menu": "Menu",
     "cta": "Request pilot access",
-    "home": "DecisionGuard AI home",
+    "home": "DecisionGuard home",
     "roles": "Who it's for",
     "homeLink": "Home"
   },
@@ -25,7 +25,7 @@
     "unreachable": "API unreachable"
   },
   "footer": {
-    "disclaimer": "DecisionGuard AI analyses support decision-making. They do not replace professional legal or financial advice."
+    "disclaimer": "DecisionGuard analyses support decision-making. They do not replace professional legal or financial advice."
   },
   "auth": {
     "panelTitle": "Better-protected decisions.",
@@ -429,22 +429,22 @@
   "pages": {
     "back": "Home",
     "solutions": {
-      "meta": "Who it's for · DecisionGuard AI",
+      "meta": "Who it's for · DecisionGuard",
       "title": "One decision, three ways of looking at it.",
       "intro": "The risks that worry a CEO are not the ones that keep a CFO up at night. DecisionGuard starts from your role."
     },
     "method": {
-      "meta": "Method · DecisionGuard AI",
+      "meta": "Method · DecisionGuard",
       "title": "From the first draft to the report you sign.",
       "intro": "Six steps, always the same. Agents analyse, the engine scores, the auditor checks, and you decide."
     },
     "agents": {
-      "meta": "The agents · DecisionGuard AI",
+      "meta": "The agents · DecisionGuard",
       "title": "Eight agents, one file.",
       "intro": "Each stays in its own field and asks its own questions. No conclusion leaves without going through the auditor."
     },
     "security": {
-      "meta": "Security · DecisionGuard AI",
+      "meta": "Security · DecisionGuard",
       "title": "Your decisions stay yours.",
       "intro": "Your files hold your company's most sensitive information. Here is how we protect them."
     }
@@ -453,14 +453,14 @@
     "updated": "Last updated: 8 November 2026",
     "tbd": "[to be completed]",
     "about": {
-      "meta": "About · DecisionGuard AI",
+      "meta": "About · DecisionGuard",
       "title": "Why DecisionGuard exists.",
       "intro": "Important decisions are often made on assumptions nobody wrote down. We are building the tool that puts them on the table before it is too late.",
       "sections": [
         {
           "h": "What we do",
           "p": [
-            "DecisionGuard AI examines a business decision from several angles at once: finance, strategy, law, cybersecurity, people, operations and scenarios. The result is a clear file: the risks, how likely they are, their impact, what to check and what would reduce them."
+            "DecisionGuard examines a business decision from several angles at once: finance, strategy, law, cybersecurity, people, operations and scenarios. The result is a clear file: the risks, how likely they are, their impact, what to check and what would reduce them."
           ]
         },
         {
@@ -484,7 +484,7 @@
       ]
     },
     "contact": {
-      "meta": "Contact · DecisionGuard AI",
+      "meta": "Contact · DecisionGuard",
       "title": "Let's talk about your next decision.",
       "intro": "A question, a demo or pilot access request: write to us and we will get back to you quickly.",
       "name": "Name",
@@ -505,7 +505,7 @@
       "privacy": "Your details are only used to reply to you. See the privacy policy."
     },
     "privacy": {
-      "meta": "Privacy · DecisionGuard AI",
+      "meta": "Privacy · DecisionGuard",
       "title": "Privacy policy",
       "intro": "What we collect, why, where it is stored, for how long, and how to exercise your rights.",
       "sections": [
@@ -560,14 +560,14 @@
       ]
     },
     "terms": {
-      "meta": "Terms of use · DecisionGuard AI",
+      "meta": "Terms of use · DecisionGuard",
       "title": "Terms of use",
-      "intro": "The rules for using DecisionGuard AI during the pilot phase.",
+      "intro": "The rules for using DecisionGuard during the pilot phase.",
       "sections": [
         {
           "h": "The service",
           "p": [
-            "DecisionGuard AI helps analyse the risks of a business decision. During the pilot phase, features change and some may be unavailable or modified."
+            "DecisionGuard helps analyse the risks of a business decision. During the pilot phase, features change and some may be unavailable or modified."
           ]
         },
         {
@@ -609,7 +609,7 @@
       ]
     },
     "notice": {
-      "meta": "Legal notice · DecisionGuard AI",
+      "meta": "Legal notice · DecisionGuard",
       "title": "Legal notice",
       "intro": "Information about the publisher and hosting of this site.",
       "sections": [
@@ -634,7 +634,7 @@
         {
           "h": "Intellectual property",
           "p": [
-            "The DecisionGuard AI name, logo and site content are protected. Any reproduction without permission is prohibited."
+            "The DecisionGuard name, logo and site content are protected. Any reproduction without permission is prohibited."
           ]
         }
       ]

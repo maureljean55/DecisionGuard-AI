@@ -63,7 +63,7 @@ export default async function AppHome({ params }: PageProps<"/[lang]/app">) {
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3 sm:px-6">
           <span className="flex items-center gap-2 font-semibold tracking-tight">
             <ShieldCheck className="size-5 text-blue-500" aria-hidden />
-            DecisionGuard <span className="text-blue-500">AI</span>
+            DecisionGuard
           </span>
           <div className="[&_button]:border-white/20 [&_button]:text-white [&_button:hover]:bg-white/10">
             <LogoutButton label={dict.app.logout} lang={lang} />

@@ -43,7 +43,7 @@ export function SiteFooter({ dict, lang }: { dict: Dictionary; lang: Locale }) {
               <SystemStatus dict={dict.status} />
             </Suspense>
             <LocaleSwitcher current={lang} label={dict.nav.language} />
-            <span>© 2026 DecisionGuard AI</span>
+            <span>© 2026 DecisionGuard</span>
           </div>
         </div>
       </div>

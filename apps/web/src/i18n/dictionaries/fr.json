@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "DecisionGuard AI · Analyse des risques avant décision",
+    "title": "DecisionGuard · Analyse des risques avant décision",
     "description": "Analysez, anticipez et surveillez les risques de vos décisions stratégiques grâce à une IA multi-agents vérifiée."
   },
   "nav": {
@@ -14,7 +14,7 @@
     "security": "Sécurité",
     "menu": "Menu",
     "cta": "Demander un accès pilote",
-    "home": "Accueil DecisionGuard AI",
+    "home": "Accueil DecisionGuard",
     "roles": "Pour qui",
     "homeLink": "Accueil"
   },
@@ -25,7 +25,7 @@
     "unreachable": "API injoignable"
   },
   "footer": {
-    "disclaimer": "Les analyses de DecisionGuard AI sont une aide à la décision. Elles ne remplacent ni un conseil juridique, ni un conseil financier professionnel."
+    "disclaimer": "Les analyses de DecisionGuard sont une aide à la décision. Elles ne remplacent ni un conseil juridique, ni un conseil financier professionnel."
   },
   "auth": {
     "panelTitle": "Des décisions mieux protégées.",
@@ -429,22 +429,22 @@
   "pages": {
     "back": "Accueil",
     "solutions": {
-      "meta": "Pour qui · DecisionGuard AI",
+      "meta": "Pour qui · DecisionGuard",
       "title": "Une même décision, trois façons de la regarder.",
       "intro": "Les risques qui inquiètent un directeur général ne sont pas ceux qui empêchent un DAF de dormir. DecisionGuard part de votre rôle."
     },
     "method": {
-      "meta": "Méthode · DecisionGuard AI",
+      "meta": "Méthode · DecisionGuard",
       "title": "Du premier brouillon au rapport que vous signez.",
       "intro": "Six étapes, toujours les mêmes. Les agents analysent, le moteur calcule, l'auditeur vérifie, et vous décidez."
     },
     "agents": {
-      "meta": "Les agents · DecisionGuard AI",
+      "meta": "Les agents · DecisionGuard",
       "title": "Huit agents, un seul dossier.",
       "intro": "Chacun reste dans son domaine et pose ses propres questions. Aucune conclusion ne sort sans être passée par l'auditeur."
     },
     "security": {
-      "meta": "Sécurité · DecisionGuard AI",
+      "meta": "Sécurité · DecisionGuard",
       "title": "Vos décisions restent les vôtres.",
       "intro": "Vos dossiers contiennent ce que votre entreprise a de plus sensible. Voici comment nous les protégeons."
     }
@@ -453,14 +453,14 @@
     "updated": "Dernière mise à jour : 8 novembre 2026",
     "tbd": "[à compléter]",
     "about": {
-      "meta": "À propos · DecisionGuard AI",
+      "meta": "À propos · DecisionGuard",
       "title": "Pourquoi DecisionGuard existe.",
       "intro": "Les décisions importantes se prennent souvent avec des hypothèses que personne n'a écrites. Nous construisons l'outil qui les met sur la table avant qu'il ne soit trop tard.",
       "sections": [
         {
           "h": "Ce que nous faisons",
           "p": [
-            "DecisionGuard AI analyse une décision d'entreprise sous plusieurs angles à la fois : finance, stratégie, droit, cybersécurité, équipes, opérations et scénarios. Le résultat est un dossier clair : les risques, leur probabilité, leur impact, ce qu'il faut vérifier et ce qui permettrait de les réduire."
+            "DecisionGuard analyse une décision d'entreprise sous plusieurs angles à la fois : finance, stratégie, droit, cybersécurité, équipes, opérations et scénarios. Le résultat est un dossier clair : les risques, leur probabilité, leur impact, ce qu'il faut vérifier et ce qui permettrait de les réduire."
           ]
         },
         {
@@ -484,7 +484,7 @@
       ]
     },
     "contact": {
-      "meta": "Contact · DecisionGuard AI",
+      "meta": "Contact · DecisionGuard",
       "title": "Parlons de votre prochaine décision.",
       "intro": "Une question, une demande de démonstration ou d'accès pilote : écrivez-nous, nous vous répondons rapidement.",
       "name": "Nom",
@@ -505,7 +505,7 @@
       "privacy": "Vos informations servent uniquement à vous répondre. Voir la politique de confidentialité."
     },
     "privacy": {
-      "meta": "Confidentialité · DecisionGuard AI",
+      "meta": "Confidentialité · DecisionGuard",
       "title": "Politique de confidentialité",
       "intro": "Ce que nous collectons, pourquoi, où c'est stocké, combien de temps, et comment exercer vos droits.",
       "sections": [
@@ -560,14 +560,14 @@
       ]
     },
     "terms": {
-      "meta": "Conditions d'utilisation · DecisionGuard AI",
+      "meta": "Conditions d'utilisation · DecisionGuard",
       "title": "Conditions d'utilisation",
-      "intro": "Les règles d'utilisation de DecisionGuard AI pendant la phase pilote.",
+      "intro": "Les règles d'utilisation de DecisionGuard pendant la phase pilote.",
       "sections": [
         {
           "h": "Le service",
           "p": [
-            "DecisionGuard AI aide à analyser les risques d'une décision d'entreprise. Pendant la phase pilote, les fonctionnalités évoluent et certaines peuvent être indisponibles ou modifiées."
+            "DecisionGuard aide à analyser les risques d'une décision d'entreprise. Pendant la phase pilote, les fonctionnalités évoluent et certaines peuvent être indisponibles ou modifiées."
           ]
         },
         {
@@ -609,7 +609,7 @@
       ]
     },
     "notice": {
-      "meta": "Mentions légales · DecisionGuard AI",
+      "meta": "Mentions légales · DecisionGuard",
       "title": "Mentions légales",
       "intro": "Informations sur l'éditeur et l'hébergement du site.",
       "sections": [
@@ -634,7 +634,7 @@
         {
           "h": "Propriété intellectuelle",
           "p": [
-            "Le nom DecisionGuard AI, le logo et les contenus du site sont protégés. Toute reproduction sans autorisation est interdite."
+            "Le nom DecisionGuard, le logo et les contenus du site sont protégés. Toute reproduction sans autorisation est interdite."
           ]
         }
       ]

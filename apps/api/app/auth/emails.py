@@ -17,17 +17,17 @@ def verification_email(to: str, name: str, token: str, locale: Locale) -> Outgoi
     if locale == "fr":
         return OutgoingEmail(
             to,
-            "Confirmez votre adresse e-mail — DecisionGuard AI",
+            "Confirmez votre adresse e-mail — DecisionGuard",
             f"Bonjour {name},\n\nConfirmez votre adresse e-mail en ouvrant ce lien "
             f"(valable 48 heures) :\n{link}\n\nSi vous n'êtes pas à l'origine de cette "
-            "inscription, ignorez ce message.\n\n— DecisionGuard AI",
+            "inscription, ignorez ce message.\n\n— DecisionGuard",
         )
     return OutgoingEmail(
         to,
-        "Confirm your e-mail address — DecisionGuard AI",
+        "Confirm your e-mail address — DecisionGuard",
         f"Hello {name},\n\nConfirm your e-mail address by opening this link "
         f"(valid for 48 hours):\n{link}\n\nIf you did not sign up, ignore this message."
-        "\n\n— DecisionGuard AI",
+        "\n\n— DecisionGuard",
     )
 
 
@@ -36,17 +36,17 @@ def password_reset_email(to: str, name: str, token: str, locale: Locale) -> Outg
     if locale == "fr":
         return OutgoingEmail(
             to,
-            "Réinitialisation de votre mot de passe — DecisionGuard AI",
+            "Réinitialisation de votre mot de passe — DecisionGuard",
             f"Bonjour {name},\n\nPour choisir un nouveau mot de passe, ouvrez ce lien "
             f"(valable 1 heure) :\n{link}\n\nSi vous n'avez rien demandé, ignorez ce message : "
-            "votre mot de passe actuel reste valable.\n\n— DecisionGuard AI",
+            "votre mot de passe actuel reste valable.\n\n— DecisionGuard",
         )
     return OutgoingEmail(
         to,
-        "Reset your password — DecisionGuard AI",
+        "Reset your password — DecisionGuard",
         f"Hello {name},\n\nTo choose a new password, open this link (valid for 1 hour):\n"
         f"{link}\n\nIf you did not request this, ignore this message: your current password "
-        "remains valid.\n\n— DecisionGuard AI",
+        "remains valid.\n\n— DecisionGuard",
     )
 
 
@@ -69,14 +69,14 @@ def invitation_email(
     if locale == "fr":
         return OutgoingEmail(
             to,
-            f"{inviter} vous invite à rejoindre {org_name} sur DecisionGuard AI",
+            f"{inviter} vous invite à rejoindre {org_name} sur DecisionGuard",
             f"Bonjour,\n\n{inviter} vous invite à rejoindre l'organisation « {org_name} » "
             f"en tant que {label}.\n\nAccepter l'invitation (valable 7 jours) :\n{link}"
-            "\n\n— DecisionGuard AI",
+            "\n\n— DecisionGuard",
         )
     return OutgoingEmail(
         to,
-        f"{inviter} invited you to join {org_name} on DecisionGuard AI",
+        f"{inviter} invited you to join {org_name} on DecisionGuard",
         f"Hello,\n\n{inviter} invited you to join the organization “{org_name}” as {label}."
-        f"\n\nAccept the invitation (valid for 7 days):\n{link}\n\n— DecisionGuard AI",
+        f"\n\nAccept the invitation (valid for 7 days):\n{link}\n\n— DecisionGuard",
     )

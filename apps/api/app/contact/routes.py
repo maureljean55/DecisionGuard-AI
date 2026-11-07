@@ -42,7 +42,7 @@ def contact(body: ContactRequest, request: Request, tasks: BackgroundTasks) -> N
     if body.website:  # bot: accept silently, send nothing
         return
     text = (
-        f"Nouveau message depuis le site DecisionGuard AI\n\n"
+        f"Nouveau message depuis le site DecisionGuard\n\n"
         f"Sujet : {TOPIC_LABEL[body.topic]}\n"
         f"Nom : {body.name}\n"
         f"E-mail : {body.email}\n"
