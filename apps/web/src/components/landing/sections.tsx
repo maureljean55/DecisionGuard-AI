@@ -28,7 +28,15 @@ import { SiteHeader } from "./site-header";
 
 type L = Dictionary["landing"];
 
-const AGENT_ICONS = [Landmark, Compass, Scale, ShieldAlert, Users, Truck, GitBranch];
+const AGENT_ICONS = [
+  Landmark,
+  Compass,
+  Scale,
+  ShieldAlert,
+  Users,
+  Truck,
+  GitBranch,
+];
 const SECURITY_ICONS = [MapPin, Lock, ScrollText, UserCheck];
 const EPISTEMIC_STYLE: Record<string, string> = {
   fact: "border-teal/40 text-teal",
@@ -59,7 +67,13 @@ export function PageShell({
   );
 }
 
-export function SectionTitle({ children, id }: { children: ReactNode; id?: string }) {
+export function SectionTitle({
+  children,
+  id,
+}: {
+  children: ReactNode;
+  id?: string;
+}) {
   return (
     <h2
       id={id}
@@ -70,14 +84,23 @@ export function SectionTitle({ children, id }: { children: ReactNode; id?: strin
   );
 }
 
-export function MoreLink({ href, children }: { href: string; children: ReactNode }) {
+export function MoreLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: ReactNode;
+}) {
   return (
     <Link
       href={href}
       className="group inline-flex items-center gap-1.5 text-sm font-medium text-teal hover:text-ink"
     >
       {children}
-      <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+      <ArrowRight
+        className="size-4 transition-transform group-hover:translate-x-0.5"
+        aria-hidden
+      />
     </Link>
   );
 }
@@ -100,7 +123,17 @@ export function SectionHead({
   );
 }
 
-export function PageIntro({ title, intro, lang, back }: { title: string; intro: string; lang: Locale; back: string }) {
+export function PageIntro({
+  title,
+  intro,
+  lang,
+  back,
+}: {
+  title: string;
+  intro: string;
+  lang: Locale;
+  back: string;
+}) {
   return (
     <header className="border-b border-line">
       <div className={`${container} py-16 sm:py-20`}>
@@ -129,8 +162,13 @@ export function RolesCompact({ l, lang }: { l: L; lang: Locale }) {
   return (
     <div className="grid gap-4 md:grid-cols-3">
       {l.roles.list.map((r) => (
-        <article key={r.role} className="rounded-xl border border-line bg-abyss/70 p-5">
-          <h3 className="font-display text-xl font-semibold text-ink">{r.role}</h3>
+        <article
+          key={r.role}
+          className="rounded-xl border border-line bg-abyss/70 p-5"
+        >
+          <h3 className="font-display text-xl font-semibold text-ink">
+            {r.role}
+          </h3>
           <p className="mt-2 text-sm leading-relaxed text-muted">{r.scope}</p>
           <p className="mt-4 border-t border-line pt-4 font-display text-lg italic leading-snug text-ink/90">
             {quote(r.example, lang)}
@@ -145,13 +183,21 @@ export function RolesDetailed({ l, lang }: { l: L; lang: Locale }) {
   return (
     <div className="grid gap-5 lg:grid-cols-3">
       {l.roles.list.map((r) => (
-        <article key={r.role} className="flex flex-col rounded-xl border border-line bg-abyss/70 p-6">
-          <h2 className="font-display text-2xl font-semibold text-ink">{r.role}</h2>
+        <article
+          key={r.role}
+          className="flex flex-col rounded-xl border border-line bg-abyss/70 p-6"
+        >
+          <h2 className="font-display text-2xl font-semibold text-ink">
+            {r.role}
+          </h2>
           <p className="mt-2 text-sm leading-relaxed text-muted">{r.scope}</p>
           <ul className="mt-5 space-y-3 text-sm text-ink/90">
             {r.points.map((p) => (
               <li key={p} className="flex gap-3">
-                <Check className="mt-0.5 size-4 shrink-0 text-teal" aria-hidden />
+                <Check
+                  className="mt-0.5 size-4 shrink-0 text-teal"
+                  aria-hidden
+                />
                 <span className="leading-relaxed">{p}</span>
               </li>
             ))}
@@ -159,7 +205,9 @@ export function RolesDetailed({ l, lang }: { l: L; lang: Locale }) {
           <div className="mt-auto pt-6">
             <div className="border-t border-line pt-4">
               <p className="text-xs text-muted">{l.roles.exampleLabel}</p>
-              <p className="mt-1 font-display text-lg italic text-ink">{quote(r.example, lang)}</p>
+              <p className="mt-1 font-display text-lg italic text-ink">
+                {quote(r.example, lang)}
+              </p>
             </div>
           </div>
         </article>
@@ -178,15 +226,21 @@ export function AgentsGrid({ l }: { l: L }) {
         return (
           <article key={a.name} className="bg-night p-6">
             <Icon className="size-5 text-muted" aria-hidden />
-            <h2 className="mt-4 font-display text-xl font-semibold text-ink">{a.name}</h2>
+            <h2 className="mt-4 font-display text-xl font-semibold text-ink">
+              {a.name}
+            </h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">{a.body}</p>
           </article>
         );
       })}
       <article className="border-l-[3px] border-teal bg-night p-6">
         <ScanEye className="size-5 text-teal" aria-hidden />
-        <h2 className="mt-4 font-display text-xl font-semibold text-ink">{l.agents.auditName}</h2>
-        <p className="mt-2 text-sm leading-relaxed text-ink/80">{l.agents.auditBody}</p>
+        <h2 className="mt-4 font-display text-xl font-semibold text-ink">
+          {l.agents.auditName}
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-ink/80">
+          {l.agents.auditBody}
+        </p>
       </article>
     </div>
   );
@@ -212,7 +266,10 @@ export function EpistemicList({ l }: { l: L }) {
   return (
     <dl className="divide-y divide-line border-y border-line">
       {l.epistemic.items.map((e) => (
-        <div key={e.key} className="grid gap-3 py-4 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:items-baseline">
+        <div
+          key={e.key}
+          className="grid gap-3 py-4 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:items-baseline"
+        >
           <dt>
             <span
               className={`inline-block rounded-full border px-3 py-1 font-mono text-[0.68rem] uppercase tracking-wider ${EPISTEMIC_STYLE[e.key]}`}
@@ -235,9 +292,41 @@ export function SecurityStrip({ l }: { l: L }) {
       {l.security.items.map((s, idx) => {
         const Icon = SECURITY_ICONS[idx];
         return (
-          <li key={s.title} className="flex items-center gap-3 bg-night px-4 py-4 text-sm font-medium text-ink sm:px-5">
+          <li
+            key={s.title}
+            className="flex items-center gap-3 bg-night px-4 py-4 text-sm font-medium text-ink sm:px-5"
+          >
             <Icon className="size-4 shrink-0 text-teal" aria-hidden />
             {s.title}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+/** Home version: four cards, each with a short explanation and a factual proof tag. */
+export function SecurityCards({ l }: { l: L }) {
+  return (
+    <ul className="grid gap-4 sm:grid-cols-2">
+      {l.security.items.map((s, idx) => {
+        const Icon = SECURITY_ICONS[idx];
+        return (
+          <li
+            key={s.title}
+            className="group flex flex-col rounded-xl border border-line bg-abyss/70 p-5 transition-colors hover:border-teal/40"
+          >
+            <span className="flex size-10 items-center justify-center rounded-lg border border-teal/30 bg-teal/10">
+              <Icon className="size-[1.1rem] text-teal" aria-hidden />
+            </span>
+            <h3 className="mt-4 text-base font-semibold text-ink">{s.title}</h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted">
+              {s.short}
+            </p>
+            <p className="mt-auto flex items-center gap-2 pt-4 font-mono text-[0.68rem] text-teal/90">
+              <span className="size-1.5 rounded-full bg-teal" aria-hidden />
+              {s.tag}
+            </p>
           </li>
         );
       })}
@@ -267,17 +356,27 @@ export function SecurityDetailed({ l }: { l: L }) {
 export function CtaBand({ l, lang }: { l: L; lang: Locale }) {
   return (
     <section aria-labelledby="cta-title" className="border-t border-line">
-      <div className={`${container} flex flex-col gap-8 py-16 lg:flex-row lg:items-center lg:justify-between`}>
+      <div
+        className={`${container} flex flex-col gap-8 py-16 lg:flex-row lg:items-center lg:justify-between`}
+      >
         <div>
-          <h2 id="cta-title" className="font-display text-3xl font-medium leading-tight text-ink sm:text-4xl">
+          <h2
+            id="cta-title"
+            className="font-display text-3xl font-medium leading-tight text-ink sm:text-4xl"
+          >
             {l.cta.title}
           </h2>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">{l.cta.body}</p>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">
+            {l.cta.body}
+          </p>
         </div>
         <div className="flex shrink-0 flex-col gap-4 sm:flex-row sm:items-center">
           <Link href={`/${lang}/register`} className={ctaPrimary}>
             {l.cta.button}
-            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+            <ArrowRight
+              className="size-4 transition-transform group-hover:translate-x-0.5"
+              aria-hidden
+            />
           </Link>
           <Link
             href={`/${lang}/login`}

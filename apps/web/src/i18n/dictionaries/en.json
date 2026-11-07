@@ -261,19 +261,27 @@
       "items": [
         {
           "title": "Hosted in Paris",
-          "body": "Application and database inside the European Union."
+          "body": "Application and database inside the European Union.",
+          "tag": "Paris region · European Union",
+          "short": "Application and database hosted in the European Union."
         },
         {
           "title": "Strict separation",
-          "body": "Each company's data is kept apart down to the database. Tests check it on every update."
+          "body": "Each company's data is kept apart down to the database. Tests check it on every update.",
+          "tag": "Checked on every update",
+          "short": "Each company only sees its own data, down to the database."
         },
         {
           "title": "Audit trail",
-          "body": "Sign-ins, invitations, role changes: every sensitive action is logged."
+          "body": "Sign-ins, invitations, role changes: every sensitive action is logged.",
+          "tag": "Sign-ins, roles, invitations",
+          "short": "Every sensitive action is logged, dated and visible to your administrators."
         },
         {
           "title": "People decide",
-          "body": "No decision is ever executed automatically. Recommendations stay recommendations."
+          "body": "No decision is ever executed automatically. Recommendations stay recommendations.",
+          "tag": "Nothing runs automatically",
+          "short": "The platform recommends. No decision is ever made for you."
         }
       ]
     },
@@ -365,7 +373,8 @@
       "flowMore": "See the full method",
       "agentsMore": "Meet the 8 agents",
       "securityTitle": "Your decisions stay yours.",
-      "securityMore": "More about security"
+      "securityMore": "More about security",
+      "securityIntro": "Your files hold your company's most sensitive information. Here is how we protect them."
     },
     "how": {
       "title": "How it works",

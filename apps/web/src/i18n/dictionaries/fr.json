@@ -261,19 +261,27 @@
       "items": [
         {
           "title": "Hébergé à Paris",
-          "body": "Application et base de données dans l'Union européenne."
+          "body": "Application et base de données dans l'Union européenne.",
+          "tag": "Région Paris · Union européenne",
+          "short": "Application et base de données hébergées dans l'Union européenne."
         },
         {
           "title": "Cloisonnement strict",
-          "body": "Les données de chaque entreprise sont séparées jusque dans la base de données. Des tests le vérifient à chaque mise à jour."
+          "body": "Les données de chaque entreprise sont séparées jusque dans la base de données. Des tests le vérifient à chaque mise à jour.",
+          "tag": "Vérifié à chaque mise à jour",
+          "short": "Chaque entreprise ne voit que ses données, jusque dans la base de données."
         },
         {
           "title": "Journal d'audit",
-          "body": "Connexions, invitations, changements de rôle : chaque action sensible est tracée."
+          "body": "Connexions, invitations, changements de rôle : chaque action sensible est tracée.",
+          "tag": "Connexions, rôles, invitations",
+          "short": "Chaque action sensible est tracée, datée et consultable par vos administrateurs."
         },
         {
           "title": "L'humain décide",
-          "body": "Aucune décision n'est exécutée automatiquement. Les recommandations restent des recommandations."
+          "body": "Aucune décision n'est exécutée automatiquement. Les recommandations restent des recommandations.",
+          "tag": "Aucune exécution automatique",
+          "short": "La plateforme recommande. Aucune décision n'est prise à votre place."
         }
       ]
     },
@@ -365,7 +373,8 @@
       "flowMore": "Voir la méthode complète",
       "agentsMore": "Découvrir les 8 agents",
       "securityTitle": "Vos décisions restent les vôtres.",
-      "securityMore": "En savoir plus sur la sécurité"
+      "securityMore": "En savoir plus sur la sécurité",
+      "securityIntro": "Vos dossiers contiennent ce que votre entreprise a de plus sensible. Voici comment nous les protégeons."
     },
     "how": {
       "title": "Comment ça marche",
