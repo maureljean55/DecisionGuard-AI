@@ -3,7 +3,9 @@
  */
 import {
   ArrowRight,
+  Building2,
   Check,
+  ChevronDown,
   Compass,
   GitBranch,
   Landmark,
@@ -12,6 +14,7 @@ import {
   Scale,
   ScanEye,
   ScrollText,
+  ServerCog,
   ShieldAlert,
   Truck,
   UserCheck,
@@ -126,33 +129,24 @@ export function SectionHead({
 export function PageIntro({
   title,
   intro,
-  lang,
-  back,
 }: {
   title: string;
   intro: string;
-  lang: Locale;
-  back: string;
+  /** Kept for call-site compatibility; navigation home is in the header. */
+  lang?: Locale;
+  back?: string;
 }) {
   return (
     <header className="border-b border-line">
-      <div className={`${container} py-16 sm:py-20`}>
-        <Link href={`/${lang}`} className="text-sm text-muted hover:text-ink">
-          ← {back}
-        </Link>
-        <h1 className="mt-6 max-w-3xl font-display text-[2.6rem] font-medium leading-[1.05] text-ink sm:text-6xl">
+      <div className={`${container} py-14 sm:py-16`}>
+        <h1 className="max-w-3xl font-display text-[2.5rem] font-medium leading-[1.05] text-ink sm:text-[3.4rem]">
           {title}
         </h1>
-        <p className="mt-6 max-w-2xl leading-relaxed text-muted">{intro}</p>
+        <p className="mt-5 max-w-2xl leading-relaxed text-muted">{intro}</p>
       </div>
     </header>
   );
 }
-
-const ctaPrimary =
-  "group inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-night transition-colors hover:bg-white";
-
-// ------------------------------------------------------------------ roles
 
 function quote(text: string, lang: Locale) {
   return lang === "fr" ? `« ${text} »` : `“${text}”`;
@@ -179,39 +173,78 @@ export function RolesCompact({ l, lang }: { l: L; lang: Locale }) {
   );
 }
 
+const ROLE_ICONS = [Building2, Landmark, ServerCog];
+
 export function RolesDetailed({ l, lang }: { l: L; lang: Locale }) {
+  const R = l.roles;
   return (
-    <div className="grid gap-5 lg:grid-cols-3">
-      {l.roles.list.map((r) => (
-        <article
-          key={r.role}
-          className="flex flex-col rounded-xl border border-line bg-abyss/70 p-6"
-        >
-          <h2 className="font-display text-2xl font-semibold text-ink">
-            {r.role}
-          </h2>
-          <p className="mt-2 text-sm leading-relaxed text-muted">{r.scope}</p>
-          <ul className="mt-5 space-y-3 text-sm text-ink/90">
-            {r.points.map((p) => (
-              <li key={p} className="flex gap-3">
-                <Check
-                  className="mt-0.5 size-4 shrink-0 text-teal"
+    <div className="grid items-start gap-5 lg:grid-cols-3">
+      {R.list.map((r, idx) => {
+        const Icon = ROLE_ICONS[idx];
+        return (
+          <article
+            key={r.role}
+            className="flex flex-col rounded-2xl border border-line bg-abyss/70 p-6 transition-colors hover:border-teal/40"
+          >
+            <span className="flex size-11 items-center justify-center rounded-xl border border-teal/30 bg-teal/10">
+              <Icon className="size-5 text-teal" aria-hidden />
+            </span>
+            <h2 className="mt-5 font-display text-[1.6rem] font-semibold leading-tight text-ink">
+              {r.role}
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted lg:min-h-[4.6rem]">{r.scope}</p>
+            <p className="mt-5 rounded-lg border border-line bg-night px-4 py-3 font-display text-lg italic leading-snug text-ink/90">
+              {quote(r.example, lang)}
+            </p>
+
+            {/* Native disclosure: works without JavaScript, keyboard accessible. */}
+            <details className="group mt-4">
+              <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-sm font-medium text-teal hover:text-ink [&::-webkit-details-marker]:hidden">
+                <span className="group-open:hidden">{R.readMore}</span>
+                <span className="hidden group-open:inline">{R.readLess}</span>
+                <ChevronDown
+                  className="size-4 transition-transform group-open:rotate-180"
                   aria-hidden
                 />
-                <span className="leading-relaxed">{p}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-auto pt-6">
-            <div className="border-t border-line pt-4">
-              <p className="text-xs text-muted">{l.roles.exampleLabel}</p>
-              <p className="mt-1 font-display text-lg italic text-ink">
-                {quote(r.example, lang)}
-              </p>
-            </div>
-          </div>
-        </article>
-      ))}
+              </summary>
+              <div className="mt-4 space-y-5 border-t border-line pt-5">
+                <div>
+                  <h3 className="text-xs font-semibold text-ink">
+                    {R.checksLabel}
+                  </h3>
+                  <ul className="mt-3 space-y-2.5 text-sm text-ink/90">
+                    {r.points.map((p) => (
+                      <li key={p} className="flex gap-2.5">
+                        <Check
+                          className="mt-0.5 size-4 shrink-0 text-teal"
+                          aria-hidden
+                        />
+                        <span className="leading-relaxed">{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-xs font-semibold text-ink">
+                    {R.decisionsLabel}
+                  </h3>
+                  <ul className="mt-3 space-y-2 text-sm text-muted">
+                    {r.decisions.map((d) => (
+                      <li key={d} className="flex gap-2.5">
+                        <span
+                          className="mt-2 size-1 shrink-0 rounded-full bg-muted"
+                          aria-hidden
+                        />
+                        <span className="leading-relaxed">{d}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </details>
+          </article>
+        );
+      })}
     </div>
   );
 }
@@ -383,6 +416,9 @@ export function SecurityDetailed({ l }: { l: L }) {
 }
 
 // ------------------------------------------------------------------ call to action
+
+const ctaPrimary =
+  "group inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-night transition-colors hover:bg-white";
 
 export function CtaBand({ l, lang }: { l: L; lang: Locale }) {
   return (

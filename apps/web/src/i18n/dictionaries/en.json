@@ -317,7 +317,12 @@
             "The dependencies you create: a supplier, a partner, a country",
             "The signals to watch once the decision is made"
           ],
-          "example": "Should we buy our distributor in Senegal?"
+          "example": "Should we buy our distributor in Senegal?",
+          "decisions": [
+            "Opening a subsidiary or office in a new country",
+            "Buying a competitor or a distributor",
+            "Launching an offer or entering a market"
+          ]
         },
         {
           "role": "Finance",
@@ -327,7 +332,12 @@
             "Currency exposure, including CFA franc, naira or cedi",
             "What the file still lacks before you can decide"
           ],
-          "example": "Should we fund the new warehouse with a loan?"
+          "example": "Should we fund the new warehouse with a loan?",
+          "decisions": [
+            "Funding an investment with a loan",
+            "Signing a large contract in a foreign currency",
+            "Cutting or postponing spending"
+          ]
         },
         {
           "role": "IT and security",
@@ -337,9 +347,18 @@
             "Vendor lock-in, and how hard it would be to switch",
             "GDPR duties and local data-protection laws"
           ],
-          "example": "Move our ERP to a host outside Europe?"
+          "example": "Move our ERP to a host outside Europe?",
+          "decisions": [
+            "Moving applications to the cloud",
+            "Changing software vendor or IT provider",
+            "Opening your systems to partners"
+          ]
         }
-      ]
+      ],
+      "readMore": "Read",
+      "readLess": "Show less",
+      "checksLabel": "What DecisionGuard examines",
+      "decisionsLabel": "Typical decisions"
     },
     "flow": {
       "title": "What happens between your question and your report.",
@@ -431,7 +450,7 @@
     "solutions": {
       "meta": "Who it's for · DecisionGuard",
       "title": "One decision, three ways of looking at it.",
-      "intro": "The risks that worry a CEO are not the ones that keep a CFO up at night. DecisionGuard starts from your role."
+      "intro": "The risks that worry leadership are not the ones that concern finance or IT. DecisionGuard adapts its analysis to your role."
     },
     "method": {
       "meta": "Method · DecisionGuard",

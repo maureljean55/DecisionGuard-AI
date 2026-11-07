@@ -317,7 +317,12 @@
             "Les dépendances que vous créez : un fournisseur, un partenaire, un pays",
             "Les signaux à surveiller une fois la décision prise"
           ],
-          "example": "Racheter notre distributeur au Sénégal ?"
+          "example": "Racheter notre distributeur au Sénégal ?",
+          "decisions": [
+            "Ouvrir une filiale ou un bureau dans un nouveau pays",
+            "Racheter un concurrent ou un distributeur",
+            "Lancer une nouvelle offre ou entrer sur un marché"
+          ]
         },
         {
           "role": "Direction financière",
@@ -327,7 +332,12 @@
             "Exposition de change, franc CFA, naira ou cedi compris",
             "Ce qui manque encore au dossier pour trancher"
           ],
-          "example": "Financer le nouvel entrepôt par un emprunt ?"
+          "example": "Financer le nouvel entrepôt par un emprunt ?",
+          "decisions": [
+            "Financer un investissement par emprunt",
+            "Signer un contrat important en devise étrangère",
+            "Réduire ou reporter des dépenses"
+          ]
         },
         {
           "role": "DSI et sécurité",
@@ -337,9 +347,18 @@
             "Dépendance au prestataire et possibilité d'en changer",
             "Obligations RGPD et lois locales sur les données"
           ],
-          "example": "Migrer l'ERP chez un hébergeur hors d'Europe ?"
+          "example": "Migrer l'ERP chez un hébergeur hors d'Europe ?",
+          "decisions": [
+            "Migrer des applications vers le cloud",
+            "Changer d'éditeur ou de prestataire informatique",
+            "Ouvrir l'accès à vos systèmes à des partenaires"
+          ]
         }
-      ]
+      ],
+      "readMore": "Lire",
+      "readLess": "Réduire",
+      "checksLabel": "Ce que DecisionGuard examine",
+      "decisionsLabel": "Décisions typiques"
     },
     "flow": {
       "title": "Ce qui se passe entre votre question et votre rapport.",
@@ -431,7 +450,7 @@
     "solutions": {
       "meta": "Pour qui · DecisionGuard",
       "title": "Une même décision, trois façons de la regarder.",
-      "intro": "Les risques qui inquiètent un directeur général ne sont pas ceux qui empêchent un DAF de dormir. DecisionGuard part de votre rôle."
+      "intro": "Les risques qui inquiètent une direction générale ne sont pas ceux qui préoccupent une direction financière ou une DSI. DecisionGuard adapte son analyse à votre rôle."
     },
     "method": {
       "meta": "Méthode · DecisionGuard",
