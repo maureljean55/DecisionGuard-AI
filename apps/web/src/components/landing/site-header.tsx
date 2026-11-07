@@ -9,6 +9,7 @@ import { Brand } from "./brand";
 
 export function SiteHeader({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   const links = [
+    { href: "#pour-qui", label: dict.nav.roles },
     { href: "#methode", label: dict.nav.method },
     { href: "#agents", label: dict.nav.agents },
     { href: "#securite", label: dict.nav.security },

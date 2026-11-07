@@ -30,3 +30,6 @@ coverage/
 # Supabase CLI cache
 supabase/.temp/
 .env.vercel.local
+
+# Design references (not shipped; contain placeholder claims)
+stitch_decisionguard_ai_website_design/

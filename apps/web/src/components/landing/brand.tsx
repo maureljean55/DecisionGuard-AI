@@ -15,7 +15,7 @@ export function Brand({ href, label, size = 40 }: { href: string; label: string;
         style={{ width: size * 1.48 }}
       />
       <span className="font-display text-[1.35rem] font-semibold leading-none tracking-tight text-ink">
-        DecisionGuard <span className="wing-text italic">AI</span>
+        DecisionGuard <span className="text-iris">AI</span>
       </span>
     </Link>
   );

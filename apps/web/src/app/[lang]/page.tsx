@@ -1,5 +1,6 @@
 import {
   ArrowRight,
+  Check,
   Compass,
   GitBranch,
   Landmark,
@@ -32,17 +33,11 @@ const EPISTEMIC_STYLE: Record<string, string> = {
   ai: "border-white/20 text-ink/80 border-dashed",
 };
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="font-mono text-[0.7rem] uppercase tracking-[0.22em] text-teal">{children}</p>
-  );
-}
-
 function SectionTitle({ children, id }: { children: React.ReactNode; id?: string }) {
   return (
     <h2
       id={id}
-      className="mt-4 max-w-3xl font-display text-[2.4rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-5xl"
+      className="max-w-3xl font-display text-[2.3rem] font-medium leading-[1.08] tracking-tight text-ink sm:text-[3.2rem]"
     >
       {children}
     </h2>
@@ -62,17 +57,16 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
       <main className="flex-1">
         {/* ------------------------------------------------------------ hero */}
         <section className="relative isolate">
-          {/* Night sky: the emblem's own light, nothing else. */}
           <div
             aria-hidden
-            className="absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_75%_20%,rgba(91,108,255,0.22),transparent_70%),radial-gradient(40%_40%_at_95%_60%,rgba(164,107,255,0.14),transparent_70%),radial-gradient(35%_35%_at_55%_45%,rgba(53,208,214,0.10),transparent_70%)]"
+            className="absolute inset-0 -z-10 bg-[radial-gradient(55%_45%_at_76%_22%,rgba(91,108,255,0.16),transparent_70%)]"
           />
           <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 pb-24 pt-14 sm:px-6 sm:pt-20 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10 lg:px-8 lg:pb-32">
             <div className="dg-rise">
-              <Eyebrow>{L.hero.eyebrow}</Eyebrow>
-              <h1 className="mt-6 font-display text-[3.1rem] font-medium leading-[0.98] tracking-[-0.015em] text-ink sm:text-7xl lg:text-[5.4rem]">
-                {L.hero.titleA}{" "}
-                <em className="wing-text pr-1 font-semibold">{L.hero.titleEm}</em> {L.hero.titleB}
+              <p className="text-sm font-medium text-teal">{L.hero.eyebrow}</p>
+              <h1 className="mt-5 font-display text-[3.1rem] font-medium leading-[0.98] tracking-[-0.015em] text-ink sm:text-7xl lg:text-[5.2rem]">
+                {L.hero.titleA} <em className="pr-1 text-teal">{L.hero.titleEm}</em>{" "}
+                {L.hero.titleB}
               </h1>
               <p className="mt-8 max-w-xl text-[1.05rem] leading-relaxed text-muted">
                 {L.hero.subtitle}
@@ -98,7 +92,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
               <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-xs text-muted">
                 {L.hero.trust.map((t) => (
                   <li key={t} className="flex items-center gap-2">
-                    <span className="size-1 rounded-full bg-teal" aria-hidden />
+                    <Check className="size-3.5 text-teal" aria-hidden />
                     {t}
                   </li>
                 ))}
@@ -115,7 +109,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
                   height={718}
                   priority
                   sizes="(min-width: 1024px) 480px, 78vw"
-                  className="h-auto w-full drop-shadow-[0_20px_60px_rgba(91,108,255,0.35)]"
+                  className="h-auto w-full drop-shadow-[0_20px_60px_rgba(91,108,255,0.3)]"
                 />
               </div>
               <div className="relative">
@@ -125,62 +119,75 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
           </div>
         </section>
 
-        {/* ------------------------------------------------------------ questions */}
-        <section aria-labelledby="questions-title" className="border-t border-line">
-          <div className="mx-auto grid max-w-7xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:px-8 lg:py-32">
-            <div>
-              <Eyebrow>{L.questions.eyebrow}</Eyebrow>
-              <SectionTitle id="questions-title">{L.questions.title}</SectionTitle>
-              <p className="mt-6 max-w-sm leading-relaxed text-muted">{L.questions.note}</p>
+        {/* ------------------------------------------------------------ by role */}
+        <section
+          id="pour-qui"
+          aria-labelledby="roles-title"
+          className="scroll-mt-20 border-t border-line"
+        >
+          <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-28">
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-end">
+              <SectionTitle id="roles-title">{L.roles.title}</SectionTitle>
+              <p className="max-w-md leading-relaxed text-muted">{L.roles.intro}</p>
             </div>
-            <ul className="grid gap-x-10 sm:grid-cols-2">
-              {L.questions.items.map((q) => (
-                <li
-                  key={q}
-                  className="border-b border-line py-6 font-display text-[1.65rem] italic leading-snug text-ink/90 sm:text-3xl"
+            <div className="mt-14 grid gap-5 lg:grid-cols-3">
+              {L.roles.list.map((r) => (
+                <article
+                  key={r.role}
+                  className="flex flex-col rounded-2xl border border-line bg-abyss/70 p-7"
                 >
-                  {q}
-                </li>
+                  <h3 className="font-display text-[1.75rem] font-semibold leading-tight text-ink">
+                    {r.role}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">{r.scope}</p>
+                  <ul className="mt-6 space-y-3 text-sm text-ink/90">
+                    {r.points.map((p) => (
+                      <li key={p} className="flex gap-3">
+                        <Check className="mt-0.5 size-4 shrink-0 text-teal" aria-hidden />
+                        <span className="leading-relaxed">{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-auto pt-7">
+                    <div className="border-t border-line pt-5">
+                      <p className="text-xs text-muted">{L.roles.exampleLabel}</p>
+                      <p className="mt-1.5 font-display text-xl italic text-ink">
+                        {lang === "fr" ? `«\u00a0${r.example}\u00a0»` : `“${r.example}”`}
+                      </p>
+                    </div>
+                  </div>
+                </article>
               ))}
-            </ul>
+            </div>
           </div>
         </section>
 
         {/* ------------------------------------------------------------ agents */}
         <section id="agents" aria-labelledby="agents-title" className="scroll-mt-20 bg-abyss/60">
-          <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
-            <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-              <div>
-                <Eyebrow>{L.agents.eyebrow}</Eyebrow>
-                <SectionTitle id="agents-title">{L.agents.title}</SectionTitle>
-              </div>
-              <p className="max-w-sm leading-relaxed text-muted">{L.agents.intro}</p>
+          <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-28">
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-end">
+              <SectionTitle id="agents-title">{L.agents.title}</SectionTitle>
+              <p className="max-w-md leading-relaxed text-muted">{L.agents.intro}</p>
             </div>
 
-            <div className="mt-16 grid gap-px overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
               {L.agents.list.map((a, idx) => {
                 const Icon = AGENT_ICONS[idx];
                 return (
-                  <article key={a.name} className="bg-night p-7 transition-colors hover:bg-abyss">
+                  <article key={a.name} className="bg-night p-7">
                     <Icon className="size-5 text-muted" aria-hidden />
-                    <h3 className="mt-6 font-display text-2xl font-semibold text-ink">{a.name}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted">{a.body}</p>
+                    <h3 className="mt-5 font-display text-2xl font-semibold text-ink">{a.name}</h3>
+                    <p className="mt-2.5 text-sm leading-relaxed text-muted">{a.body}</p>
                   </article>
                 );
               })}
-              {/* The eighth perspective is different in kind: it can overrule the others. */}
-              <article className="relative overflow-hidden bg-night p-7">
-                <div
-                  aria-hidden
-                  className="absolute inset-0 bg-[radial-gradient(120%_80%_at_100%_0%,rgba(164,107,255,0.22),transparent_60%),radial-gradient(100%_80%_at_0%_100%,rgba(53,208,214,0.16),transparent_60%)]"
-                />
-                <div className="relative">
-                  <ScanEye className="size-5 text-teal" aria-hidden />
-                  <h3 className="wing-text mt-6 font-display text-2xl font-semibold">
-                    {L.agents.auditName}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-ink/80">{L.agents.auditBody}</p>
-                </div>
+              {/* The eighth agent is different in kind: it can send the others' work back. */}
+              <article className="border-l-[3px] border-teal bg-night p-7">
+                <ScanEye className="size-5 text-teal" aria-hidden />
+                <h3 className="mt-5 font-display text-2xl font-semibold text-ink">
+                  {L.agents.auditName}
+                </h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-ink/80">{L.agents.auditBody}</p>
               </article>
             </div>
           </div>
@@ -188,20 +195,13 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
 
         {/* ------------------------------------------------------------ method (a true sequence) */}
         <section id="methode" aria-labelledby="method-title" className="scroll-mt-20">
-          <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
-            <Eyebrow>{L.method.eyebrow}</Eyebrow>
+          <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-28">
             <SectionTitle id="method-title">{L.method.title}</SectionTitle>
-            <ol className="mt-16 grid gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+            <ol className="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
               {L.method.steps.map((s, idx) => (
-                <li key={s.title} className="relative border-t border-line pt-6">
-                  <span
-                    className={`absolute -top-px left-0 h-px w-16 ${idx === L.method.steps.length - 1 ? "bg-gradient-to-r from-teal via-iris to-violet" : "bg-ink/40"}`}
-                    aria-hidden
-                  />
-                  <span className="font-mono text-xs text-muted">
-                    {String(idx + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-3 font-display text-[1.7rem] font-semibold leading-tight text-ink">
+                <li key={s.title} className="border-t border-line pt-6">
+                  <span className="font-mono text-xs text-teal">{idx + 1}</span>
+                  <h3 className="mt-2 font-display text-[1.65rem] font-semibold leading-tight text-ink">
                     {s.title}
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted">{s.body}</p>
@@ -211,19 +211,48 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
           </div>
         </section>
 
+        {/* ------------------------------------------------------------ before / after */}
+        <section aria-labelledby="compare-title" className="border-t border-line bg-abyss/60">
+          <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-28">
+            <SectionTitle id="compare-title">{L.compare.title}</SectionTitle>
+            <div className="mt-14 overflow-hidden rounded-2xl border border-line">
+              <div className="hidden grid-cols-2 border-b border-line bg-night text-sm md:grid">
+                <p className="px-7 py-4 text-muted">{L.compare.today}</p>
+                <p className="border-l border-line px-7 py-4 font-semibold text-teal">
+                  {L.compare.with}
+                </p>
+              </div>
+              {L.compare.rows.map(([before, after]) => (
+                <div
+                  key={before}
+                  className="grid border-b border-line last:border-b-0 md:grid-cols-2"
+                >
+                  <div className="bg-night/60 px-7 py-6">
+                    <p className="text-xs text-muted md:hidden">{L.compare.today}</p>
+                    <p className="mt-1 leading-relaxed text-muted md:mt-0">{before}</p>
+                  </div>
+                  <div className="bg-night px-7 py-6 md:border-l md:border-line">
+                    <p className="text-xs font-semibold text-teal md:hidden">{L.compare.with}</p>
+                    <p className="mt-1 leading-relaxed text-ink md:mt-0">{after}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ------------------------------------------------------------ facts ≠ assumptions */}
-        <section aria-labelledby="epistemic-title" className="border-y border-line bg-abyss/60">
+        <section aria-labelledby="epistemic-title" className="border-t border-line">
           <div className="mx-auto grid max-w-7xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-28">
             <div>
-              <Eyebrow>{L.epistemic.eyebrow}</Eyebrow>
               <SectionTitle id="epistemic-title">{L.epistemic.title}</SectionTitle>
               <p className="mt-6 max-w-md leading-relaxed text-muted">{L.epistemic.intro}</p>
             </div>
-            <dl className="space-y-4">
+            <dl className="divide-y divide-line border-y border-line">
               {L.epistemic.items.map((e) => (
                 <div
                   key={e.key}
-                  className="grid gap-3 rounded-2xl border border-line bg-night p-5 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:items-baseline"
+                  className="grid gap-3 py-5 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:items-baseline"
                 >
                   <dt>
                     <span
@@ -240,19 +269,20 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         </section>
 
         {/* ------------------------------------------------------------ security */}
-        <section id="securite" aria-labelledby="security-title" className="scroll-mt-20">
-          <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
-            <Eyebrow>{L.security.eyebrow}</Eyebrow>
+        <section
+          id="securite"
+          aria-labelledby="security-title"
+          className="scroll-mt-20 border-t border-line bg-abyss/60"
+        >
+          <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-28">
             <SectionTitle id="security-title">{L.security.title}</SectionTitle>
-            <div className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
               {L.security.items.map((s, idx) => {
                 const Icon = SECURITY_ICONS[idx];
                 return (
                   <div key={s.title}>
-                    <span className="flex size-11 items-center justify-center rounded-full border border-line">
-                      <Icon className="size-5 text-teal" aria-hidden />
-                    </span>
-                    <h3 className="mt-5 text-base font-semibold text-ink">{s.title}</h3>
+                    <Icon className="size-5 text-teal" aria-hidden />
+                    <h3 className="mt-4 text-base font-semibold text-ink">{s.title}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
                   </div>
                 );
@@ -261,40 +291,35 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
           </div>
         </section>
 
-        {/* ------------------------------------------------------------ final call */}
-        <section aria-labelledby="cta-title" className="px-4 pb-24 sm:px-6 lg:px-8 lg:pb-32">
-          <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[28px] border border-line bg-abyss px-6 py-16 text-center sm:px-12 sm:py-24">
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-[radial-gradient(50%_70%_at_50%_0%,rgba(91,108,255,0.28),transparent_70%)]"
-            />
-            <div className="wing-rule absolute inset-x-0 top-0" aria-hidden />
-            <div className="relative">
+        {/* ------------------------------------------------------------ call to action */}
+        <section aria-labelledby="cta-title" className="border-t border-line">
+          <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-24 sm:px-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:px-8 lg:py-28">
+            <div>
               <h2
                 id="cta-title"
-                className="mx-auto max-w-3xl font-display text-4xl font-medium leading-[1.05] text-ink sm:text-6xl"
+                className="font-display text-4xl font-medium leading-[1.05] text-ink sm:text-[3.4rem]"
               >
                 {L.cta.title}
               </h2>
-              <p className="mx-auto mt-6 max-w-xl leading-relaxed text-muted">{L.cta.body}</p>
-              <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link
-                  href={`/${lang}/register`}
-                  className="group inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 text-sm font-semibold text-night transition-colors hover:bg-white"
-                >
-                  {L.cta.button}
-                  <ArrowRight
-                    className="size-4 transition-transform group-hover:translate-x-0.5"
-                    aria-hidden
-                  />
-                </Link>
-                <Link
-                  href={`/${lang}/login`}
-                  className="text-sm text-muted underline-offset-4 hover:text-ink hover:underline"
-                >
-                  {L.cta.login}
-                </Link>
-              </div>
+              <p className="mt-6 max-w-xl leading-relaxed text-muted">{L.cta.body}</p>
+            </div>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center lg:justify-end">
+              <Link
+                href={`/${lang}/register`}
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-ink px-7 py-3.5 text-sm font-semibold text-night transition-colors hover:bg-white"
+              >
+                {L.cta.button}
+                <ArrowRight
+                  className="size-4 transition-transform group-hover:translate-x-0.5"
+                  aria-hidden
+                />
+              </Link>
+              <Link
+                href={`/${lang}/login`}
+                className="text-center text-sm text-muted underline-offset-4 hover:text-ink hover:underline"
+              >
+                {L.cta.login}
+              </Link>
             </div>
           </div>
         </section>

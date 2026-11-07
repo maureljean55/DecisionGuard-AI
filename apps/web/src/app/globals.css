@@ -83,19 +83,6 @@ body {
   outline-offset: 3px;
 }
 
-/* The wing gradient: reserved for signature moments (emphasis words, audit seal, rules). */
-.wing-text {
-  background: linear-gradient(100deg, var(--teal), var(--iris) 55%, var(--violet));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.wing-rule {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--teal), var(--iris), var(--violet), transparent);
-}
-
 /* ------------------------------------------------------------------ dossier reveal */
 @keyframes dg-rise {
   from {

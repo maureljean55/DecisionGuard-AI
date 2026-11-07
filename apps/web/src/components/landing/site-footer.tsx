@@ -14,7 +14,6 @@ export function SiteFooter({ dict, lang }: { dict: Dictionary; lang: Locale }) {
 
   return (
     <footer className="relative border-t border-line bg-night">
-      <div className="wing-rule absolute inset-x-0 top-0 opacity-60" aria-hidden />
       <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
         <div className="max-w-sm">
           <Brand href={`/${lang}`} label={dict.nav.home} size={36} />
@@ -22,10 +21,11 @@ export function SiteFooter({ dict, lang }: { dict: Dictionary; lang: Locale }) {
         </div>
 
         <nav aria-label={f.product} className="text-sm">
-          <h2 className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-muted/70">
+          <h2 className="text-sm font-semibold text-ink">
             {f.product}
           </h2>
           <ul className="mt-4 space-y-3">
+            <li><a href="#pour-qui" className={linkClass}>{dict.nav.roles}</a></li>
             <li><a href="#methode" className={linkClass}>{dict.nav.method}</a></li>
             <li><a href="#agents" className={linkClass}>{dict.nav.agents}</a></li>
             <li><a href="#securite" className={linkClass}>{dict.nav.security}</a></li>
@@ -33,7 +33,7 @@ export function SiteFooter({ dict, lang }: { dict: Dictionary; lang: Locale }) {
         </nav>
 
         <nav aria-label={f.account} className="text-sm">
-          <h2 className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-muted/70">
+          <h2 className="text-sm font-semibold text-ink">
             {f.account}
           </h2>
           <ul className="mt-4 space-y-3">

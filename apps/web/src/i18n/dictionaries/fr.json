@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "DecisionGuard AI — Intelligence des risques décisionnels",
+    "title": "DecisionGuard AI · Analyse des risques avant décision",
     "description": "Analysez, anticipez et surveillez les risques de vos décisions stratégiques grâce à une IA multi-agents vérifiée."
   },
   "nav": {
@@ -14,7 +14,8 @@
     "security": "Sécurité",
     "menu": "Menu",
     "cta": "Demander un accès pilote",
-    "home": "Accueil DecisionGuard AI"
+    "home": "Accueil DecisionGuard AI",
+    "roles": "Pour qui"
   },
   "status": {
     "label": "État du système",
@@ -48,8 +49,8 @@
       "title": "Connexion",
       "subtitle": "Accédez à votre espace DecisionGuard.",
       "submit": "Se connecter",
-      "forgot": "Mot de passe oublié ?",
-      "noAccount": "Pas encore de compte ?",
+      "forgot": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
       "register": "Créer un compte"
     },
     "register": {
@@ -58,13 +59,13 @@
       "you": "Vous",
       "company": "Votre entreprise",
       "submit": "Créer mon compte",
-      "hasAccount": "Déjà un compte ?",
+      "hasAccount": "Déjà un compte ?",
       "login": "Se connecter",
       "terms": "En créant un compte, vous acceptez que les analyses produites soient une aide à la décision et non un conseil juridique ou financier."
     },
     "forgot": {
       "title": "Mot de passe oublié",
-      "subtitle": "Indiquez votre adresse : si un compte existe, vous recevrez un lien de réinitialisation valable 1 heure.",
+      "subtitle": "Indiquez votre adresse : si un compte existe, vous recevrez un lien de réinitialisation valable 1 heure.",
       "submit": "Envoyer le lien",
       "sent": "Si un compte existe pour cette adresse, un e-mail vient d'être envoyé. Pensez à vérifier vos courriers indésirables.",
       "back": "Retour à la connexion"
@@ -88,7 +89,7 @@
       "sentTo": "Invitation envoyée à {email}.",
       "accept": "Accepter l'invitation",
       "loginFirst": "Connectez-vous avec cette adresse pour accepter.",
-      "registerFirst": "Pas encore de compte ? Créez-le avec cette adresse.",
+      "registerFirst": "Pas encore de compte ? Créez-le avec cette adresse.",
       "accepted": "Vous avez rejoint {org}."
     },
     "roles": {
@@ -114,9 +115,9 @@
       "titleA": "Voyez ce qui peut mal tourner,",
       "titleEm": "avant",
       "titleB": "de décider.",
-      "subtitle": "Décrivez une décision. Sept agents spécialisés l'examinent — finance, stratégie, droit, cybersécurité, équipes, opérations, scénarios — puis un auditeur indépendant vérifie chaque conclusion avant qu'elle n'entre dans votre rapport.",
+      "subtitle": "Vous décrivez une décision. Sept agents l'examinent chacun sous un angle : finance, stratégie, droit, cybersécurité, équipes, opérations et scénarios. Un huitième vérifie leur travail avant que quoi que ce soit n'arrive dans votre rapport.",
       "primary": "Demander un accès pilote",
-      "secondary": "Voir la méthode",
+      "secondary": "Comment ça marche",
       "trust": [
         "Hébergé à Paris",
         "Données isolées par entreprise",
@@ -127,7 +128,7 @@
       "label": "Exemple illustratif",
       "kind": "Décision stratégique",
       "title": "Ouvrir une filiale à Douala",
-      "meta": "Budget : 1,6 Md XAF · Échéance : T2 2027",
+      "meta": "Budget : 1,6 Md XAF · Échéance : T2 2027",
       "probability": "Probabilité",
       "impact": "Impact",
       "score": "Score",
@@ -163,23 +164,9 @@
       "seal": "Vérifié par l'agent d'audit",
       "sealNote": "3 hypothèses à confirmer avant décision"
     },
-    "questions": {
-      "eyebrow": "Ce que DecisionGuard examine",
-      "title": "Les questions qu'on se pose souvent trop tard.",
-      "items": [
-        "Qu'est-ce qui peut mal tourner ?",
-        "Pourquoi, et avec quelle probabilité ?",
-        "Combien cela coûterait-il ?",
-        "Quels risques s'entraînent les uns les autres ?",
-        "Que faire pour les réduire ?",
-        "Que manque-t-il pour décider ?"
-      ],
-      "note": "Pour chaque décision, une réponse argumentée — et un aveu clair quand l'information manque."
-    },
     "agents": {
-      "eyebrow": "Les agents",
-      "title": "Huit regards sur une même décision.",
-      "intro": "Chaque agent travaille dans son domaine, avec ses propres questions. Aucun ne signe seul.",
+      "title": "Huit agents, un seul dossier.",
+      "intro": "Chacun reste dans son domaine et pose ses propres questions. Aucune conclusion ne sort sans être passée par l'auditeur.",
       "list": [
         {
           "name": "Finance",
@@ -191,7 +178,7 @@
         },
         {
           "name": "Juridique & conformité",
-          "body": "RGPD, droit OHADA, contrats, droit du travail. Il signale ; il ne remplace pas votre avocat."
+          "body": "RGPD, droit OHADA, contrats, droit du travail. Il signale ; il ne remplace pas votre avocat."
         },
         {
           "name": "Cybersécurité & technologie",
@@ -207,15 +194,14 @@
         },
         {
           "name": "Scénarios",
-          "body": "Optimiste, réaliste, pessimiste, crise : ce qui change quand les hypothèses changent."
+          "body": "Optimiste, réaliste, pessimiste, crise : ce qui change quand les hypothèses changent."
         }
       ],
       "auditName": "L'auditeur",
-      "auditBody": "Il vérifie la cohérence entre les agents, refait les calculs, contrôle les sources et leur date. Il peut rejeter une conclusion et exiger une nouvelle analyse."
+      "auditBody": "Il compare ce que disent les autres agents, refait les calculs et vérifie les sources et leur date. Quand une conclusion ne tient pas, il la renvoie avec une demande précise."
     },
     "method": {
-      "eyebrow": "Méthode",
-      "title": "Du brouillon de décision au rapport signé par vous.",
+      "title": "Du premier brouillon au rapport que vous signez.",
       "steps": [
         {
           "title": "Vous décrivez la décision",
@@ -227,11 +213,11 @@
         },
         {
           "title": "Les agents analysent en parallèle",
-          "body": "Chacun produit des risques structurés : cause, probabilité, impact, preuves."
+          "body": "Chacun produit des risques structurés : cause, probabilité, impact, preuves."
         },
         {
           "title": "Le moteur calcule",
-          "body": "Probabilité × impact sur une échelle de 1 à 5. Mêmes données, même score : les calculs ne dépendent pas de l'IA."
+          "body": "Probabilité × impact, notés de 1 à 5. Avec les mêmes données, vous obtenez toujours le même score : le calcul ne passe pas par l'IA."
         },
         {
           "title": "L'auditeur vérifie",
@@ -239,39 +225,37 @@
         },
         {
           "title": "Vous décidez",
-          "body": "Synthèse, matrice des risques, scénarios, plan d'atténuation. La plateforme recommande ; elle n'exécute jamais rien à votre place."
+          "body": "Synthèse, matrice des risques, scénarios et plan d'action. La plateforme recommande, elle n'agit jamais à votre place."
         }
       ]
     },
     "epistemic": {
-      "eyebrow": "Transparence",
-      "title": "Chaque phrase dit d'où elle vient.",
-      "intro": "Une estimation n'est jamais présentée comme un fait. Dans chaque rapport, chaque élément porte son étiquette.",
+      "title": "Vous savez toujours d'où vient une information.",
+      "intro": "Une estimation n'est jamais présentée comme un fait. Chaque élément du rapport porte l'une de ces quatre étiquettes.",
       "items": [
         {
           "key": "fact",
           "name": "Fait vérifié",
-          "body": "Sourcé et daté. Exemple : la parité fixe entre le franc CFA et l'euro."
+          "body": "Sourcé et daté. Exemple : la parité fixe entre le franc CFA et l'euro."
         },
         {
           "key": "estimate",
           "name": "Estimation",
-          "body": "Calculée, avec sa méthode et ses données d'entrée."
+          "body": "Un chiffre calculé, avec sa méthode et les données utilisées."
         },
         {
           "key": "hypothesis",
           "name": "Hypothèse",
-          "body": "Plausible mais non confirmée : à vérifier avant de décider."
+          "body": "Plausible mais non confirmée : à vérifier avant de décider."
         },
         {
           "key": "ai",
           "name": "Piste de l'IA",
-          "body": "Une idée générée par un agent, présentée comme telle, jamais comme une certitude."
+          "body": "Une idée proposée par un agent. Utile pour réfléchir, à ne pas prendre pour une certitude."
         }
       ]
     },
     "security": {
-      "eyebrow": "Sécurité",
       "title": "Vos décisions restent les vôtres.",
       "items": [
         {
@@ -280,11 +264,11 @@
         },
         {
           "title": "Cloisonnement strict",
-          "body": "Les données de chaque entreprise sont isolées jusque dans la base de données, et cette isolation est testée à chaque mise à jour."
+          "body": "Les données de chaque entreprise sont séparées jusque dans la base de données. Des tests le vérifient à chaque mise à jour."
         },
         {
           "title": "Journal d'audit",
-          "body": "Connexions, invitations, changements de rôle : chaque action sensible est tracée."
+          "body": "Connexions, invitations, changements de rôle : chaque action sensible est tracée."
         },
         {
           "title": "L'humain décide",
@@ -293,18 +277,78 @@
       ]
     },
     "cta": {
-      "title": "Votre prochaine décision mérite un second regard.",
-      "body": "Nous ouvrons DecisionGuard à un premier groupe d'entreprises en Europe et en Afrique.",
+      "title": "Vous avez une décision importante à prendre ?",
+      "body": "Nous ouvrons DecisionGuard à un premier groupe d'entreprises en Europe et en Afrique. Soumettez-nous un vrai dossier, on l'analyse avec vous.",
       "button": "Demander un accès pilote",
       "login": "J'ai déjà un compte"
     },
     "footer": {
-      "tagline": "Intelligence des risques décisionnels pour les entreprises d'Europe et d'Afrique.",
+      "tagline": "L'analyse des risques avant décision, pour les entreprises d'Europe et d'Afrique.",
       "product": "Produit",
       "account": "Compte",
       "login": "Connexion",
       "register": "Créer un compte",
       "rights": "Tous droits réservés."
+    },
+    "roles": {
+      "title": "Une même décision, trois façons de la regarder.",
+      "intro": "Les risques qui inquiètent un directeur général ne sont pas ceux qui empêchent un DAF de dormir. DecisionGuard part de votre rôle.",
+      "exampleLabel": "Exemple de question",
+      "list": [
+        {
+          "role": "Direction générale",
+          "scope": "Implantation dans un nouveau pays, acquisition, lancement d'une offre, partenariat structurant.",
+          "points": [
+            "Ce que la décision vous engage à tenir sur trois à cinq ans",
+            "Les dépendances que vous créez : un fournisseur, un partenaire, un pays",
+            "Les signaux à surveiller une fois la décision prise"
+          ],
+          "example": "Racheter notre distributeur au Sénégal ?"
+        },
+        {
+          "role": "Direction financière",
+          "scope": "Investissement, financement, trésorerie, exposition de change.",
+          "points": [
+            "Besoin de trésorerie et ce qui se passe si le budget dérape",
+            "Exposition de change, franc CFA, naira ou cedi compris",
+            "Ce qui manque encore au dossier pour trancher"
+          ],
+          "example": "Financer le nouvel entrepôt par un emprunt ?"
+        },
+        {
+          "role": "DSI et sécurité",
+          "scope": "Migration vers le cloud, choix d'un prestataire, nouvelle application, mise en conformité.",
+          "points": [
+            "Risques de fuite de données et d'indisponibilité",
+            "Dépendance au prestataire et possibilité d'en changer",
+            "Obligations RGPD et lois locales sur les données"
+          ],
+          "example": "Migrer l'ERP chez un hébergeur hors d'Europe ?"
+        }
+      ]
+    },
+    "compare": {
+      "title": "Ce qui change dans votre façon de décider.",
+      "today": "Aujourd'hui, le plus souvent",
+      "with": "Avec DecisionGuard",
+      "rows": [
+        [
+          "Les hypothèses restent dans la tête de ceux qui ont monté le dossier.",
+          "Chaque hypothèse est écrite, étiquetée, et vous savez lesquelles confirmer."
+        ],
+        [
+          "Les risques sont notés à l'intuition, différemment d'une réunion à l'autre.",
+          "Le même calcul pour chaque décision, donc des scores comparables."
+        ],
+        [
+          "Chaque service regarde son périmètre et découvre les autres trop tard.",
+          "Finance, droit, cyber et opérations dans le même dossier, avec les risques qui s'entraînent."
+        ],
+        [
+          "Une fois la décision prise, le dossier part aux archives.",
+          "Le dossier peut rester sous surveillance et signaler ce qui a changé."
+        ]
+      ]
     }
   }
 }

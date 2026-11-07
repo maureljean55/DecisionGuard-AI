@@ -58,7 +58,7 @@ export function RiskDossier({ d }: { d: Dictionary["landing"]["dossier"] }) {
   const sealAt = start + RISKS.length * step + 0.3;
 
   return (
-    <figure className="relative overflow-hidden rounded-[22px] border border-white/10 bg-abyss/90 shadow-[0_40px_120px_-40px_rgba(91,108,255,0.45)] backdrop-blur">
+    <figure className="relative overflow-hidden rounded-[22px] border border-white/10 bg-abyss/90 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.8)]">
       {/* Header of the dossier */}
       <figcaption className="flex flex-wrap items-start justify-between gap-3 border-b border-white/[0.07] px-5 py-4 sm:px-6">
         <div>
@@ -157,10 +157,8 @@ export function RiskDossier({ d }: { d: Dictionary["landing"]["dossier"] }) {
       {/* Audit seal: the last thing to appear, as in the real workflow. */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.07] px-5 py-4 sm:px-6">
         <div className="dg-seal flex items-center gap-2.5" style={delay(sealAt)}>
-          <span className="flex size-9 items-center justify-center rounded-full bg-gradient-to-br from-teal via-iris to-violet p-[1.5px]">
-            <span className="flex size-full items-center justify-center rounded-full bg-abyss">
-              <ShieldCheck className="size-4 text-teal" aria-hidden />
-            </span>
+          <span className="flex size-9 items-center justify-center rounded-full border border-teal/50 bg-teal/10">
+            <ShieldCheck className="size-4 text-teal" aria-hidden />
           </span>
           <span className="text-sm font-semibold text-ink">{d.seal}</span>
         </div>
