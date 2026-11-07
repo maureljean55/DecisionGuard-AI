@@ -327,28 +327,30 @@
         }
       ]
     },
-    "compare": {
-      "title": "Ce qui change dans votre façon de décider.",
-      "today": "Aujourd'hui, le plus souvent",
-      "with": "Avec DecisionGuard",
-      "rows": [
-        [
-          "Les hypothèses restent dans la tête de ceux qui ont monté le dossier.",
-          "Chaque hypothèse est écrite, étiquetée, et vous savez lesquelles confirmer."
-        ],
-        [
-          "Les risques sont notés à l'intuition, différemment d'une réunion à l'autre.",
-          "Le même calcul pour chaque décision, donc des scores comparables."
-        ],
-        [
-          "Chaque service regarde son périmètre et découvre les autres trop tard.",
-          "Finance, droit, cyber et opérations dans le même dossier, avec les risques qui s'entraînent."
-        ],
-        [
-          "Une fois la décision prise, le dossier part aux archives.",
-          "Le dossier peut rester sous surveillance et signaler ce qui a changé."
-        ]
-      ]
+    "flow": {
+      "title": "Ce qui se passe entre votre question et votre rapport.",
+      "intro": "Les agents travaillent en parallèle, le calcul est fait à part, et rien n'arrive dans le rapport sans l'accord de l'auditeur.",
+      "decision": "Votre décision",
+      "decisionNote": "Si une information manque, on vous la demande",
+      "agents": [
+        "Finance",
+        "Stratégie",
+        "Juridique",
+        "Cybersécurité",
+        "Équipes",
+        "Opérations",
+        "Scénarios"
+      ],
+      "agentsLabel": "7 agents en parallèle",
+      "engine": "Moteur de calcul",
+      "formula": "Probabilité × Impact",
+      "engineNote": "Mêmes données, même score",
+      "auditor": "Auditeur",
+      "auditorNote": "Cohérence, calculs, sources",
+      "loop": "Renvoyé à l'agent s'il n'est pas étayé",
+      "report": "Votre rapport",
+      "reportNote": "Vous décidez",
+      "srSummary": "Votre décision est analysée en parallèle par sept agents : finance, stratégie, juridique, cybersécurité, équipes, opérations et scénarios. Leurs risques sont notés par le moteur de calcul (probabilité × impact), puis contrôlés par l'auditeur, qui renvoie aux agents tout ce qui n'est pas étayé. Le rapport final vous est remis : la décision reste la vôtre."
     }
   }
 }

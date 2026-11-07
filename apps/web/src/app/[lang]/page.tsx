@@ -18,6 +18,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { AnalysisFlow } from "@/components/landing/analysis-flow";
 import { RiskDossier } from "@/components/landing/risk-dossier";
 import { SiteFooter } from "@/components/landing/site-footer";
 import { SiteHeader } from "@/components/landing/site-header";
@@ -211,32 +212,15 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
           </div>
         </section>
 
-        {/* ------------------------------------------------------------ before / after */}
-        <section aria-labelledby="compare-title" className="border-t border-line bg-abyss/60">
+        {/* ------------------------------------------------------------ how a decision flows */}
+        <section aria-labelledby="flow-title" className="border-t border-line bg-abyss/60">
           <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-28">
-            <SectionTitle id="compare-title">{L.compare.title}</SectionTitle>
-            <div className="mt-14 overflow-hidden rounded-2xl border border-line">
-              <div className="hidden grid-cols-2 border-b border-line bg-night text-sm md:grid">
-                <p className="px-7 py-4 text-muted">{L.compare.today}</p>
-                <p className="border-l border-line px-7 py-4 font-semibold text-teal">
-                  {L.compare.with}
-                </p>
-              </div>
-              {L.compare.rows.map(([before, after]) => (
-                <div
-                  key={before}
-                  className="grid border-b border-line last:border-b-0 md:grid-cols-2"
-                >
-                  <div className="bg-night/60 px-7 py-6">
-                    <p className="text-xs text-muted md:hidden">{L.compare.today}</p>
-                    <p className="mt-1 leading-relaxed text-muted md:mt-0">{before}</p>
-                  </div>
-                  <div className="bg-night px-7 py-6 md:border-l md:border-line">
-                    <p className="text-xs font-semibold text-teal md:hidden">{L.compare.with}</p>
-                    <p className="mt-1 leading-relaxed text-ink md:mt-0">{after}</p>
-                  </div>
-                </div>
-              ))}
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-end">
+              <SectionTitle id="flow-title">{L.flow.title}</SectionTitle>
+              <p className="max-w-md leading-relaxed text-muted">{L.flow.intro}</p>
+            </div>
+            <div className="mt-14 rounded-2xl border border-line bg-night px-4 py-8 sm:px-8 lg:px-10 lg:py-12">
+              <AnalysisFlow f={L.flow} />
             </div>
           </div>
         </section>

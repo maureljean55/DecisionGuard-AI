@@ -327,28 +327,30 @@
         }
       ]
     },
-    "compare": {
-      "title": "What changes in the way you decide.",
-      "today": "Today, more often than not",
-      "with": "With DecisionGuard",
-      "rows": [
-        [
-          "Assumptions stay in the heads of whoever built the file.",
-          "Every assumption is written down and labelled, and you know which ones to confirm."
-        ],
-        [
-          "Risks are scored by gut feeling, differently from one meeting to the next.",
-          "The same calculation for every decision, so scores can be compared."
-        ],
-        [
-          "Each department looks at its own area and finds out about the others too late.",
-          "Finance, legal, cyber and operations in one file, including the risks that trigger each other."
-        ],
-        [
-          "Once the decision is made, the file goes into the archive.",
-          "The file can stay under watch and flag what has changed."
-        ]
-      ]
+    "flow": {
+      "title": "What happens between your question and your report.",
+      "intro": "Agents work in parallel, scoring is done separately, and nothing reaches the report without the auditor's approval.",
+      "decision": "Your decision",
+      "decisionNote": "If information is missing, we ask you for it",
+      "agents": [
+        "Finance",
+        "Strategy",
+        "Legal",
+        "Cybersecurity",
+        "People",
+        "Operations",
+        "Scenarios"
+      ],
+      "agentsLabel": "7 agents in parallel",
+      "engine": "Scoring engine",
+      "formula": "Probability × Impact",
+      "engineNote": "Same data, same score",
+      "auditor": "Auditor",
+      "auditorNote": "Consistency, calculations, sources",
+      "loop": "Sent back to the agent if unsupported",
+      "report": "Your report",
+      "reportNote": "You decide",
+      "srSummary": "Your decision is analysed in parallel by seven agents: finance, strategy, legal, cybersecurity, people, operations and scenarios. Their risks are scored by the engine (probability × impact), then checked by the auditor, who sends anything unsupported back to the agents. The final report is handed to you: the decision stays yours."
     }
   }
 }

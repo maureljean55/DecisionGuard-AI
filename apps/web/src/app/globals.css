@@ -149,11 +149,23 @@ body {
   animation: dg-scan 2.4s ease-in-out 0.3s 1 both;
 }
 
+/* The auditor's send-back loop: a slow dash moving toward the agents. */
+@keyframes dg-dash {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+
+.dg-flow {
+  animation: dg-dash 1.8s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .dg-rise,
   .dg-pop,
   .dg-seal,
-  .dg-scan {
+  .dg-scan,
+  .dg-flow {
     animation: none;
   }
   .dg-scan {
