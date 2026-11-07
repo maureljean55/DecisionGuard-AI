@@ -8,28 +8,13 @@
     "pricing": "Pricing",
     "login": "Log in",
     "language": "Language",
-    "register": "Create account"
-  },
-  "hero": {
-    "eyebrow": "Decision intelligence for companies",
-    "title": "Know what could go wrong, before you decide.",
-    "subtitle": "DecisionGuard AI examines every decision from eight angles — financial, strategic, legal, cyber, human, operational, predictive — then verifies its own conclusions before presenting them.",
+    "register": "Create account",
+    "method": "Method",
+    "agents": "The agents",
+    "security": "Security",
+    "menu": "Menu",
     "cta": "Request pilot access",
-    "secondary": "See the methodology"
-  },
-  "pillars": {
-    "verified": {
-      "title": "Verified conclusions",
-      "body": "An independent audit agent checks the consistency, calculations and sources of every analysis."
-    },
-    "reproducible": {
-      "title": "Reproducible scores",
-      "body": "Risk scores are computed by a deterministic engine, never improvised by the AI."
-    },
-    "transparent": {
-      "title": "Facts ≠ assumptions",
-      "body": "Every finding is labelled: verified fact, assumption, estimate or AI-generated hypothesis."
-    }
+    "home": "DecisionGuard AI home"
   },
   "status": {
     "label": "System status",
@@ -122,5 +107,204 @@
     "verifyBanner": "Confirm your e-mail address to secure your account.",
     "resend": "Resend e-mail",
     "resent": "E-mail sent."
+  },
+  "landing": {
+    "hero": {
+      "eyebrow": "Decision risk intelligence",
+      "titleA": "See what could go wrong,",
+      "titleEm": "before",
+      "titleB": "you decide.",
+      "subtitle": "Describe a decision. Seven specialist agents examine it — finance, strategy, law, cybersecurity, people, operations, scenarios — then an independent auditor checks every conclusion before it reaches your report.",
+      "primary": "Request pilot access",
+      "secondary": "See the method",
+      "trust": [
+        "Hosted in Paris",
+        "Data isolated per company",
+        "Français · English"
+      ]
+    },
+    "dossier": {
+      "label": "Illustrative example",
+      "kind": "Strategic decision",
+      "title": "Open a subsidiary in Douala",
+      "meta": "Budget: XAF 1.6bn · Deadline: Q2 2027",
+      "probability": "Probability",
+      "impact": "Impact",
+      "score": "Score",
+      "levels": {
+        "low": "Low",
+        "moderate": "Moderate",
+        "high": "High",
+        "critical": "Critical"
+      },
+      "status": {
+        "fact": "Verified fact",
+        "estimate": "Estimate",
+        "hypothesis": "Assumption"
+      },
+      "risks": [
+        "Single-supplier dependency",
+        "Set-up budget overrun",
+        "Licensing delays",
+        "Shortage of technical profiles",
+        "Customer data breach",
+        "XAF/EUR currency risk"
+      ],
+      "categories": {
+        "operations": "Operations",
+        "finance": "Finance",
+        "legal": "Legal",
+        "people": "People",
+        "cyber": "Cyber"
+      },
+      "notes": {
+        "fx": "Fixed XAF/EUR peg"
+      },
+      "seal": "Verified by the audit agent",
+      "sealNote": "3 assumptions to confirm before deciding"
+    },
+    "questions": {
+      "eyebrow": "What DecisionGuard examines",
+      "title": "The questions people often ask too late.",
+      "items": [
+        "What could go wrong?",
+        "Why, and how likely is it?",
+        "What would it cost?",
+        "Which risks trigger one another?",
+        "What would reduce them?",
+        "What is missing to decide?"
+      ],
+      "note": "For every decision, a reasoned answer — and a clear admission when information is missing."
+    },
+    "agents": {
+      "eyebrow": "The agents",
+      "title": "Eight perspectives on one decision.",
+      "intro": "Each agent works in its own field, with its own questions. None of them signs alone.",
+      "list": [
+        {
+          "name": "Finance",
+          "body": "Cash flow, debt, profitability, return on investment, budget overruns."
+        },
+        {
+          "name": "Strategy",
+          "body": "Positioning, competition, reputation, dependencies and long-term consequences."
+        },
+        {
+          "name": "Legal & compliance",
+          "body": "GDPR, OHADA law, contracts, employment law. It flags issues; it does not replace your lawyer."
+        },
+        {
+          "name": "Cybersecurity & technology",
+          "body": "Threats, data breaches, software dependencies, system availability."
+        },
+        {
+          "name": "People & organisation",
+          "body": "Hiring, skills, resistance to change, management capacity."
+        },
+        {
+          "name": "Operations",
+          "body": "Suppliers, logistics, lead times, business continuity."
+        },
+        {
+          "name": "Scenarios",
+          "body": "Optimistic, realistic, pessimistic, crisis: what changes when assumptions change."
+        }
+      ],
+      "auditName": "The auditor",
+      "auditBody": "It checks consistency across agents, redoes the calculations, verifies sources and their dates. It can reject a conclusion and demand a new analysis."
+    },
+    "method": {
+      "eyebrow": "Method",
+      "title": "From a draft decision to a report you sign.",
+      "steps": [
+        {
+          "title": "You describe the decision",
+          "body": "Context, amounts, deadlines, relevant documents."
+        },
+        {
+          "title": "We ask the right questions",
+          "body": "When essential information is missing, DecisionGuard asks for it instead of assuming."
+        },
+        {
+          "title": "Agents analyse in parallel",
+          "body": "Each produces structured risks: cause, probability, impact, evidence."
+        },
+        {
+          "title": "The engine calculates",
+          "body": "Probability × impact on a 1-to-5 scale. Same data, same score: calculations do not depend on the AI."
+        },
+        {
+          "title": "The auditor checks",
+          "body": "Contradictions, calculations, sources. Anything unsupported is sent back."
+        },
+        {
+          "title": "You decide",
+          "body": "Summary, risk matrix, scenarios, mitigation plan. The platform recommends; it never acts on your behalf."
+        }
+      ]
+    },
+    "epistemic": {
+      "eyebrow": "Transparency",
+      "title": "Every sentence says where it comes from.",
+      "intro": "An estimate is never presented as a fact. In every report, each finding carries its label.",
+      "items": [
+        {
+          "key": "fact",
+          "name": "Verified fact",
+          "body": "Sourced and dated. Example: the fixed peg between the CFA franc and the euro."
+        },
+        {
+          "key": "estimate",
+          "name": "Estimate",
+          "body": "Calculated, with its method and input data."
+        },
+        {
+          "key": "hypothesis",
+          "name": "Assumption",
+          "body": "Plausible but unconfirmed: check it before you decide."
+        },
+        {
+          "key": "ai",
+          "name": "AI lead",
+          "body": "An idea generated by an agent, presented as such, never as a certainty."
+        }
+      ]
+    },
+    "security": {
+      "eyebrow": "Security",
+      "title": "Your decisions stay yours.",
+      "items": [
+        {
+          "title": "Hosted in Paris",
+          "body": "Application and database inside the European Union."
+        },
+        {
+          "title": "Strict separation",
+          "body": "Each company's data is isolated down to the database, and that isolation is tested on every update."
+        },
+        {
+          "title": "Audit trail",
+          "body": "Sign-ins, invitations, role changes: every sensitive action is logged."
+        },
+        {
+          "title": "People decide",
+          "body": "No decision is ever executed automatically. Recommendations stay recommendations."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Your next decision deserves a second look.",
+      "body": "We are opening DecisionGuard to a first group of companies in Europe and Africa.",
+      "button": "Request pilot access",
+      "login": "I already have an account"
+    },
+    "footer": {
+      "tagline": "Decision risk intelligence for companies in Europe and Africa.",
+      "product": "Product",
+      "account": "Account",
+      "login": "Sign in",
+      "register": "Create an account",
+      "rights": "All rights reserved."
+    }
   }
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Source_Serif_4 } from "next/font/google";
+import { EB_Garamond, JetBrains_Mono, Manrope } from "next/font/google";
 import { notFound } from "next/navigation";
 
 import { hasLocale, locales } from "@/i18n/config";
@@ -7,8 +7,17 @@ import { getDictionary } from "@/i18n/dictionaries";
 
 import "../globals.css";
 
-const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
-const display = Source_Serif_4({ variable: "--font-display", subsets: ["latin"] });
+// Display: an old-style Garamond with heraldic gravity (the shield, the owl's wisdom),
+// chosen over Cormorant for its well-seated French accents (ê, ô, â).
+const display = EB_Garamond({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  style: ["normal", "italic"],
+});
+const body = Manrope({ variable: "--font-body", subsets: ["latin"] });
+// Utility face for scores and figures: the risk engine is deterministic, numbers look it.
+const mono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"], weight: ["400", "500"] });
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -30,7 +39,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   if (!hasLocale(lang)) notFound();
 
   return (
-    <html lang={lang} className={`${inter.variable} ${display.variable} h-full antialiased`}>
+    <html lang={lang} className={`${display.variable} ${body.variable} ${mono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">{children}</body>
     </html>
   );
