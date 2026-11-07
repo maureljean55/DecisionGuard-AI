@@ -1,5 +1,4 @@
 import {
-  ArrowRight,
   Presentation,
   Scale,
   Truck,
@@ -10,7 +9,6 @@ import {
   Rocket,
 } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import {
@@ -68,24 +66,6 @@ export default async function Page({ params }: PageProps<"/[lang]/solutions">) {
             {S.title}
           </h1>
           <p className="mt-5 max-w-2xl leading-relaxed text-muted">{S.intro}</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link
-              href={`/${lang}/register`}
-              className="group inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-night transition-colors hover:bg-white"
-            >
-              {S.primary}
-              <ArrowRight
-                className="size-4 transition-transform group-hover:translate-x-0.5"
-                aria-hidden
-              />
-            </Link>
-            <Link
-              href={`/${lang}/methode`}
-              className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-ink transition-colors hover:border-white/35"
-            >
-              {S.secondary}
-            </Link>
-          </div>
         </div>
       </header>
 
