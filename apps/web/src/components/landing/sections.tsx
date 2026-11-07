@@ -192,7 +192,9 @@ export function RolesDetailed({ l, lang }: { l: L; lang: Locale }) {
             <h2 className="mt-5 font-display text-[1.6rem] font-semibold leading-tight text-ink">
               {r.role}
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted lg:min-h-[4.6rem]">{r.scope}</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted lg:min-h-[4.6rem]">
+              {r.scope}
+            </p>
             <p className="mt-5 rounded-lg border border-line bg-night px-4 py-3 font-display text-lg italic leading-snug text-ink/90">
               {quote(r.example, lang)}
             </p>
@@ -257,7 +259,11 @@ export function AgentsGrid({ l }: { l: L }) {
       {l.agents.list.map((a, idx) => {
         const Icon = AGENT_ICONS[idx];
         return (
-          <article key={a.name} className="bg-night p-6">
+          <article
+            key={a.name}
+            id={idx === AGENT_ICONS.length - 1 ? "scenarios" : undefined}
+            className="scroll-mt-24 bg-night p-6 target:bg-abyss target:ring-1 target:ring-inset target:ring-teal/50"
+          >
             <Icon className="size-5 text-muted" aria-hidden />
             <h2 className="mt-4 font-display text-xl font-semibold text-ink">
               {a.name}

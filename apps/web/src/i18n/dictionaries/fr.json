@@ -292,7 +292,7 @@
       "login": "J'ai déjà un compte"
     },
     "footer": {
-      "tagline": "L'analyse des risques avant décision, pour les entreprises d'Europe et d'Afrique.",
+      "tagline": "Analyse des risques avant décision, pour les entreprises d'Europe et d'Afrique qui veulent anticiper plutôt que subir.",
       "product": "Produit",
       "account": "Compte",
       "login": "Connexion",
@@ -300,9 +300,18 @@
       "rights": "Tous droits réservés.",
       "about": "À propos",
       "contact": "Contact",
-      "privacy": "Confidentialité",
+      "privacy": "Politique de confidentialité",
       "terms": "Conditions d'utilisation",
-      "legal": "Mentions légales"
+      "legal": "Mentions légales",
+      "colProduct": "Produit",
+      "colCompany": "Entreprise",
+      "colResources": "Ressources",
+      "colLegal": "Légal",
+      "agents": "Agents IA",
+      "riskAnalysis": "Analyse des risques",
+      "scenarios": "Simulation de scénarios",
+      "faq": "FAQ",
+      "security": "Sécurité"
     },
     "roles": {
       "title": "Une même décision, trois façons de la regarder.",
@@ -655,6 +664,45 @@
           "p": [
             "Le nom DecisionGuard, le logo et les contenus du site sont protégés. Toute reproduction sans autorisation est interdite."
           ]
+        }
+      ]
+    },
+    "faq": {
+      "meta": "FAQ · DecisionGuard",
+      "title": "Questions fréquentes",
+      "intro": "Les réponses aux questions qu'on nous pose le plus souvent. Pour le reste, écrivez-nous.",
+      "items": [
+        {
+          "q": "Qu'est-ce que DecisionGuard ?",
+          "a": "Une plateforme qui analyse une décision d'entreprise avant que vous la preniez : les risques, leur probabilité, leur impact, ce qu'il faut vérifier et ce qui permettrait de les réduire."
+        },
+        {
+          "q": "Est-ce un conseil juridique ou financier ?",
+          "a": "Non. DecisionGuard est une aide à la décision. Il signale des points d'attention, mais ne remplace ni un avocat, ni un expert-comptable, ni un conseiller financier."
+        },
+        {
+          "q": "Comment les scores de risque sont-ils calculés ?",
+          "a": "Chaque risque reçoit une probabilité et un impact notés de 1 à 5, et le score est leur produit. Ce calcul est fait par un moteur déterministe, pas par l'IA : avec les mêmes données, vous obtenez toujours le même score."
+        },
+        {
+          "q": "Comment savoir si une information est fiable ?",
+          "a": "Chaque élément du rapport porte une étiquette : fait vérifié, estimation, hypothèse ou piste de l'IA. Une estimation n'est jamais présentée comme un fait."
+        },
+        {
+          "q": "Où sont hébergées mes données ?",
+          "a": "Dans l'Union européenne, en région Paris : la base de données chez Supabase et l'application chez Vercel. Le détail figure dans la politique de confidentialité."
+        },
+        {
+          "q": "Qui peut voir mes dossiers ?",
+          "a": "Uniquement les membres de votre organisation, selon leur rôle. Les données de chaque entreprise sont séparées jusque dans la base de données, et cette séparation est testée à chaque mise à jour."
+        },
+        {
+          "q": "Dans quelles langues fonctionne DecisionGuard ?",
+          "a": "En français et en anglais, pour l'interface comme pour les rapports."
+        },
+        {
+          "q": "Comment rejoindre la phase pilote ?",
+          "a": "Créez un compte ou écrivez-nous depuis la page Contact en décrivant la décision que vous souhaitez analyser. Les conditions du pilote sont présentées individuellement."
         }
       ]
     }

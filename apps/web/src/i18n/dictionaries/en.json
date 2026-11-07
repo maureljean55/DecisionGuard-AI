@@ -292,7 +292,7 @@
       "login": "I already have an account"
     },
     "footer": {
-      "tagline": "Risk analysis before decisions, for companies in Europe and Africa.",
+      "tagline": "Risk analysis before decisions, for companies in Europe and Africa that would rather anticipate than react.",
       "product": "Product",
       "account": "Account",
       "login": "Sign in",
@@ -300,9 +300,18 @@
       "rights": "All rights reserved.",
       "about": "About",
       "contact": "Contact",
-      "privacy": "Privacy",
+      "privacy": "Privacy policy",
       "terms": "Terms of use",
-      "legal": "Legal notice"
+      "legal": "Legal notice",
+      "colProduct": "Product",
+      "colCompany": "Company",
+      "colResources": "Resources",
+      "colLegal": "Legal",
+      "agents": "AI agents",
+      "riskAnalysis": "Risk analysis",
+      "scenarios": "Scenario simulation",
+      "faq": "FAQ",
+      "security": "Security"
     },
     "roles": {
       "title": "One decision, three ways of looking at it.",
@@ -655,6 +664,45 @@
           "p": [
             "The DecisionGuard name, logo and site content are protected. Any reproduction without permission is prohibited."
           ]
+        }
+      ]
+    },
+    "faq": {
+      "meta": "FAQ · DecisionGuard",
+      "title": "Frequently asked questions",
+      "intro": "Answers to the questions we hear most often. For anything else, write to us.",
+      "items": [
+        {
+          "q": "What is DecisionGuard?",
+          "a": "A platform that analyses a business decision before you make it: the risks, how likely they are, their impact, what to check and what would reduce them."
+        },
+        {
+          "q": "Is it legal or financial advice?",
+          "a": "No. DecisionGuard is decision support. It flags points of attention but does not replace a lawyer, an accountant or a financial adviser."
+        },
+        {
+          "q": "How are risk scores calculated?",
+          "a": "Each risk gets a probability and an impact scored 1 to 5, and the score is their product. This is done by a deterministic engine, not by the AI: the same data always gives the same score."
+        },
+        {
+          "q": "How do I know whether information is reliable?",
+          "a": "Every item in the report carries a label: verified fact, estimate, assumption or AI lead. An estimate is never presented as a fact."
+        },
+        {
+          "q": "Where is my data hosted?",
+          "a": "In the European Union, in the Paris region: the database with Supabase and the application with Vercel. Details are in the privacy policy."
+        },
+        {
+          "q": "Who can see my files?",
+          "a": "Only members of your organisation, according to their role. Each company's data is kept apart down to the database, and this separation is tested on every update."
+        },
+        {
+          "q": "Which languages does DecisionGuard support?",
+          "a": "French and English, for the interface and for reports."
+        },
+        {
+          "q": "How do I join the pilot?",
+          "a": "Create an account or write to us from the Contact page describing the decision you want analysed. Pilot terms are presented individually."
         }
       ]
     }
