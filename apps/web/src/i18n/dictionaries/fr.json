@@ -707,5 +707,108 @@
         }
       ]
     }
+  },
+  "solutionsPage": {
+    "eyebrow": "Pour qui",
+    "title": "Conçu pour ceux qui portent la décision.",
+    "intro": "Direction générale, finance ou informatique : chacun regarde une décision avec ses propres inquiétudes. DecisionGuard part de votre rôle pour mettre en avant les risques qui vous concernent d'abord.",
+    "primary": "Demander un accès pilote",
+    "secondary": "Voir comment ça marche",
+    "lensTitle": "Une même décision, trois lectures.",
+    "lensIntro": "La filiale de Douala, vue par chaque rôle : les mêmes données, mais pas les mêmes priorités.",
+    "lensLabel": "Exemple illustratif",
+    "lensFirst": "Ce qui ressort en premier",
+    "lensQuestion": "La question à trancher",
+    "lenses": [
+      {
+        "role": "Direction générale",
+        "risks": [
+          [
+            "Dépendance à un fournisseur unique",
+            4,
+            5
+          ],
+          [
+            "Délais d'obtention des agréments",
+            4,
+            3
+          ]
+        ],
+        "question": "Sécuriser un second fournisseur avant l'ouverture ?"
+      },
+      {
+        "role": "Direction financière",
+        "risks": [
+          [
+            "Dépassement du budget d'installation",
+            4,
+            4
+          ],
+          [
+            "Risque de change XAF/EUR",
+            1,
+            3
+          ]
+        ],
+        "question": "Prévoir une réserve sur le budget d'installation ?"
+      },
+      {
+        "role": "DSI et sécurité",
+        "risks": [
+          [
+            "Pénurie de profils techniques",
+            3,
+            4
+          ],
+          [
+            "Fuite de données clients",
+            2,
+            5
+          ]
+        ],
+        "question": "Recruter sur place ou confier l'informatique à un prestataire ?"
+      }
+    ],
+    "levels": {
+      "low": "Faible",
+      "moderate": "Modéré",
+      "high": "Élevé",
+      "critical": "Critique"
+    },
+    "moreTitle": "Pour toutes les équipes, toutes les tailles.",
+    "teamsLabel": "Autres fonctions",
+    "teams": [
+      [
+        "Ressources humaines",
+        "Réorganisation, recrutement, plan social."
+      ],
+      [
+        "Juridique",
+        "Contrats, conformité, nouveaux pays."
+      ],
+      [
+        "Supply chain",
+        "Fournisseurs, logistique, stocks."
+      ],
+      [
+        "Conseil d'administration",
+        "Décisions qui engagent l'entreprise."
+      ]
+    ],
+    "sizesLabel": "Taille d'entreprise",
+    "sizes": [
+      [
+        "Start-up",
+        "Peu de marge d'erreur : chaque décision compte."
+      ],
+      [
+        "PME et ETI",
+        "Des décisions structurantes, sans service dédié aux risques."
+      ],
+      [
+        "Grand groupe",
+        "Des analyses comparables d'une filiale ou d'un pays à l'autre."
+      ]
+    ]
   }
 }

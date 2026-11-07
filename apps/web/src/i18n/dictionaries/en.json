@@ -707,5 +707,108 @@
         }
       ]
     }
+  },
+  "solutionsPage": {
+    "eyebrow": "Who it's for",
+    "title": "Built for the people who carry the decision.",
+    "intro": "Leadership, finance or IT: each looks at a decision with its own concerns. DecisionGuard starts from your role to bring forward the risks that matter to you first.",
+    "primary": "Request pilot access",
+    "secondary": "See how it works",
+    "lensTitle": "One decision, three readings.",
+    "lensIntro": "The Douala subsidiary, seen by each role: the same data, different priorities.",
+    "lensLabel": "Illustrative example",
+    "lensFirst": "What stands out first",
+    "lensQuestion": "The question to settle",
+    "lenses": [
+      {
+        "role": "Leadership",
+        "risks": [
+          [
+            "Single-supplier dependency",
+            4,
+            5
+          ],
+          [
+            "Licensing delays",
+            4,
+            3
+          ]
+        ],
+        "question": "Secure a second supplier before opening?"
+      },
+      {
+        "role": "Finance",
+        "risks": [
+          [
+            "Set-up budget overrun",
+            4,
+            4
+          ],
+          [
+            "XAF/EUR currency risk",
+            1,
+            3
+          ]
+        ],
+        "question": "Set aside a reserve on the set-up budget?"
+      },
+      {
+        "role": "IT and security",
+        "risks": [
+          [
+            "Shortage of technical profiles",
+            3,
+            4
+          ],
+          [
+            "Customer data breach",
+            2,
+            5
+          ]
+        ],
+        "question": "Hire locally or hand IT to a provider?"
+      }
+    ],
+    "levels": {
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "moreTitle": "For every team, every size.",
+    "teamsLabel": "Other functions",
+    "teams": [
+      [
+        "Human resources",
+        "Reorganisation, hiring, restructuring."
+      ],
+      [
+        "Legal",
+        "Contracts, compliance, new countries."
+      ],
+      [
+        "Supply chain",
+        "Suppliers, logistics, inventory."
+      ],
+      [
+        "Board",
+        "Decisions that commit the company."
+      ]
+    ],
+    "sizesLabel": "Company size",
+    "sizes": [
+      [
+        "Start-up",
+        "Little room for error: every decision counts."
+      ],
+      [
+        "SMEs and mid-caps",
+        "Structural decisions, without a dedicated risk team."
+      ],
+      [
+        "Large group",
+        "Comparable analyses from one subsidiary or country to another."
+      ]
+    ]
   }
 }
