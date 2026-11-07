@@ -1,8 +1,8 @@
 """Test configuration.
 
-Integration tests run against the real Postgres (database `decisionguard_test`) and Redis (db 15)
+Integration tests run against the real Postgres (database `decisionguard_test`)
 from docker compose, connecting as the unprivileged `dg_app` role exactly like production.
-They are skipped when those services are unreachable, unless DG_REQUIRE_INTEGRATION=1 (CI).
+They are skipped when Postgres is unreachable, unless DG_REQUIRE_INTEGRATION=1 (CI).
 """
 
 import os
@@ -16,14 +16,14 @@ os.environ.update(
     DG_MIGRATION_DATABASE_URL=(
         f"postgresql+psycopg://decisionguard:decisionguard@{_PG_HOST}:5432/decisionguard_test"
     ),
-    DG_REDIS_URL=os.environ.get("DG_TEST_REDIS_URL", "redis://localhost:6379/15"),
+    DG_REDIS_URL="",
+    DG_RELAY_SECRET="test-relay-secret",
     DG_PUBLIC_WEB_URL="http://web.test",
 )
 
 from collections.abc import Iterator  # noqa: E402
 
 import pytest  # noqa: E402
-import redis  # noqa: E402
 from alembic import command  # noqa: E402
 from alembic.config import Config  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
@@ -32,7 +32,28 @@ from sqlalchemy import create_engine, text  # noqa: E402
 from app.core.config import get_settings  # noqa: E402
 from app.core.email import test_outbox  # noqa: E402
 
-TABLES = "audit_logs, invitations, memberships, organizations, user_tokens, auth_sessions, users"
+TABLES = (
+    "audit_logs, invitations, memberships, organizations, user_tokens, auth_sessions, users, "
+    "rate_limits"
+)
+
+# Simulates Supabase: these roles back its public Data API and, by default, receive
+# privileges on every new table in `public`. Migrations must revoke them.
+SUPABASE_PUBLIC_ROLES = ("anon", "authenticated")
+_SIMULATE_SUPABASE = """
+DO $$
+DECLARE r text;
+BEGIN
+  FOREACH r IN ARRAY ARRAY['anon', 'authenticated'] LOOP
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = r) THEN
+      EXECUTE format('CREATE ROLE %I NOLOGIN', r);
+    END IF;
+    EXECUTE format('GRANT USAGE ON SCHEMA public TO %I', r);
+    EXECUTE format('ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO %I', r);
+    EXECUTE format('ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO %I', r);
+  END LOOP;
+END $$;
+"""
 
 
 def _services_available() -> str | None:
@@ -40,9 +61,8 @@ def _services_available() -> str | None:
     try:
         with create_engine(s.migration_database_url).connect() as c:
             c.execute(text("SELECT 1"))
-        redis.Redis.from_url(s.redis_url, socket_timeout=1).ping()
     except Exception as exc:  # noqa: BLE001
-        return f"Postgres/Redis unavailable ({type(exc).__name__}); run `docker compose up -d`"
+        return f"Postgres unavailable ({type(exc).__name__}); run `docker compose up -d`"
     return None
 
 
@@ -58,6 +78,10 @@ def migrated() -> Iterator[None]:
         "script_location", os.path.join(os.path.dirname(__file__), "..", "migrations")
     )
     command.downgrade(cfg, "base")
+    engine = create_engine(get_settings().migration_database_url)
+    with engine.begin() as conn:
+        conn.execute(text(_SIMULATE_SUPABASE))
+    engine.dispose()
     command.upgrade(cfg, "head")
     yield
 
@@ -69,7 +93,6 @@ def clean(migrated: None) -> Iterator[None]:
     with engine.begin() as c:
         c.execute(text(f"TRUNCATE {TABLES} RESTART IDENTITY CASCADE"))
     engine.dispose()
-    redis.Redis.from_url(s.redis_url).flushdb()
     test_outbox.clear()
     yield
 

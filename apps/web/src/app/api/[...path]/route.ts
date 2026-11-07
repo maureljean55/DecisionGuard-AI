@@ -7,6 +7,8 @@
 import type { NextRequest } from "next/server";
 
 const API_URL = process.env.API_URL ?? "http://localhost:8000";
+// Shared with the API: lets it trust the browser IP we forward (rate limits, audit log).
+const RELAY_SECRET = process.env.DG_RELAY_SECRET;
 const FORWARDED_REQUEST_HEADERS = [
   "accept",
   "accept-language",
@@ -14,7 +16,6 @@ const FORWARDED_REQUEST_HEADERS = [
   "cookie",
   "user-agent",
   "x-csrf-token",
-  "x-forwarded-for",
 ];
 const FORWARDED_RESPONSE_HEADERS = ["content-type", "cache-control", "retry-after"];
 const MAX_BODY_BYTES = 1_000_000; // JSON API; file uploads will get a dedicated path
@@ -32,6 +33,15 @@ async function relay(request: NextRequest, ctx: RouteContext<"/api/[...path]">) 
   for (const name of FORWARDED_REQUEST_HEADERS) {
     const value = request.headers.get(name);
     if (value) headers.set(name, value);
+  }
+
+  if (RELAY_SECRET) {
+    // On Vercel, x-forwarded-for is set by the platform edge (not spoofable by the client).
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      request.headers.get("x-real-ip");
+    if (ip) headers.set("x-dg-client-ip", ip);
+    headers.set("x-dg-relay-secret", RELAY_SECRET);
   }
 
   let body: ArrayBuffer | undefined;

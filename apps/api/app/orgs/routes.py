@@ -12,7 +12,7 @@ from app.auth import emails
 from app.auth.deps import DB, CurrentUser
 from app.auth.schemas import OrganizationCreate, TokenRequest
 from app.core import audit, ratelimit
-from app.core.email import send_email
+from app.core.email import dispatch_email
 from app.core.errors import AppError, NotFound
 from app.core.permissions import Permission, Role, can_assign_role, can_manage_member
 from app.core.security import hash_token, new_token
@@ -269,8 +269,8 @@ def create_invitation(
     ctx.db.commit()
 
     locale = ctx.org.default_locale
-    tasks.add_task(
-        send_email,
+    dispatch_email(
+        tasks,
         emails.invitation_email(
             email, ctx.user.full_name, ctx.org.name, body.role.value, token, locale
         ),
@@ -317,9 +317,7 @@ def _load_invitation_by_token(db: Session, token: str) -> Invitation:
 def preview_invitation(
     token: Annotated[str, Query(min_length=16, max_length=128)], request: Request, db: DB
 ):
-    ratelimit.hit(
-        "token:ip", request.client.host if request.client else "?", limit=30, window_seconds=3600
-    )
+    ratelimit.hit("token:ip", audit.client_ip(request) or "unknown", limit=30, window_seconds=3600)
     inv = _load_invitation_by_token(db, token)
     return InvitationPreview(
         organization_name=inv.organization.name, email=inv.email, role=inv.role

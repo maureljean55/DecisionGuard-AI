@@ -27,7 +27,7 @@ from app.auth.schemas import (
 )
 from app.core import audit, ratelimit
 from app.core.config import get_settings
-from app.core.email import send_email
+from app.core.email import dispatch_email
 from app.core.errors import AppError
 from app.core.security import hash_password, needs_rehash, verify_password
 from app.db.base import utcnow
@@ -59,7 +59,7 @@ def _me(db: Session, user: User) -> MeOut:
 
 
 def _client_ip(request: Request) -> str:
-    return request.client.host if request.client else "unknown"
+    return audit.client_ip(request) or "unknown"
 
 
 @router.post("/register", response_model=MeOut, status_code=status.HTTP_201_CREATED)
@@ -114,8 +114,8 @@ def register(
     session_token = auth.create_session(db, user, meta.ip, meta.user_agent)
     db.commit()
 
-    tasks.add_task(
-        send_email, emails.verification_email(user.email, user.full_name, verify_token, body.locale)
+    dispatch_email(
+        tasks, emails.verification_email(user.email, user.full_name, verify_token, body.locale)
     )
     set_session_cookies(response, session_token)
     return _me(db, user)
@@ -196,9 +196,7 @@ def resend_verification(user: CurrentUser, db: DB, tasks: BackgroundTasks) -> No
         return
     token = auth.issue_token(db, user, TokenPurpose.VERIFY_EMAIL)
     db.commit()
-    tasks.add_task(
-        send_email, emails.verification_email(user.email, user.full_name, token, user.locale)
-    )  # type: ignore[arg-type]
+    dispatch_email(tasks, emails.verification_email(user.email, user.full_name, token, user.locale))  # type: ignore[arg-type]
 
 
 @router.post("/password/forgot", status_code=status.HTTP_202_ACCEPTED)
@@ -220,8 +218,8 @@ def forgot_password(
         actor_id=user.id,
     )
     db.commit()
-    tasks.add_task(
-        send_email, emails.password_reset_email(user.email, user.full_name, token, user.locale)
+    dispatch_email(
+        tasks, emails.password_reset_email(user.email, user.full_name, token, user.locale)
     )  # type: ignore[arg-type]
 
 

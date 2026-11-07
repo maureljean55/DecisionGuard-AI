@@ -39,9 +39,12 @@ def _check_database() -> CheckState:
         return "error"
 
 
-def _check_redis() -> CheckState:
+def _check_redis() -> CheckState | None:
+    url = get_settings().redis_url
+    if url is None:  # not used by this deployment (serverless)
+        return None
     try:
-        client = redis.Redis.from_url(get_settings().redis_url, socket_timeout=2)
+        client = redis.Redis.from_url(url, socket_timeout=2)
         client.ping()
         return "ok"
     except Exception:
@@ -52,7 +55,10 @@ def _check_redis() -> CheckState:
 @router.get("/health", response_model=HealthResponse)
 def health(response: Response) -> HealthResponse:
     """Readiness: verifies every backing service. Returns 503 if any is down."""
-    checks = {"database": _check_database(), "redis": _check_redis()}
+    checks: dict[str, CheckState] = {"database": _check_database()}
+    redis_state = _check_redis()
+    if redis_state is not None:
+        checks["redis"] = redis_state
     healthy = all(v == "ok" for v in checks.values())
     if not healthy:
         response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE

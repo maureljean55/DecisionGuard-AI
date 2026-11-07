@@ -35,7 +35,14 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://dg_app:dg_app_dev@localhost:5432/decisionguard"
     # Migration connection: table owner. Falls back to database_url if unset.
     migration_database_url: str | None = None
-    redis_url: str = "redis://localhost:6379/0"
+    # "queue": classic connection pool (long-running server).
+    # "null": one connection per use, for serverless platforms behind an external pooler.
+    db_pool: Literal["queue", "null"] = "queue"
+    # Disable server-side prepared statements (required behind transaction-mode poolers
+    # such as Supabase Supavisor on port 6543 / PgBouncer).
+    db_disable_prepared_statements: bool = False
+    # Optional: used for the health check now, and by background workers later (M4).
+    redis_url: str | None = None
 
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
     # Public URL of the web app, used to build links in e-mails.
@@ -50,6 +57,9 @@ class Settings(BaseSettings):
     password_min_length: int = Field(default=12, ge=8)
     login_rate_limit: int = Field(default=10, ge=1, description="attempts per window")
     login_rate_window_seconds: int = Field(default=900, ge=1)
+    # Shared secret between the web relay and the API. When set, the API trusts the
+    # client IP forwarded by the relay (X-DG-Client-IP) only if X-DG-Relay-Secret matches.
+    relay_secret: SecretStr | None = None
 
     # --- E-mail ---
     smtp_host: str = "localhost"
@@ -58,6 +68,9 @@ class Settings(BaseSettings):
     smtp_password: SecretStr | None = None
     smtp_use_tls: bool = False
     email_from: str = "DecisionGuard AI <no-reply@decisionguard.local>"
+    # Send after the HTTP response (long-running server) or inline (serverless platforms,
+    # where work after the response is not guaranteed to run).
+    email_background: bool = True
 
     default_locale: Locale = "fr"
     supported_locales: tuple[Locale, ...] = ("fr", "en")
@@ -67,7 +80,13 @@ class Settings(BaseSettings):
     llm_api_key: SecretStr | None = None
 
     @field_validator(
-        "llm_api_key", "smtp_password", "smtp_username", "migration_database_url", mode="before"
+        "llm_api_key",
+        "smtp_password",
+        "smtp_username",
+        "migration_database_url",
+        "redis_url",
+        "relay_secret",
+        mode="before",
     )
     @classmethod
     def _empty_is_unset(cls, value: object) -> object:

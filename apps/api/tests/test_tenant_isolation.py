@@ -198,3 +198,43 @@ def test_invitation_visible_only_with_its_token(two_tenants) -> None:
         assert len(_ids(s, "invitations")) == 1
     with _session(invite_token_hash=hash_token("not-the-token-at-all")) as s:
         assert _ids(s, "invitations") == set()
+
+
+# ------------------------------------------------------------------ hosted Postgres (Supabase)
+
+
+def test_supabase_public_roles_have_no_access(two_tenants, owner_engine) -> None:
+    """Supabase's public Data API roles must not reach any table, current or future."""
+    from tests.conftest import SUPABASE_PUBLIC_ROLES
+
+    with owner_engine.connect() as conn:
+        tables = (
+            conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = 'public'"))
+            .scalars()
+            .all()
+        )
+        assert "users" in tables
+        for role in SUPABASE_PUBLIC_ROLES:
+            for table in tables:
+                for priv in ("SELECT", "INSERT", "UPDATE", "DELETE"):
+                    allowed = conn.execute(
+                        text("SELECT has_table_privilege(:r, :t, :p)"),
+                        {"r": role, "t": f"public.{table}", "p": priv},
+                    ).scalar_one()
+                    assert not allowed, f"{role} has {priv} on {table}"
+
+
+def test_every_table_has_row_level_security(owner_engine) -> None:
+    with owner_engine.connect() as conn:
+        rows = (
+            conn.execute(
+                text(
+                    "SELECT relname FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace "
+                    "WHERE n.nspname = 'public' AND c.relkind = 'r' AND NOT c.relrowsecurity "
+                    "AND relname <> 'alembic_version'"
+                )
+            )
+            .scalars()
+            .all()
+        )
+    assert rows == [], f"tables without RLS: {rows}"

@@ -15,7 +15,7 @@ from collections.abc import Iterator
 from dataclasses import dataclass
 from functools import lru_cache
 
-from sqlalchemy import Connection, Engine, create_engine, event, text
+from sqlalchemy import Connection, Engine, NullPool, create_engine, event, text
 from sqlalchemy.orm import DeclarativeBase, Session, SessionTransaction, sessionmaker
 
 from app.core.config import get_settings
@@ -73,7 +73,15 @@ def set_rls_context(session: Session, **changes: object) -> RLSContext:
 
 @lru_cache
 def get_engine() -> Engine:
-    return create_engine(get_settings().database_url, pool_pre_ping=True, pool_size=10)
+    s = get_settings()
+    connect_args: dict[str, object] = {}
+    if s.db_disable_prepared_statements:
+        connect_args["prepare_threshold"] = None  # psycopg 3: never prepare
+    if s.db_pool == "null":
+        return create_engine(s.database_url, poolclass=NullPool, connect_args=connect_args)
+    return create_engine(
+        s.database_url, pool_pre_ping=True, pool_size=10, connect_args=connect_args
+    )
 
 
 @lru_cache

@@ -236,3 +236,29 @@ def test_password_containing_email_name_is_rejected(make_client) -> None:
     )
     assert r.status_code == 422
     assert r.json()["error"]["code"] == "auth.password_contains_email"
+
+
+def test_client_ip_from_relay_requires_secret(make_client, owner_engine) -> None:
+    c = make_client()
+    c.post(
+        "/auth/login",
+        headers={"X-DG-Client-IP": "203.0.113.7", "X-DG-Relay-Secret": "test-relay-secret"},
+        json={"email": "a@acme.example.com", "password": "whatever-wrong"},
+    )
+    c.post(
+        "/auth/login",
+        headers={"X-DG-Client-IP": "198.51.100.66", "X-DG-Relay-Secret": "forged"},
+        json={"email": "a@acme.example.com", "password": "whatever-wrong"},
+    )
+    with owner_engine.connect() as conn:
+        ips = (
+            conn.execute(
+                text(
+                    "SELECT host(ip) FROM audit_logs WHERE action = 'auth.login_failed' ORDER BY id"
+                )
+            )
+            .scalars()
+            .all()
+        )
+    assert ips[0] == "203.0.113.7"  # trusted: secret matches
+    assert ips[1] != "198.51.100.66"  # spoofed header ignored

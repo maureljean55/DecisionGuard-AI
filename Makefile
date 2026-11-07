@@ -1,4 +1,4 @@
-.PHONY: up down logs test test-api test-web lint migrate
+.PHONY: up down logs test test-api test-web lint migrate migrate-prod
 
 up:            ## Start the full stack (builds images)
 	docker compose up --build -d
@@ -23,3 +23,7 @@ test-web:
 lint:
 	cd apps/api && uv run ruff check . && uv run ruff format --check .
 	cd apps/web && npm run lint && npm run typecheck
+
+migrate-prod:  ## Apply migrations to the online Supabase database (needs .env.vercel.local)
+	@test -f .env.vercel.local || (echo "missing .env.vercel.local" && exit 1)
+	cd apps/api && set -a && . ../../.env.vercel.local && set +a && uv run alembic upgrade head

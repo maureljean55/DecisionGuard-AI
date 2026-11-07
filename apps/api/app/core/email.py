@@ -9,6 +9,8 @@ import smtplib
 from dataclasses import dataclass
 from email.message import EmailMessage
 
+from fastapi import BackgroundTasks
+
 from app.core.config import get_settings
 
 log = logging.getLogger(__name__)
@@ -19,6 +21,14 @@ class OutgoingEmail:
     to: str
     subject: str
     body: str
+
+
+def dispatch_email(tasks: BackgroundTasks, message: OutgoingEmail) -> None:
+    """Send after the response when supported, inline on serverless platforms."""
+    if get_settings().email_background:
+        tasks.add_task(send_email, message)
+    else:
+        send_email(message)
 
 
 # Captured messages when DG_ENVIRONMENT=test (inspected by the test suite).

@@ -60,9 +60,6 @@ services:
     environment:
       <<: *db-urls
       DG_PUBLIC_WEB_URL: http://localhost:3000
-      # Trust X-Forwarded-For from the web relay so audit logs and rate limits see client IPs.
-      # Dev only (API bound to 127.0.0.1). In production, list the relay/LB addresses only.
-      FORWARDED_ALLOW_IPS: "*"
     ports: ["127.0.0.1:8000:8000"]
     depends_on:
       migrate: { condition: service_completed_successfully }
@@ -78,6 +75,7 @@ services:
     build: ./apps/web
     environment:
       API_URL: http://api:8000
+      DG_RELAY_SECRET: ${DG_RELAY_SECRET:-dev-relay-secret}
     ports: ["127.0.0.1:3000:3000"]
     depends_on:
       api: { condition: service_healthy }

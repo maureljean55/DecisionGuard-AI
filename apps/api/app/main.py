@@ -17,14 +17,15 @@ from app.orgs.routes import router as orgs_router
 def create_app() -> FastAPI:
     settings = get_settings()
     configure_logging(settings.log_level, settings.log_json)
+    expose_docs = settings.environment in ("development", "test")
 
     app = FastAPI(
         title=settings.app_name,
         version="0.2.0",
-        # Interactive docs are disabled in production; the OpenAPI schema is exported in CI.
-        docs_url=None if settings.is_production else "/docs",
-        redoc_url=None if settings.is_production else "/redoc",
-        openapi_url=None if settings.is_production else "/openapi.json",
+        # Interactive docs only on local machines; never exposed by deployed environments.
+        docs_url="/docs" if expose_docs else None,
+        redoc_url="/redoc" if expose_docs else None,
+        openapi_url="/openapi.json" if expose_docs else None,
     )
     install_error_handlers(app)
     # Order: last added runs first. CORS must wrap CSRF so preflights are answered.

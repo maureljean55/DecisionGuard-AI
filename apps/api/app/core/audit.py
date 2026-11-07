@@ -9,13 +9,25 @@ from sqlalchemy import insert
 from sqlalchemy.orm import Session
 from starlette.requests import Request
 
+from app.core.config import get_settings
+from app.core.security import tokens_equal
 from app.db.base import utcnow
 from app.models.audit import AuditLog
 
 
 def client_ip(request: Request) -> str | None:
-    """Client IP as seen by the server, or None if it is not a valid address."""
+    """Best-known client IP, or None if it is not a valid address.
+
+    Behind the web relay (e.g. both apps on a serverless platform), the TCP peer is the relay
+    itself; the relay forwards the browser's IP in X-DG-Client-IP, trusted only when the
+    shared secret X-DG-Relay-Secret matches DG_RELAY_SECRET.
+    """
     host = request.client.host if request.client else None
+    secret = get_settings().relay_secret
+    if secret is not None:
+        sent = request.headers.get("x-dg-relay-secret", "")
+        if sent and tokens_equal(sent, secret.get_secret_value()):
+            host = request.headers.get("x-dg-client-ip", "").split(",")[0].strip() or host
     try:
         return str(ipaddress.ip_address(host)) if host else None
     except ValueError:
