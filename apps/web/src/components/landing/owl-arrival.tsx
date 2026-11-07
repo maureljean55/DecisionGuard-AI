@@ -6,7 +6,10 @@
  *    wings half folded, and settles where it belongs;
  * 2. its eyes light up in a deep blue and send out rays of light;
  * 3. then it blinks like a real owl (upper lid coming down), at irregular intervals.
- * Web Animations API. With prefers-reduced-motion: no approach, no blinking, only the glow.
+ * Afterwards it stays alive: it turns its face towards the cursor (owls cannot move their
+ * eyes in their sockets, they turn their head), breathes, and now and then stretches its
+ * wings. On touch screens it looks around on its own.
+ * Web Animations API. With prefers-reduced-motion: only the glow, nothing else moves.
  */
 import Image from "next/image";
 import { useEffect, useRef } from "react";
@@ -44,6 +47,8 @@ export function OwlArrival({ sizes }: { sizes: string }) {
   const glowRef = useRef<HTMLDivElement>(null);
   const raysRef = useRef<HTMLDivElement>(null);
   const lidsRef = useRef<HTMLDivElement>(null);
+  const lookRef = useRef<HTMLDivElement>(null);
+  const breathRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -202,7 +207,93 @@ export function OwlArrival({ sizes }: { sizes: string }) {
       ARRIVAL_MS + GLOW_MS + 500,
     );
 
+    // 4. Alive once perched: head turned towards the cursor, breathing, wing stretches.
+    const look = lookRef.current;
+    const breath = breathRef.current;
+    let raf = 0;
+    let target = { x: 0, y: 0 };
+    const current = { x: 0, y: 0 };
+    const onPointer = (e: PointerEvent) => {
+      if (!look) return;
+      const r = look.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height * 0.42);
+      // Saturating response: follows nearby movement, stays calm for far-away cursors.
+      target = { x: Math.tanh(dx / 450), y: Math.tanh(dy / 350) };
+    };
+    const tick = () => {
+      if (look) {
+        current.x += (target.x - current.x) * 0.06;
+        current.y += (target.y - current.y) * 0.06;
+        look.style.transform =
+          `perspective(900px) translate(${(current.x * 5).toFixed(2)}px, ${(current.y * 3).toFixed(2)}px) ` +
+          `rotateY(${(current.x * 9).toFixed(2)}deg) rotateX(${(-current.y * 6).toFixed(2)}deg)`;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    const touchOnly = window.matchMedia("(hover: none)").matches;
+    const lookAround = () => {
+      // On touch screens: an owl scanning its surroundings, with pauses.
+      const glances = [
+        { x: 0, y: 0 },
+        { x: -0.8, y: 0.1 },
+        { x: 0.8, y: 0.05 },
+        { x: 0.3, y: -0.3 },
+      ];
+      target = glances[Math.floor(Math.random() * glances.length)];
+      later(lookAround, 2500 + Math.random() * 3500);
+    };
+    const stretch = () => {
+      if (!document.hidden) {
+        [leftRef.current, rightRef.current].forEach((wing, i) => {
+          const sign = i === 0 ? 1 : -1;
+          wing?.animate(
+            [
+              { transform: "rotate(0deg) scaleX(1)" },
+              {
+                transform: `rotate(${sign * 11}deg) scaleX(1.05)`,
+                offset: 0.35,
+                easing: "ease-out",
+              },
+              {
+                transform: `rotate(${sign * 11}deg) scaleX(1.05)`,
+                offset: 0.5,
+              },
+              {
+                transform: `rotate(${sign * -3}deg) scaleX(0.98)`,
+                offset: 0.68,
+              },
+              { transform: `rotate(${sign * 2}deg) scaleX(1)`, offset: 0.82 },
+              { transform: "rotate(0deg) scaleX(1)" },
+            ],
+            { duration: 1500, easing: "ease-in-out" },
+          );
+        });
+      }
+      later(stretch, 20000 + Math.random() * 10000);
+    };
+    later(() => {
+      if (breath) {
+        anims.push(
+          breath.animate(
+            [
+              { transform: "scale(1, 1)" },
+              { transform: "scale(1.008, 1.016)", offset: 0.45 },
+              { transform: "scale(1, 1)" },
+            ],
+            { duration: 4200, iterations: Infinity, easing: "ease-in-out" },
+          ),
+        );
+      }
+      if (touchOnly) lookAround();
+      else window.addEventListener("pointermove", onPointer, { passive: true });
+      raf = requestAnimationFrame(tick);
+      later(stretch, 9000 + Math.random() * 6000);
+    }, ARRIVAL_MS);
+
     return () => {
+      window.removeEventListener("pointermove", onPointer);
+      cancelAnimationFrame(raf);
       timers.forEach(clearTimeout);
       anims.forEach((a) => a.cancel());
     };
@@ -214,115 +305,119 @@ export function OwlArrival({ sizes }: { sizes: string }) {
       className="owl-pending relative"
       style={{ willChange: "transform" }}
     >
-      <div className="relative drop-shadow-[0_20px_60px_rgba(91,108,255,0.3)]">
-        <Image
-          src="/brand/owl-body.png"
-          alt=""
-          width={W}
-          height={H}
-          priority
-          sizes={sizes}
-          className="h-auto w-full"
-        />
-        <div
-          ref={leftRef}
-          className="absolute inset-0"
-          style={{ transformOrigin: LEFT_PIVOT }}
-        >
-          <Image
-            src="/brand/owl-wing-left.png"
-            alt=""
-            width={W}
-            height={H}
-            priority
-            sizes={sizes}
-            className="h-auto w-full"
-          />
-        </div>
-        <div
-          ref={rightRef}
-          className="absolute inset-0"
-          style={{ transformOrigin: RIGHT_PIVOT }}
-        >
-          <Image
-            src="/brand/owl-wing-right.png"
-            alt=""
-            width={W}
-            height={H}
-            priority
-            sizes={sizes}
-            className="h-auto w-full"
-          />
-        </div>
-
-        {/* Eyelids: upper lids textured with the owl's own facial feathers, curved edge and
-            lash line; parked above the eye (clipped away) until a blink. */}
-        <div
-          ref={lidsRef}
-          className="pointer-events-none absolute inset-0"
-          aria-hidden
-        >
-          {EYES.map((pos, i) => (
-            <span
-              key={pos.left}
-              className="absolute block aspect-square w-[5.5%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full"
-              style={pos}
+      <div ref={lookRef} style={{ willChange: "transform" }}>
+        <div ref={breathRef} style={{ transformOrigin: "50% 78%" }}>
+          <div className="relative drop-shadow-[0_20px_60px_rgba(91,108,255,0.3)]">
+            <Image
+              src="/brand/owl-body.png"
+              alt=""
+              width={W}
+              height={H}
+              priority
+              sizes={sizes}
+              className="h-auto w-full"
+            />
+            <div
+              ref={leftRef}
+              className="absolute inset-0"
+              style={{ transformOrigin: LEFT_PIVOT }}
             >
-              <span
-                data-lid
-                className="absolute inset-0 block bg-cover"
-                style={{
-                  transform: "translateY(-102%)",
-                  backgroundImage: `url(/brand/owl-lid-${i === 0 ? "left" : "right"}.png)`,
-                }}
+              <Image
+                src="/brand/owl-wing-left.png"
+                alt=""
+                width={W}
+                height={H}
+                priority
+                sizes={sizes}
+                className="h-auto w-full"
               />
-            </span>
-          ))}
-        </div>
+            </div>
+            <div
+              ref={rightRef}
+              className="absolute inset-0"
+              style={{ transformOrigin: RIGHT_PIVOT }}
+            >
+              <Image
+                src="/brand/owl-wing-right.png"
+                alt=""
+                width={W}
+                height={H}
+                priority
+                sizes={sizes}
+                className="h-auto w-full"
+              />
+            </div>
 
-        {/* Deep-blue glow at the eyes. */}
-        <div
-          ref={glowRef}
-          className="pointer-events-none absolute inset-0 opacity-0"
-          aria-hidden
-        >
-          {EYES.map((pos) => (
-            <span
-              key={pos.left}
-              className="absolute block aspect-square w-[8%] -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-screen"
-              style={{
-                ...pos,
-                background:
-                  "radial-gradient(circle, rgba(170,205,255,1) 0%, rgba(60,120,255,0.95) 24%, rgba(28,72,235,0.6) 50%, rgba(20,50,200,0) 72%)",
-                boxShadow: "0 0 14px 4px rgba(30,90,255,0.55)",
-              }}
-            />
-          ))}
-        </div>
+            {/* Eyelids: upper lids textured with the owl's own facial feathers, curved edge and
+            lash line; parked above the eye (clipped away) until a blink. */}
+            <div
+              ref={lidsRef}
+              className="pointer-events-none absolute inset-0"
+              aria-hidden
+            >
+              {EYES.map((pos, i) => (
+                <span
+                  key={pos.left}
+                  className="absolute block aspect-square w-[5.5%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full"
+                  style={pos}
+                >
+                  <span
+                    data-lid
+                    className="absolute inset-0 block bg-cover"
+                    style={{
+                      transform: "translateY(-102%)",
+                      backgroundImage: `url(/brand/owl-lid-${i === 0 ? "left" : "right"}.png)`,
+                    }}
+                  />
+                </span>
+              ))}
+            </div>
 
-        {/* Rays of light emitted by the eyes. */}
-        <div
-          ref={raysRef}
-          className="pointer-events-none absolute inset-0"
-          aria-hidden
-        >
-          {EYES.map((pos, i) => (
-            <span
-              key={pos.left}
-              data-rays={i === 0 ? "left" : "right"}
-              className="absolute block aspect-square w-[62%] rounded-full opacity-0 mix-blend-screen"
-              style={{
-                ...pos,
-                transform: "translate(-50%, -50%)",
-                background:
-                  "repeating-conic-gradient(from 0deg, rgba(30,85,255,0) 0deg 8deg, rgba(50,110,255,0.8) 10.5deg, rgba(30,85,255,0) 13deg 22deg)",
-                WebkitMaskImage:
-                  "radial-gradient(circle, transparent 7%, #000 11%, rgba(0,0,0,0.6) 30%, transparent 62%)",
-                maskImage:
-                  "radial-gradient(circle, transparent 7%, #000 11%, rgba(0,0,0,0.6) 30%, transparent 62%)",
-              }}
-            />
-          ))}
+            {/* Deep-blue glow at the eyes. */}
+            <div
+              ref={glowRef}
+              className="pointer-events-none absolute inset-0 opacity-0"
+              aria-hidden
+            >
+              {EYES.map((pos) => (
+                <span
+                  key={pos.left}
+                  className="absolute block aspect-square w-[8%] -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-screen"
+                  style={{
+                    ...pos,
+                    background:
+                      "radial-gradient(circle, rgba(170,205,255,1) 0%, rgba(60,120,255,0.95) 24%, rgba(28,72,235,0.6) 50%, rgba(20,50,200,0) 72%)",
+                    boxShadow: "0 0 14px 4px rgba(30,90,255,0.55)",
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Rays of light emitted by the eyes. */}
+            <div
+              ref={raysRef}
+              className="pointer-events-none absolute inset-0"
+              aria-hidden
+            >
+              {EYES.map((pos, i) => (
+                <span
+                  key={pos.left}
+                  data-rays={i === 0 ? "left" : "right"}
+                  className="absolute block aspect-square w-[62%] rounded-full opacity-0 mix-blend-screen"
+                  style={{
+                    ...pos,
+                    transform: "translate(-50%, -50%)",
+                    background:
+                      "repeating-conic-gradient(from 0deg, rgba(30,85,255,0) 0deg 8deg, rgba(50,110,255,0.8) 10.5deg, rgba(30,85,255,0) 13deg 22deg)",
+                    WebkitMaskImage:
+                      "radial-gradient(circle, transparent 7%, #000 11%, rgba(0,0,0,0.6) 30%, transparent 62%)",
+                    maskImage:
+                      "radial-gradient(circle, transparent 7%, #000 11%, rgba(0,0,0,0.6) 30%, transparent 62%)",
+                  }}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
