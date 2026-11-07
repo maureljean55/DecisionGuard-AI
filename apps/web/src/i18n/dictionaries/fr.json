@@ -288,7 +288,12 @@
       "account": "Compte",
       "login": "Connexion",
       "register": "Créer un compte",
-      "rights": "Tous droits réservés."
+      "rights": "Tous droits réservés.",
+      "about": "À propos",
+      "contact": "Contact",
+      "privacy": "Confidentialité",
+      "terms": "Conditions d'utilisation",
+      "legal": "Mentions légales"
     },
     "roles": {
       "title": "Une même décision, trois façons de la regarder.",
@@ -383,6 +388,197 @@
       "meta": "Sécurité · DecisionGuard AI",
       "title": "Vos décisions restent les vôtres.",
       "intro": "Vos dossiers contiennent ce que votre entreprise a de plus sensible. Voici comment nous les protégeons."
+    }
+  },
+  "legal": {
+    "updated": "Dernière mise à jour : 8 novembre 2026",
+    "tbd": "[à compléter]",
+    "about": {
+      "meta": "À propos · DecisionGuard AI",
+      "title": "Pourquoi DecisionGuard existe.",
+      "intro": "Les décisions importantes se prennent souvent avec des hypothèses que personne n'a écrites. Nous construisons l'outil qui les met sur la table avant qu'il ne soit trop tard.",
+      "sections": [
+        {
+          "h": "Ce que nous faisons",
+          "p": [
+            "DecisionGuard AI analyse une décision d'entreprise sous plusieurs angles à la fois : finance, stratégie, droit, cybersécurité, équipes, opérations et scénarios. Le résultat est un dossier clair : les risques, leur probabilité, leur impact, ce qu'il faut vérifier et ce qui permettrait de les réduire."
+          ]
+        },
+        {
+          "h": "Nos principes",
+          "p": [
+            "Une estimation n'est jamais présentée comme un fait. Les scores sont calculés de façon reproductible, pas improvisés par l'IA. Les données de chaque entreprise restent séparées. Et la plateforme recommande : c'est toujours vous qui décidez."
+          ]
+        },
+        {
+          "h": "Pour qui",
+          "p": [
+            "Des entreprises de toutes tailles, en Europe et en Afrique, qui prennent des décisions où une erreur coûte cher : implantation dans un nouveau pays, investissement, changement de prestataire, réorganisation."
+          ]
+        },
+        {
+          "h": "Où nous en sommes",
+          "p": [
+            "DecisionGuard est en phase pilote. Nous l'ouvrons à un premier groupe d'entreprises pour l'améliorer avec elles, sur de vraies décisions."
+          ]
+        }
+      ]
+    },
+    "contact": {
+      "meta": "Contact · DecisionGuard AI",
+      "title": "Parlons de votre prochaine décision.",
+      "intro": "Une question, une demande de démonstration ou d'accès pilote : écrivez-nous, nous vous répondons rapidement.",
+      "name": "Nom",
+      "email": "E-mail professionnel",
+      "company": "Entreprise",
+      "topic": "Sujet",
+      "message": "Votre message",
+      "messageHint": "Quelques lignes suffisent : la décision qui vous occupe, votre secteur, votre pays.",
+      "topics": {
+        "pilot": "Accès pilote",
+        "demo": "Démonstration",
+        "partnership": "Partenariat",
+        "other": "Autre"
+      },
+      "submit": "Envoyer le message",
+      "sent": "Merci, votre message est bien parti. Nous vous répondons à l'adresse indiquée.",
+      "again": "Envoyer un autre message",
+      "privacy": "Vos informations servent uniquement à vous répondre. Voir la politique de confidentialité."
+    },
+    "privacy": {
+      "meta": "Confidentialité · DecisionGuard AI",
+      "title": "Politique de confidentialité",
+      "intro": "Ce que nous collectons, pourquoi, où c'est stocké, combien de temps, et comment exercer vos droits.",
+      "sections": [
+        {
+          "h": "Responsable du traitement",
+          "p": [
+            "L'éditeur du site, dont l'identité figure dans les mentions légales. Pour toute question sur vos données, utilisez le formulaire de contact."
+          ]
+        },
+        {
+          "h": "Données collectées",
+          "p": [
+            "Compte : nom, adresse e-mail, mot de passe (stocké uniquement sous forme hachée, jamais en clair), langue.",
+            "Organisation : nom, pays, devise, membres et leurs rôles.",
+            "Sécurité : journal des actions sensibles (connexions, invitations, changements de rôle) avec l'adresse IP et le navigateur.",
+            "Contact : les informations que vous saisissez dans le formulaire de contact."
+          ]
+        },
+        {
+          "h": "Pourquoi",
+          "p": [
+            "Fournir le service et votre espace (exécution du contrat), protéger les comptes et détecter les abus (intérêt légitime), vous envoyer les e-mails nécessaires : confirmation d'adresse, invitation, réinitialisation de mot de passe. Aucune donnée n'est vendue ni utilisée à des fins publicitaires."
+          ]
+        },
+        {
+          "h": "Où sont stockées les données",
+          "p": [
+            "Base de données : Supabase, région Paris (Union européenne).",
+            "Application : Vercel, fonctions exécutées dans la région Paris. Vercel est une société américaine ; les transferts éventuels sont encadrés par les clauses contractuelles types de la Commission européenne.",
+            "E-mails : Brevo (France).",
+            "Lorsque l'analyse par intelligence artificielle sera activée, les fournisseurs utilisés seront indiqués ici avant leur mise en service."
+          ]
+        },
+        {
+          "h": "Durées de conservation",
+          "p": [
+            "Le compte et l'organisation sont conservés tant qu'ils existent. Les sessions expirent après 14 jours. Les liens envoyés par e-mail sont à usage unique et expirent après 1 heure (mot de passe), 48 heures (confirmation) ou 7 jours (invitation). Le journal de sécurité est conservé pendant la durée de vie de l'organisation."
+          ]
+        },
+        {
+          "h": "Cookies",
+          "p": [
+            "Le site n'utilise que des cookies strictement nécessaires : dg_session (connexion, 14 jours), dg_csrf (protection contre les requêtes frauduleuses, 14 jours) et dg_locale (langue choisie, 1 an). Aucun cookie publicitaire ni de mesure d'audience, c'est pourquoi aucun bandeau de consentement n'est affiché."
+          ]
+        },
+        {
+          "h": "Vos droits",
+          "p": [
+            "Vous pouvez demander l'accès à vos données, leur rectification, leur effacement, leur portabilité, ou vous opposer à un traitement, via le formulaire de contact. Vous pouvez aussi saisir l'autorité de protection des données de votre pays (en France, la CNIL)."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "meta": "Conditions d'utilisation · DecisionGuard AI",
+      "title": "Conditions d'utilisation",
+      "intro": "Les règles d'utilisation de DecisionGuard AI pendant la phase pilote.",
+      "sections": [
+        {
+          "h": "Le service",
+          "p": [
+            "DecisionGuard AI aide à analyser les risques d'une décision d'entreprise. Pendant la phase pilote, les fonctionnalités évoluent et certaines peuvent être indisponibles ou modifiées."
+          ]
+        },
+        {
+          "h": "Une aide à la décision",
+          "p": [
+            "Les analyses sont une aide à la décision. Elles ne constituent ni un conseil juridique, ni un conseil financier, ni un conseil en investissement. Les décisions et leurs conséquences restent sous votre responsabilité. Faites valider les sujets juridiques et financiers par des professionnels."
+          ]
+        },
+        {
+          "h": "Votre compte",
+          "p": [
+            "Vous êtes responsable de la confidentialité de votre mot de passe et des actions faites depuis votre compte. Les propriétaires et administrateurs d'une organisation gèrent ses membres et leurs rôles."
+          ]
+        },
+        {
+          "h": "Vos contenus",
+          "p": [
+            "Les informations que vous saisissez restent les vôtres. Nous les utilisons uniquement pour vous fournir le service, selon la politique de confidentialité."
+          ]
+        },
+        {
+          "h": "Usage acceptable",
+          "p": [
+            "Il est interdit d'utiliser le service pour des activités illégales, de tenter d'accéder aux données d'une autre organisation, ou de perturber son fonctionnement."
+          ]
+        },
+        {
+          "h": "Disponibilité et responsabilité",
+          "p": [
+            "Pendant la phase pilote, le service est fourni sans garantie de disponibilité. Dans les limites permises par la loi, notre responsabilité ne saurait être engagée pour les décisions prises sur la base des analyses."
+          ]
+        },
+        {
+          "h": "Droit applicable",
+          "p": [
+            "Droit applicable et juridiction compétente : [à compléter]."
+          ]
+        }
+      ]
+    },
+    "notice": {
+      "meta": "Mentions légales · DecisionGuard AI",
+      "title": "Mentions légales",
+      "intro": "Informations sur l'éditeur et l'hébergement du site.",
+      "sections": [
+        {
+          "h": "Éditeur",
+          "p": [
+            "Nom ou raison sociale : [à compléter]",
+            "Forme juridique et capital : [à compléter]",
+            "Adresse : [à compléter]",
+            "Numéro d'immatriculation (SIRET / RCCM) : [à compléter]",
+            "Directeur de la publication : [à compléter]",
+            "Contact : via le formulaire de contact du site."
+          ]
+        },
+        {
+          "h": "Hébergement",
+          "p": [
+            "Application : Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis (exécution en région Paris).",
+            "Base de données : Supabase Inc., région Paris (eu-west-3)."
+          ]
+        },
+        {
+          "h": "Propriété intellectuelle",
+          "p": [
+            "Le nom DecisionGuard AI, le logo et les contenus du site sont protégés. Toute reproduction sans autorisation est interdite."
+          ]
+        }
+      ]
     }
   }
 }

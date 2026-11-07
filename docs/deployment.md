@@ -51,7 +51,8 @@ make migrate-prod
 | `DG_PUBLIC_WEB_URL` | `https://decisionguard.vercel.app` |
 | `DG_LOG_JSON` | `true` |
 | `DG_LLM_PROVIDER` | `mock` (en attendant une clé) |
-| `DG_SMTP_*`, `DG_EMAIL_FROM` | Brevo — voir ci-dessous |
+| `DG_SMTP_*`, `DG_EMAIL_FROM` | Brevo, voir ci-dessous |
+| `DG_CONTACT_EMAIL` | destinataire du formulaire de contact (jamais affiché sur le site) |
 
 **decisionguard (web)** : `API_URL=https://decisionguard-api.vercel.app`, `DG_RELAY_SECRET`.
 

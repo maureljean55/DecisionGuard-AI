@@ -71,6 +71,8 @@ class Settings(BaseSettings):
     # Send after the HTTP response (long-running server) or inline (serverless platforms,
     # where work after the response is not guaranteed to run).
     email_background: bool = True
+    # Where messages from the public contact form are delivered (never shown on the site).
+    contact_email: str | None = None
 
     default_locale: Locale = "fr"
     supported_locales: tuple[Locale, ...] = ("fr", "en")
@@ -86,6 +88,7 @@ class Settings(BaseSettings):
         "migration_database_url",
         "redis_url",
         "relay_secret",
+        "contact_email",
         mode="before",
     )
     @classmethod

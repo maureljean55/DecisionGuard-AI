@@ -8,50 +8,42 @@ import type { Dictionary } from "@/i18n/dictionaries";
 
 import { Brand } from "./brand";
 
+/** Compact footer: only the links that are not already in the header. */
 export function SiteFooter({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   const f = dict.landing.footer;
-  const linkClass = "text-muted transition-colors hover:text-ink";
+  const links = [
+    { href: `/${lang}/a-propos`, label: f.about },
+    { href: `/${lang}/contact`, label: f.contact },
+    { href: `/${lang}/confidentialite`, label: f.privacy },
+    { href: `/${lang}/conditions`, label: f.terms },
+    { href: `/${lang}/mentions-legales`, label: f.legal },
+  ];
 
   return (
-    <footer className="relative border-t border-line bg-night">
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
-        <div className="max-w-sm">
-          <Brand href={`/${lang}`} label={dict.nav.home} size={36} />
-          <p className="mt-5 text-sm leading-relaxed text-muted">{f.tagline}</p>
-        </div>
-
-        <nav aria-label={f.product} className="text-sm">
-          <h2 className="text-sm font-semibold text-ink">
-            {f.product}
-          </h2>
-          <ul className="mt-4 space-y-3">
-            <li><Link href={`/${lang}/solutions`} className={linkClass}>{dict.nav.roles}</Link></li>
-            <li><Link href={`/${lang}/methode`} className={linkClass}>{dict.nav.method}</Link></li>
-            <li><Link href={`/${lang}/agents`} className={linkClass}>{dict.nav.agents}</Link></li>
-            <li><Link href={`/${lang}/securite`} className={linkClass}>{dict.nav.security}</Link></li>
-          </ul>
-        </nav>
-
-        <nav aria-label={f.account} className="text-sm">
-          <h2 className="text-sm font-semibold text-ink">
-            {f.account}
-          </h2>
-          <ul className="mt-4 space-y-3">
-            <li><Link href={`/${lang}/login`} className={linkClass}>{f.login}</Link></li>
-            <li><Link href={`/${lang}/register`} className={linkClass}>{f.register}</Link></li>
+    <footer className="border-t border-line bg-night">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <Brand href={`/${lang}`} label={dict.nav.home} size={28} />
+        <nav aria-label={f.product}>
+          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
+            {links.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="transition-colors hover:text-ink">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>
-
       <div className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl flex-col gap-5 px-4 py-6 text-xs text-muted sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <p className="max-w-2xl leading-relaxed">{dict.footer.disclaimer}</p>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4 text-xs text-muted sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+          <p className="max-w-xl">{dict.footer.disclaimer}</p>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <Suspense fallback={<SystemStatusFallback />}>
               <SystemStatus dict={dict.status} />
             </Suspense>
             <LocaleSwitcher current={lang} label={dict.nav.language} />
-            <span>© 2026 DecisionGuard AI. {f.rights}</span>
+            <span>© 2026 DecisionGuard AI</span>
           </div>
         </div>
       </div>

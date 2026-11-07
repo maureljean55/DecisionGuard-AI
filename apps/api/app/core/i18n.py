@@ -66,6 +66,10 @@ MESSAGES: dict[str, dict[Locale, str]] = {
         "fr": "Cette personne est déjà membre de l'organisation.",
         "en": "This person is already a member of the organization.",
     },
+    "contact.unavailable": {
+        "fr": "Le formulaire de contact est momentanément indisponible.",
+        "en": "The contact form is temporarily unavailable.",
+    },
     "invitation.email_mismatch": {
         "fr": "Cette invitation a été envoyée à une autre adresse e-mail.",
         "en": "This invitation was sent to a different e-mail address.",

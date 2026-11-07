@@ -21,6 +21,7 @@ class OutgoingEmail:
     to: str
     subject: str
     body: str
+    reply_to: str | None = None
 
 
 def dispatch_email(tasks: BackgroundTasks, message: OutgoingEmail) -> None:
@@ -45,6 +46,8 @@ def send_email(message: OutgoingEmail) -> None:
     msg["From"] = settings.email_from
     msg["To"] = message.to
     msg["Subject"] = message.subject
+    if message.reply_to:
+        msg["Reply-To"] = message.reply_to
     msg.set_content(message.body)
     try:
         with smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=10) as smtp:
