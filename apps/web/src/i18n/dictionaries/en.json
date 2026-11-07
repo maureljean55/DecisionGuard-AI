@@ -7,7 +7,8 @@
     "features": "Features",
     "pricing": "Pricing",
     "login": "Log in",
-    "language": "Language"
+    "language": "Language",
+    "register": "Create account"
   },
   "hero": {
     "eyebrow": "Decision intelligence for companies",
@@ -38,5 +39,88 @@
   },
   "footer": {
     "disclaimer": "DecisionGuard AI analyses support decision-making. They do not replace professional legal or financial advice."
+  },
+  "auth": {
+    "panelTitle": "Better-protected decisions.",
+    "panelBody": "Every analysis separates verified facts, assumptions and estimates. Your data stays isolated from other companies' data.",
+    "panelPoints": [
+      "Strict per-company data isolation",
+      "Hosting and compliance designed for GDPR",
+      "Audit trail of every sensitive action"
+    ],
+    "email": "Work e-mail address",
+    "password": "Password",
+    "passwordHint": "At least 12 characters. A passphrase works best.",
+    "fullName": "Full name",
+    "orgName": "Company name",
+    "country": "Country",
+    "currency": "Reporting currency",
+    "language": "Report language",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "networkError": "Cannot reach the server. Check your connection.",
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Access your DecisionGuard workspace.",
+      "submit": "Sign in",
+      "forgot": "Forgot password?",
+      "noAccount": "No account yet?",
+      "register": "Create an account"
+    },
+    "register": {
+      "title": "Create your workspace",
+      "subtitle": "Your account and your company's, in one step.",
+      "you": "You",
+      "company": "Your company",
+      "submit": "Create my account",
+      "hasAccount": "Already have an account?",
+      "login": "Sign in",
+      "terms": "By creating an account, you accept that analyses are decision support, not legal or financial advice."
+    },
+    "forgot": {
+      "title": "Forgot password",
+      "subtitle": "Enter your address: if an account exists, you will receive a reset link valid for 1 hour.",
+      "submit": "Send link",
+      "sent": "If an account exists for this address, an e-mail has just been sent. Check your spam folder too.",
+      "back": "Back to sign in"
+    },
+    "reset": {
+      "title": "New password",
+      "subtitle": "Choose a new password. All your open sessions will be signed out.",
+      "submit": "Save",
+      "done": "Your password has been changed. You can now sign in.",
+      "missingToken": "This link is incomplete. Request a new reset link."
+    },
+    "verify": {
+      "title": "E-mail verification",
+      "pending": "Verifying…",
+      "done": "Your e-mail address is confirmed.",
+      "continue": "Continue"
+    },
+    "invite": {
+      "title": "Invitation",
+      "body": "You are invited to join {org} as {role}.",
+      "sentTo": "Invitation sent to {email}.",
+      "accept": "Accept invitation",
+      "loginFirst": "Sign in with this address to accept.",
+      "registerFirst": "No account yet? Create one with this address.",
+      "accepted": "You joined {org}."
+    },
+    "roles": {
+      "owner": "owner",
+      "admin": "administrator",
+      "analyst": "analyst",
+      "viewer": "viewer"
+    }
+  },
+  "app": {
+    "welcome": "Hello {name}",
+    "subtitle": "Your workspace is ready. The full dashboard arrives in the next milestone.",
+    "organizations": "Your organizations",
+    "role": "Role",
+    "logout": "Sign out",
+    "verifyBanner": "Confirm your e-mail address to secure your account.",
+    "resend": "Resend e-mail",
+    "resent": "E-mail sent."
   }
 }

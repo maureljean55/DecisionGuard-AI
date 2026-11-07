@@ -19,6 +19,37 @@ Navigateur ──► Next.js (apps/web) ──► FastAPI (apps/api) ──► P
 6. **Bilingue natif.** Interface FR/EN (routes `/fr`, `/en`), messages API localisés, sorties d'agents et rapports générés dans la langue de l'organisation.
 7. **Humain dans la boucle.** La plateforme recommande, ne décide ni n'exécute jamais.
 
+## Authentification et isolation (M2)
+
+**Sessions.** Jeton opaque aléatoire (256 bits) dans un cookie `dg_session` `HttpOnly`, `SameSite=Lax`, `Secure` hors développement. Seul son hachage SHA-256 est stocké (`auth_sessions`). Révocation immédiate (déconnexion, changement ou réinitialisation de mot de passe). Durée : 14 jours (`DG_SESSION_TTL_HOURS`).
+
+**CSRF.** Double-submit : cookie `dg_csrf` lisible par le front, renvoyé dans l'en-tête `X-CSRF-Token` pour toute requête non-GET authentifiée.
+
+**Mots de passe.** Argon2id, 12 caractères minimum, ne doit pas contenir l'identifiant de l'e-mail, 128 maximum (borne le coût de hachage). Temps de réponse identique que le compte existe ou non. « Mot de passe oublié » répond toujours 202 (pas d'énumération). Liens à usage unique (seul le hachage est stocké), seul le dernier lien émis est valable.
+
+**Limitation de débit (Redis).** Connexion : 10 essais / 15 min par e-mail, 50 par IP. Inscription, mot de passe oublié, jetons et invitations également limités.
+
+**Relais web.** Le navigateur ne parle qu'au site (`/api/*` → route handler Next.js → API). Cookies first-party, pas de CORS, l'API peut rester sur un réseau privé.
+
+**Rôles** (`app/core/permissions.py`) : `owner` ⊃ `admin` ⊃ `analyst` ⊃ `viewer`. Un admin ne peut ni créer, ni modifier, ni retirer un propriétaire. Une organisation garde toujours au moins un propriétaire. Un non-membre reçoit **404**, jamais 403 : l'existence des autres entreprises n'est pas révélée.
+
+**Row-Level Security.** L'API se connecte avec le rôle `dg_app` (ni superuser, ni `BYPASSRLS`). Au début de **chaque transaction**, `app.user_id` / `app.org_id` sont fixés par `set_config(..., true)` (portée transaction : aucune fuite via le pool de connexions). Politiques :
+
+| Table | Lecture | Écriture |
+|---|---|---|
+| `organizations` | contexte org, ou membre | contexte org uniquement |
+| `memberships` | contexte org, ou ses propres adhésions | contexte org uniquement |
+| `invitations` | contexte org, ou détenteur du jeton | contexte org uniquement |
+| `audit_logs` | contexte org | insertion seule (pas d'UPDATE/DELETE accordé) |
+
+Les tables `users`, `auth_sessions`, `user_tokens` sont globales (identité) et ne sont jamais exposées en liste.
+
+**Journal d'audit** : inscription, connexions réussies et échouées, déconnexion, vérification d'e-mail, mots de passe, organisations, rôles, invitations. Consultable par `owner`/`admin`.
+
+**Tests** : `tests/test_tenant_isolation.py` attaque les deux couches (API et SQL brut sans filtre) ; la CI exige leur exécution (`DG_REQUIRE_INTEGRATION=1`).
+
+**Limites connues.** Pas encore d'authentification à deux facteurs ni de SSO (prévus pour Business/Enterprise). L'IP client fiable dépend de la configuration du proxy en production (`FORWARDED_ALLOW_IPS`). Envoi d'e-mails synchrone en tâche de fond FastAPI, à basculer sur Celery au M4.
+
 ## Backend (`apps/api`)
 
 | Module | Rôle | Milestone |
@@ -26,7 +57,7 @@ Navigateur ──► Next.js (apps/web) ──► FastAPI (apps/api) ──► P
 | `app/core` | configuration, logs structurés, sécurité, i18n | M1–M2 |
 | `app/db` | moteur SQLAlchemy, session, base déclarative | M1 |
 | `app/api` | routes HTTP | M1+ |
-| `app/auth`, `app/tenancy` | authentification, organisations, RBAC, RLS | M2 |
+| `app/auth`, `app/orgs` | authentification, organisations, membres, invitations, audit | M2 ✅ |
 | `app/decisions` | décisions, analyses, statuts | M4 |
 | `app/llm` | interface fournisseur, mock, suivi de consommation | M5 |
 | `app/agents` | orchestrateur LangGraph, agents spécialisés, audit | M5, M7 |

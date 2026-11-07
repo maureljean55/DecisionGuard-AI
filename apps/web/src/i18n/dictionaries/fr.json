@@ -7,7 +7,8 @@
     "features": "Fonctionnalités",
     "pricing": "Tarifs",
     "login": "Connexion",
-    "language": "Langue"
+    "language": "Langue",
+    "register": "Créer un compte"
   },
   "hero": {
     "eyebrow": "Intelligence décisionnelle pour entreprises",
@@ -38,5 +39,88 @@
   },
   "footer": {
     "disclaimer": "Les analyses de DecisionGuard AI sont une aide à la décision. Elles ne remplacent ni un conseil juridique, ni un conseil financier professionnel."
+  },
+  "auth": {
+    "panelTitle": "Des décisions mieux protégées.",
+    "panelBody": "Chaque analyse distingue les faits vérifiés, les hypothèses et les estimations. Vos données restent isolées de celles des autres entreprises.",
+    "panelPoints": [
+      "Isolation stricte des données par entreprise",
+      "Hébergement et conformité pensés pour le RGPD",
+      "Journal d'audit de toutes les actions sensibles"
+    ],
+    "email": "Adresse e-mail professionnelle",
+    "password": "Mot de passe",
+    "passwordHint": "Au moins 12 caractères. Une phrase de passe est idéale.",
+    "fullName": "Nom complet",
+    "orgName": "Nom de l'entreprise",
+    "country": "Pays",
+    "currency": "Devise de référence",
+    "language": "Langue des rapports",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "networkError": "Impossible de joindre le serveur. Vérifiez votre connexion.",
+    "login": {
+      "title": "Connexion",
+      "subtitle": "Accédez à votre espace DecisionGuard.",
+      "submit": "Se connecter",
+      "forgot": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
+      "register": "Créer un compte"
+    },
+    "register": {
+      "title": "Créer votre espace",
+      "subtitle": "Votre compte et celui de votre entreprise, en une étape.",
+      "you": "Vous",
+      "company": "Votre entreprise",
+      "submit": "Créer mon compte",
+      "hasAccount": "Déjà un compte ?",
+      "login": "Se connecter",
+      "terms": "En créant un compte, vous acceptez que les analyses produites soient une aide à la décision et non un conseil juridique ou financier."
+    },
+    "forgot": {
+      "title": "Mot de passe oublié",
+      "subtitle": "Indiquez votre adresse : si un compte existe, vous recevrez un lien de réinitialisation valable 1 heure.",
+      "submit": "Envoyer le lien",
+      "sent": "Si un compte existe pour cette adresse, un e-mail vient d'être envoyé. Pensez à vérifier vos courriers indésirables.",
+      "back": "Retour à la connexion"
+    },
+    "reset": {
+      "title": "Nouveau mot de passe",
+      "subtitle": "Choisissez un nouveau mot de passe. Toutes vos sessions ouvertes seront fermées.",
+      "submit": "Enregistrer",
+      "done": "Votre mot de passe a été modifié. Vous pouvez vous connecter.",
+      "missingToken": "Ce lien est incomplet. Demandez un nouveau lien de réinitialisation."
+    },
+    "verify": {
+      "title": "Vérification de l'adresse e-mail",
+      "pending": "Vérification en cours…",
+      "done": "Votre adresse e-mail est confirmée.",
+      "continue": "Continuer"
+    },
+    "invite": {
+      "title": "Invitation",
+      "body": "Vous avez reçu une invitation à rejoindre {org} en tant que {role}.",
+      "sentTo": "Invitation envoyée à {email}.",
+      "accept": "Accepter l'invitation",
+      "loginFirst": "Connectez-vous avec cette adresse pour accepter.",
+      "registerFirst": "Pas encore de compte ? Créez-le avec cette adresse.",
+      "accepted": "Vous avez rejoint {org}."
+    },
+    "roles": {
+      "owner": "propriétaire",
+      "admin": "administrateur",
+      "analyst": "analyste",
+      "viewer": "lecteur"
+    }
+  },
+  "app": {
+    "welcome": "Bonjour {name}",
+    "subtitle": "Votre espace est prêt. Le tableau de bord complet arrive à la prochaine étape.",
+    "organizations": "Vos organisations",
+    "role": "Rôle",
+    "logout": "Se déconnecter",
+    "verifyBanner": "Confirmez votre adresse e-mail pour sécuriser votre compte.",
+    "resend": "Renvoyer l'e-mail",
+    "resent": "E-mail envoyé."
   }
 }

@@ -3,11 +3,14 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+import app.models  # noqa: F401,E402 - register all models on the metadata
 from app.core.config import get_settings
 from app.db.session import Base
 
 config = context.config
-config.set_main_option("sqlalchemy.url", get_settings().database_url)
+_settings = get_settings()
+# Migrations run as the table owner; the app runs as the unprivileged `dg_app` role.
+config.set_main_option("sqlalchemy.url", _settings.migration_database_url or _settings.database_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

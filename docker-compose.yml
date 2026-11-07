@@ -3,6 +3,15 @@
 
 name: decisionguard
 
+x-db-urls: &db-urls
+  # Runtime: unprivileged role, subject to Row-Level Security.
+  DG_DATABASE_URL: postgresql+psycopg://dg_app:${DG_APP_DB_PASSWORD:-dg_app_dev}@postgres:5432/${POSTGRES_DB:-decisionguard}
+  # Migrations: table owner.
+  DG_MIGRATION_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-decisionguard}:${POSTGRES_PASSWORD:-decisionguard}@postgres:5432/${POSTGRES_DB:-decisionguard}
+  DG_REDIS_URL: redis://redis:6379/0
+  DG_SMTP_HOST: mailpit
+  DG_SMTP_PORT: "1025"
+
 services:
   postgres:
     image: pgvector/pgvector:pg17
@@ -10,8 +19,11 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-decisionguard}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-decisionguard}
       POSTGRES_DB: ${POSTGRES_DB:-decisionguard}
+      DG_APP_DB_PASSWORD: ${DG_APP_DB_PASSWORD:-dg_app_dev}
     ports: ["127.0.0.1:5432:5432"]
-    volumes: [pgdata:/var/lib/postgresql/data]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
@@ -29,24 +41,33 @@ services:
       timeout: 3s
       retries: 10
 
+  mailpit:
+    # Local SMTP catcher: every e-mail sent in development lands here (web UI on :8025).
+    image: axllent/mailpit:v1.27
+    ports: ["127.0.0.1:8025:8025", "127.0.0.1:1025:1025"]
+
   migrate:
     build: ./apps/api
     command: ["alembic", "upgrade", "head"]
     env_file: [.env]
-    environment: &api-env
-      DG_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-decisionguard}:${POSTGRES_PASSWORD:-decisionguard}@postgres:5432/${POSTGRES_DB:-decisionguard}
-      DG_REDIS_URL: redis://redis:6379/0
+    environment: *db-urls
     depends_on:
       postgres: { condition: service_healthy }
 
   api:
     build: ./apps/api
     env_file: [.env]
-    environment: *api-env
+    environment:
+      <<: *db-urls
+      DG_PUBLIC_WEB_URL: http://localhost:3000
+      # Trust X-Forwarded-For from the web relay so audit logs and rate limits see client IPs.
+      # Dev only (API bound to 127.0.0.1). In production, list the relay/LB addresses only.
+      FORWARDED_ALLOW_IPS: "*"
     ports: ["127.0.0.1:8000:8000"]
     depends_on:
       migrate: { condition: service_completed_successfully }
       redis: { condition: service_healthy }
+      mailpit: { condition: service_started }
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/live')"]
       interval: 10s

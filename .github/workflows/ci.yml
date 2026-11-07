@@ -11,9 +11,36 @@ jobs:
     defaults:
       run:
         working-directory: apps/api
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: decisionguard
+          POSTGRES_PASSWORD: decisionguard
+          POSTGRES_DB: decisionguard
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U decisionguard" --health-interval 5s
+          --health-timeout 3s --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-retries 10
+    env:
+      # Integration tests (tenant isolation, RLS) must run in CI, never be skipped.
+      DG_REQUIRE_INTEGRATION: "1"
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+      - name: Create runtime DB role and test database (same script as docker compose)
+        working-directory: .
+        env:
+          PGHOST: localhost
+          PGPASSWORD: decisionguard
+          POSTGRES_USER: decisionguard
+          POSTGRES_DB: decisionguard
+          DG_APP_DB_PASSWORD: dg_app_dev
+        run: sh infra/postgres/init/01-app-role.sh
       - run: uv sync --frozen
       - run: uv run ruff check .
       - run: uv run ruff format --check .
@@ -25,8 +52,8 @@ jobs:
       run:
         working-directory: apps/web
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm

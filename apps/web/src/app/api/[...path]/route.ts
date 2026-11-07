@@ -1,0 +1,76 @@
+/**
+ * Same-origin relay to the DecisionGuard API.
+ *
+ * The browser only ever talks to the web origin: session cookies stay first-party,
+ * no CORS is needed, and the API can live on a private network.
+ */
+import type { NextRequest } from "next/server";
+
+const API_URL = process.env.API_URL ?? "http://localhost:8000";
+const FORWARDED_REQUEST_HEADERS = [
+  "accept",
+  "accept-language",
+  "content-type",
+  "cookie",
+  "user-agent",
+  "x-csrf-token",
+  "x-forwarded-for",
+];
+const FORWARDED_RESPONSE_HEADERS = ["content-type", "cache-control", "retry-after"];
+const MAX_BODY_BYTES = 1_000_000; // JSON API; file uploads will get a dedicated path
+
+async function relay(request: NextRequest, ctx: RouteContext<"/api/[...path]">) {
+  const { path } = await ctx.params;
+  if (path.some((segment) => segment === "." || segment === ".." || segment === "")) {
+    return Response.json({ error: { code: "not_found", message: "Not found" } }, { status: 404 });
+  }
+
+  const target = new URL(`${API_URL}/${path.map(encodeURIComponent).join("/")}`);
+  target.search = request.nextUrl.search;
+
+  const headers = new Headers();
+  for (const name of FORWARDED_REQUEST_HEADERS) {
+    const value = request.headers.get(name);
+    if (value) headers.set(name, value);
+  }
+
+  let body: ArrayBuffer | undefined;
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    body = await request.arrayBuffer();
+    if (body.byteLength > MAX_BODY_BYTES) {
+      return Response.json(
+        { error: { code: "payload_too_large", message: "Payload too large" } },
+        { status: 413 },
+      );
+    }
+  }
+
+  let upstream: Response;
+  try {
+    upstream = await fetch(target, {
+      method: request.method,
+      headers,
+      body,
+      redirect: "manual",
+      cache: "no-store",
+      signal: AbortSignal.timeout(30_000),
+    });
+  } catch {
+    return Response.json(
+      { error: { code: "api_unreachable", message: "API unreachable" } },
+      { status: 502 },
+    );
+  }
+
+  const out = new Headers();
+  for (const name of FORWARDED_RESPONSE_HEADERS) {
+    const value = upstream.headers.get(name);
+    if (value) out.set(name, value);
+  }
+  for (const cookie of upstream.headers.getSetCookie()) out.append("set-cookie", cookie);
+
+  const noBody = upstream.status === 204 || upstream.status === 304;
+  return new Response(noBody ? null : upstream.body, { status: upstream.status, headers: out });
+}
+
+export { relay as DELETE, relay as GET, relay as PATCH, relay as POST, relay as PUT };

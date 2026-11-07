@@ -2,7 +2,7 @@
 
 Plateforme SaaS d'intelligence des risques décisionnels : une IA multi-agents analyse une décision d'entreprise, évalue les risques avec un moteur de calcul déterministe, simule des scénarios, vérifie ses propres conclusions et produit un rapport d'aide à la décision (FR/EN).
 
-> **Statut : Milestone 1 (fondations).** Voir [docs/roadmap.md](docs/roadmap.md).
+> **Statut : Milestone 2 terminé (authentification, organisations, isolation).** Voir [docs/roadmap.md](docs/roadmap.md).
 
 ## Prérequis
 
@@ -23,8 +23,13 @@ make up                     # = docker compose up --build -d
 | API | http://localhost:8000 |
 | Documentation API (dev) | http://localhost:8000/docs |
 | Santé | http://localhost:8000/health |
+| Boîte mail de développement (Mailpit) | http://localhost:8025 |
 
 Arrêter : `make down` (les données sont conservées dans des volumes Docker).
+
+En développement, tous les e-mails (vérification, invitation, mot de passe oublié) arrivent dans Mailpit : aucun e-mail réel n'est envoyé.
+
+> Le script `infra/postgres/init` (rôle applicatif `dg_app`, base de test) ne s'exécute qu'à la **première** création du volume. Pour repartir de zéro : `docker compose down -v && make up` (efface les données locales).
 
 ## Développement sans Docker pour les applis
 
@@ -38,6 +43,7 @@ cd apps/web && npm install && npm run dev
 
 ```bash
 make test     # tests backend (pytest) + frontend (vitest)
+              # les tests d'intégration (isolation, RLS) utilisent Postgres/Redis de docker compose
 make lint     # ruff, eslint, typecheck
 ```
 

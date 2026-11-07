@@ -1,4 +1,5 @@
 import { CheckCircle2, Scale, ShieldCheck } from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -30,6 +31,9 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
             <a href="#features" className="hidden hover:text-white sm:inline">
               {dict.nav.features}
             </a>
+            <Link href={`/${lang}/login`} className="hover:text-white">
+              {dict.nav.login}
+            </Link>
             <LocaleSwitcher current={lang} label={dict.nav.language} />
           </div>
         </div>
@@ -48,12 +52,12 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
               {dict.hero.subtitle}
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <a
-                href="#features"
+              <Link
+                href={`/${lang}/register`}
                 className="rounded-md bg-blue-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-500/90"
               >
                 {dict.hero.cta}
-              </a>
+              </Link>
               <a
                 href="#features"
                 className="rounded-md border border-white/20 px-5 py-2.5 text-sm font-medium text-white/90 hover:bg-white/5"
