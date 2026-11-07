@@ -366,6 +366,55 @@
       "agentsMore": "Découvrir les 8 agents",
       "securityTitle": "Vos décisions restent les vôtres.",
       "securityMore": "En savoir plus sur la sécurité"
+    },
+    "how": {
+      "title": "Comment ça marche",
+      "intro": "Cinq étapes, toujours dans le même ordre. Le calcul ne dépend pas de l'IA, et rien n'arrive dans votre rapport sans avoir été vérifié.",
+      "more": "Voir la méthode complète",
+      "stages": [
+        {
+          "title": "Votre décision",
+          "body": "Vous la décrivez en quelques lignes, avec les montants et l'échéance."
+        },
+        {
+          "title": "Analyse par 7 agents",
+          "body": "Chacun l'examine sous son angle, en parallèle."
+        },
+        {
+          "title": "Calcul du score",
+          "body": "Probabilité × impact, de 1 à 5. Mêmes données, même score."
+        },
+        {
+          "title": "Audit",
+          "body": "Calculs, sources et cohérence vérifiés. Le non étayé est renvoyé."
+        },
+        {
+          "title": "Votre rapport",
+          "body": "Risques, scénarios et plan d'action. Vous décidez."
+        }
+      ],
+      "demo": {
+        "input": "Ouvrir une filiale à Douala",
+        "inputMeta": "1,6 Md XAF · T2 2027",
+        "agents": [
+          "Finance",
+          "Stratégie",
+          "Juridique",
+          "Cyber",
+          "Équipes",
+          "Opérations",
+          "Scénarios"
+        ],
+        "formula": "P × I",
+        "checks": [
+          "Calculs refaits",
+          "Sources datées",
+          "Agents cohérents"
+        ],
+        "loop": "Renvoi si non étayé",
+        "report": "Rapport de décision",
+        "seal": "Vérifié"
+      }
     }
   },
   "pages": {

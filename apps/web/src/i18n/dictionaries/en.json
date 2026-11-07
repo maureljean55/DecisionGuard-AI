@@ -366,6 +366,55 @@
       "agentsMore": "Meet the 8 agents",
       "securityTitle": "Your decisions stay yours.",
       "securityMore": "More about security"
+    },
+    "how": {
+      "title": "How it works",
+      "intro": "Five steps, always in the same order. Scoring does not depend on the AI, and nothing reaches your report without being checked.",
+      "more": "See the full method",
+      "stages": [
+        {
+          "title": "Your decision",
+          "body": "You describe it in a few lines, with amounts and deadline."
+        },
+        {
+          "title": "7 agents analyse",
+          "body": "Each examines it from its own angle, in parallel."
+        },
+        {
+          "title": "Scoring",
+          "body": "Probability × impact, 1 to 5. Same data, same score."
+        },
+        {
+          "title": "Audit",
+          "body": "Calculations, sources and consistency checked. Anything unsupported is sent back."
+        },
+        {
+          "title": "Your report",
+          "body": "Risks, scenarios and action plan. You decide."
+        }
+      ],
+      "demo": {
+        "input": "Open a subsidiary in Douala",
+        "inputMeta": "XAF 1.6bn · Q2 2027",
+        "agents": [
+          "Finance",
+          "Strategy",
+          "Legal",
+          "Cyber",
+          "People",
+          "Operations",
+          "Scenarios"
+        ],
+        "formula": "P × I",
+        "checks": [
+          "Calculations redone",
+          "Sources dated",
+          "Agents consistent"
+        ],
+        "loop": "Sent back if unsupported",
+        "report": "Decision report",
+        "seal": "Verified"
+      }
     }
   },
   "pages": {
