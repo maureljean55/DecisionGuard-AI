@@ -175,6 +175,7 @@ export function RolesCompact({ l, lang }: { l: L; lang: Locale }) {
 }
 
 const ROLE_ICONS = [Building2, Landmark, ServerCog];
+const ROLE_PHOTOS = ["leadership", "finance", "it"];
 
 export function RolesDetailed({ l, lang }: { l: L; lang: Locale }) {
   const R = l.roles;
@@ -185,66 +186,72 @@ export function RolesDetailed({ l, lang }: { l: L; lang: Locale }) {
         return (
           <article
             key={r.role}
-            className="flex flex-col rounded-2xl border border-line bg-abyss/70 p-6 transition-colors hover:border-teal/40"
+            className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-abyss transition-colors hover:border-teal/40"
           >
-            <span className="flex size-11 items-center justify-center rounded-xl border border-teal/30 bg-teal/10">
-              <Icon className="size-5 text-teal" aria-hidden />
-            </span>
-            <h2 className="mt-5 font-display text-[1.6rem] font-semibold leading-tight text-ink">
-              {r.role}
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted lg:min-h-[4.6rem]">
-              {r.scope}
-            </p>
-            <p className="mt-5 rounded-lg border border-line bg-night px-4 py-3 font-display text-lg italic leading-snug text-ink/90">
-              {quote(r.example, lang)}
-            </p>
+            <CardPhoto
+              src={`/roles/${ROLE_PHOTOS[idx]}.webp`}
+              sizes="(min-width: 1024px) 370px, 100vw"
+            />
+            <div className="relative -mt-7 flex flex-1 flex-col px-6 pb-6">
+              <span className="flex size-11 items-center justify-center rounded-xl border border-teal/40 bg-night">
+                <Icon className="size-5 text-teal" aria-hidden />
+              </span>
+              <h2 className="mt-5 font-display text-[1.6rem] font-semibold leading-tight text-ink">
+                {r.role}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-muted lg:min-h-[4.6rem]">
+                {r.scope}
+              </p>
+              <p className="mt-5 rounded-lg border border-line bg-night px-4 py-3 font-display text-lg italic leading-snug text-ink/90">
+                {quote(r.example, lang)}
+              </p>
 
-            {/* Native disclosure: works without JavaScript, keyboard accessible. */}
-            <details className="group mt-4">
-              <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-sm font-medium text-teal hover:text-ink [&::-webkit-details-marker]:hidden">
-                <span className="group-open:hidden">{R.readMore}</span>
-                <span className="hidden group-open:inline">{R.readLess}</span>
-                <ChevronDown
-                  className="size-4 transition-transform group-open:rotate-180"
-                  aria-hidden
-                />
-              </summary>
-              <div className="mt-4 space-y-5 border-t border-line pt-5">
-                <div>
-                  <h3 className="text-xs font-semibold text-ink">
-                    {R.checksLabel}
-                  </h3>
-                  <ul className="mt-3 space-y-2.5 text-sm text-ink/90">
-                    {r.points.map((p) => (
-                      <li key={p} className="flex gap-2.5">
-                        <Check
-                          className="mt-0.5 size-4 shrink-0 text-teal"
-                          aria-hidden
-                        />
-                        <span className="leading-relaxed">{p}</span>
-                      </li>
-                    ))}
-                  </ul>
+              {/* Native disclosure: works without JavaScript, keyboard accessible. */}
+              <details className="group mt-4">
+                <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-sm font-medium text-teal hover:text-ink [&::-webkit-details-marker]:hidden">
+                  <span className="group-open:hidden">{R.readMore}</span>
+                  <span className="hidden group-open:inline">{R.readLess}</span>
+                  <ChevronDown
+                    className="size-4 transition-transform group-open:rotate-180"
+                    aria-hidden
+                  />
+                </summary>
+                <div className="mt-4 space-y-5 border-t border-line pt-5">
+                  <div>
+                    <h3 className="text-xs font-semibold text-ink">
+                      {R.checksLabel}
+                    </h3>
+                    <ul className="mt-3 space-y-2.5 text-sm text-ink/90">
+                      {r.points.map((p) => (
+                        <li key={p} className="flex gap-2.5">
+                          <Check
+                            className="mt-0.5 size-4 shrink-0 text-teal"
+                            aria-hidden
+                          />
+                          <span className="leading-relaxed">{p}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-ink">
+                      {R.decisionsLabel}
+                    </h3>
+                    <ul className="mt-3 space-y-2 text-sm text-muted">
+                      {r.decisions.map((d) => (
+                        <li key={d} className="flex gap-2.5">
+                          <span
+                            className="mt-2 size-1 shrink-0 rounded-full bg-muted"
+                            aria-hidden
+                          />
+                          <span className="leading-relaxed">{d}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xs font-semibold text-ink">
-                    {R.decisionsLabel}
-                  </h3>
-                  <ul className="mt-3 space-y-2 text-sm text-muted">
-                    {r.decisions.map((d) => (
-                      <li key={d} className="flex gap-2.5">
-                        <span
-                          className="mt-2 size-1 shrink-0 rounded-full bg-muted"
-                          aria-hidden
-                        />
-                        <span className="leading-relaxed">{d}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </details>
+              </details>
+            </div>
           </article>
         );
       })}
@@ -265,14 +272,21 @@ const AGENT_PHOTOS = [
   "scenarios",
 ];
 
-function AgentPhoto({ name }: { name: string }) {
+/** Real photo at the top of a card, blended into the night palette. */
+export function CardPhoto({
+  src,
+  sizes = "(min-width: 1024px) 270px, (min-width: 640px) 50vw, 100vw",
+}: {
+  src: string;
+  sizes?: string;
+}) {
   return (
     <div className="relative aspect-[16/10] overflow-hidden">
       <Image
-        src={`/agents/${name}.webp`}
+        src={src}
         alt=""
         fill
-        sizes="(min-width: 1024px) 270px, (min-width: 640px) 50vw, 100vw"
+        sizes={sizes}
         className="object-cover brightness-[0.82] saturate-[0.8] transition-transform duration-500 group-hover:scale-[1.04]"
       />
       {/* Blend into the night palette: blue tint, fade to the card colour at the bottom. */}
@@ -300,7 +314,7 @@ export function AgentsGrid({ l }: { l: L }) {
               id={idx === AGENT_ICONS.length - 1 ? "scenarios" : undefined}
               className="group scroll-mt-24 overflow-hidden rounded-xl border border-line bg-abyss transition-colors hover:border-teal/40 target:border-teal/60"
             >
-              <AgentPhoto name={AGENT_PHOTOS[idx]} />
+              <CardPhoto src={`/agents/${AGENT_PHOTOS[idx]}.webp`} />
               <div className="relative -mt-6 px-5 pb-5">
                 <span className="flex size-10 items-center justify-center rounded-lg border border-line bg-night">
                   <Icon className="size-[1.1rem] text-muted" aria-hidden />
@@ -316,7 +330,7 @@ export function AgentsGrid({ l }: { l: L }) {
           );
         })}
         <article className="group overflow-hidden rounded-xl border border-teal/50 bg-abyss shadow-[inset_3px_0_0_0_var(--teal)]">
-          <AgentPhoto name="auditor" />
+          <CardPhoto src="/agents/auditor.webp" />
           <div className="relative -mt-6 px-5 pb-5">
             <span className="flex size-10 items-center justify-center rounded-lg border border-teal/40 bg-night">
               <ScanEye className="size-[1.1rem] text-teal" aria-hidden />

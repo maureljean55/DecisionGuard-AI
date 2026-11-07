@@ -72,6 +72,7 @@ export default async function Page({ params }: PageProps<"/[lang]/solutions">) {
       {/* ------------------------------------------------------------ the three role cards (kept) */}
       <section className={`${container} py-14`}>
         <RolesDetailed l={L} lang={lang} />
+        <p className="mt-6 text-xs text-muted/70">{S.photoCredits}</p>
       </section>
 
       {/* ------------------------------------------------------------ one decision, three readings */}
