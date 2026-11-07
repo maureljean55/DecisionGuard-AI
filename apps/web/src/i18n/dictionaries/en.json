@@ -199,7 +199,8 @@
         }
       ],
       "auditName": "The auditor",
-      "auditBody": "It compares what the other agents say, redoes the calculations and checks sources and their dates. When a conclusion does not hold, it sends it back with a specific request."
+      "auditBody": "It compares what the other agents say, redoes the calculations and checks sources and their dates. When a conclusion does not hold, it sends it back with a specific request.",
+      "photoCredits": "Photos: Unsplash (Kasongo Bulobo, Vitaly Gariev, Tony Marinescu, ThisisEngineering, Barrett Ward, Apex Virtual Education, Markus Winkler)"
     },
     "method": {
       "title": "From the first draft to the report you sign.",

@@ -199,7 +199,8 @@
         }
       ],
       "auditName": "L'auditeur",
-      "auditBody": "Il compare ce que disent les autres agents, refait les calculs et vérifie les sources et leur date. Quand une conclusion ne tient pas, il la renvoie avec une demande précise."
+      "auditBody": "Il compare ce que disent les autres agents, refait les calculs et vérifie les sources et leur date. Quand une conclusion ne tient pas, il la renvoie avec une demande précise.",
+      "photoCredits": "Photos : Unsplash (Kasongo Bulobo, Vitaly Gariev, Tony Marinescu, ThisisEngineering, Barrett Ward, Apex Virtual Education, Markus Winkler)"
     },
     "method": {
       "title": "Du premier brouillon au rapport que vous signez.",

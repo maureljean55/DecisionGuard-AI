@@ -20,6 +20,7 @@ import {
   UserCheck,
   Users,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -253,35 +254,84 @@ export function RolesDetailed({ l, lang }: { l: L; lang: Locale }) {
 
 // ------------------------------------------------------------------ agents, method, labels
 
+// One real photo per agent (Unsplash licence), in the order of the agents list.
+const AGENT_PHOTOS = [
+  "finance",
+  "strategy",
+  "legal",
+  "cyber",
+  "people",
+  "operations",
+  "scenarios",
+];
+
+function AgentPhoto({ name }: { name: string }) {
+  return (
+    <div className="relative aspect-[16/10] overflow-hidden">
+      <Image
+        src={`/agents/${name}.webp`}
+        alt=""
+        fill
+        sizes="(min-width: 1024px) 270px, (min-width: 640px) 50vw, 100vw"
+        className="object-cover brightness-[0.82] saturate-[0.8] transition-transform duration-500 group-hover:scale-[1.04]"
+      />
+      {/* Blend into the night palette: blue tint, fade to the card colour at the bottom. */}
+      <div
+        className="absolute inset-0 bg-iris/10 mix-blend-color"
+        aria-hidden
+      />
+      <div
+        className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-abyss to-transparent"
+        aria-hidden
+      />
+    </div>
+  );
+}
+
 export function AgentsGrid({ l }: { l: L }) {
   return (
-    <div className="grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
-      {l.agents.list.map((a, idx) => {
-        const Icon = AGENT_ICONS[idx];
-        return (
-          <article
-            key={a.name}
-            id={idx === AGENT_ICONS.length - 1 ? "scenarios" : undefined}
-            className="scroll-mt-24 bg-night p-6 target:bg-abyss target:ring-1 target:ring-inset target:ring-teal/50"
-          >
-            <Icon className="size-5 text-muted" aria-hidden />
-            <h2 className="mt-4 font-display text-xl font-semibold text-ink">
-              {a.name}
+    <>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {l.agents.list.map((a, idx) => {
+          const Icon = AGENT_ICONS[idx];
+          return (
+            <article
+              key={a.name}
+              id={idx === AGENT_ICONS.length - 1 ? "scenarios" : undefined}
+              className="group scroll-mt-24 overflow-hidden rounded-xl border border-line bg-abyss transition-colors hover:border-teal/40 target:border-teal/60"
+            >
+              <AgentPhoto name={AGENT_PHOTOS[idx]} />
+              <div className="relative -mt-6 px-5 pb-5">
+                <span className="flex size-10 items-center justify-center rounded-lg border border-line bg-night">
+                  <Icon className="size-[1.1rem] text-muted" aria-hidden />
+                </span>
+                <h2 className="mt-3 font-display text-xl font-semibold text-ink">
+                  {a.name}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {a.body}
+                </p>
+              </div>
+            </article>
+          );
+        })}
+        <article className="group overflow-hidden rounded-xl border border-teal/50 bg-abyss shadow-[inset_3px_0_0_0_var(--teal)]">
+          <AgentPhoto name="auditor" />
+          <div className="relative -mt-6 px-5 pb-5">
+            <span className="flex size-10 items-center justify-center rounded-lg border border-teal/40 bg-night">
+              <ScanEye className="size-[1.1rem] text-teal" aria-hidden />
+            </span>
+            <h2 className="mt-3 font-display text-xl font-semibold text-ink">
+              {l.agents.auditName}
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted">{a.body}</p>
-          </article>
-        );
-      })}
-      <article className="border-l-[3px] border-teal bg-night p-6">
-        <ScanEye className="size-5 text-teal" aria-hidden />
-        <h2 className="mt-4 font-display text-xl font-semibold text-ink">
-          {l.agents.auditName}
-        </h2>
-        <p className="mt-2 text-sm leading-relaxed text-ink/80">
-          {l.agents.auditBody}
-        </p>
-      </article>
-    </div>
+            <p className="mt-2 text-sm leading-relaxed text-ink/80">
+              {l.agents.auditBody}
+            </p>
+          </div>
+        </article>
+      </div>
+      <p className="mt-6 text-xs text-muted/70">{l.agents.photoCredits}</p>
+    </>
   );
 }
 
