@@ -9,7 +9,6 @@ import {
   container,
   CtaBand,
   PageShell,
-  RolesCompact,
   SectionHead,
   SecurityStrip,
 } from "@/components/landing/sections";
@@ -73,20 +72,6 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
             <div className="relative">
               <RiskDossier d={L.dossier} />
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------------ who it's for */}
-      <section aria-labelledby="roles-title" className="border-t border-line">
-        <div className={`${container} py-16 lg:py-20`}>
-          <SectionHead
-            id="roles-title"
-            title={H.rolesTitle}
-            more={{ href: `/${lang}/solutions`, label: H.rolesMore }}
-          />
-          <div className="mt-8">
-            <RolesCompact l={L} lang={lang} />
           </div>
         </div>
       </section>
