@@ -71,6 +71,8 @@ class AuditLogOut(BaseModel):
     id: int
     action: str
     actor_user_id: uuid.UUID | None
+    actor_name: str | None = None
+    actor_email: str | None = None
     target_type: str | None
     target_id: str | None
     ip: Any | None

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { EB_Garamond, JetBrains_Mono, Manrope } from "next/font/google";
 import { notFound } from "next/navigation";
 
@@ -18,6 +18,8 @@ const display = EB_Garamond({
 const body = Manrope({ variable: "--font-body", subsets: ["latin"] });
 // Utility face for scores and figures: the risk engine is deterministic, numbers look it.
 const mono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"], weight: ["400", "500"] });
+
+export const viewport: Viewport = { themeColor: "#060a1a" };
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));

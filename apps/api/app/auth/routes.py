@@ -1,6 +1,9 @@
 """Authentication endpoints: register, login, logout, e-mail verification, passwords."""
 
+import uuid
+
 from fastapi import APIRouter, BackgroundTasks, Request, Response, status
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -20,19 +23,21 @@ from app.auth.schemas import (
     MembershipOut,
     MeOut,
     OrganizationSummary,
+    ProfileUpdate,
     RegisterRequest,
     ResetPasswordRequest,
+    SessionOut,
     TokenRequest,
     UserOut,
 )
 from app.core import audit, ratelimit
 from app.core.config import get_settings
 from app.core.email import dispatch_email
-from app.core.errors import AppError
+from app.core.errors import AppError, NotFound
 from app.core.security import hash_password, needs_rehash, verify_password
 from app.db.base import utcnow
 from app.db.session import set_rls_context
-from app.models import TokenPurpose, User
+from app.models import AuthSession, TokenPurpose, User
 from app.orgs.service import create_organization
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -260,5 +265,85 @@ def change_password(
         actor_id=user.id,
         target_type="user",
         target_id=user.id,
+    )
+    db.commit()
+
+
+# ------------------------------------------------------------------ profile & sessions
+
+
+@router.patch("/me", response_model=MeOut)
+def update_profile(body: ProfileUpdate, user: CurrentUser, request: Request, db: DB) -> MeOut:
+    changes = body.model_dump(exclude_unset=True, exclude_none=True)
+    if "full_name" in changes:
+        user.full_name = changes["full_name"].strip()
+    if "locale" in changes:
+        user.locale = changes["locale"]
+    if changes:
+        audit.record(
+            db,
+            "auth.profile_updated",
+            audit.RequestMeta.from_request(request),
+            actor_id=user.id,
+            target_type="user",
+            target_id=user.id,
+            details={"fields": sorted(changes)},
+        )
+        db.commit()
+    return _me(db, user)
+
+
+@router.get("/sessions", response_model=list[SessionOut])
+def list_sessions(session: CurrentSession, db: DB) -> list[SessionOut]:
+    rows = db.scalars(
+        select(AuthSession)
+        .where(
+            AuthSession.user_id == session.user_id,
+            AuthSession.revoked_at.is_(None),
+            AuthSession.expires_at > utcnow(),
+        )
+        .order_by(AuthSession.last_seen_at.desc())
+    ).all()
+    return [
+        SessionOut(
+            id=r.id,
+            created_at=r.created_at,
+            last_seen_at=r.last_seen_at,
+            expires_at=r.expires_at,
+            ip=str(r.ip) if r.ip else None,
+            user_agent=r.user_agent,
+            current=r.id == session.id,
+        )
+        for r in rows
+    ]
+
+
+@router.delete("/sessions/{session_id}", status_code=status.HTTP_204_NO_CONTENT)
+def revoke_session(
+    session_id: uuid.UUID, session: CurrentSession, request: Request, db: DB
+) -> None:
+    target = db.get(AuthSession, session_id)
+    if target is None or target.user_id != session.user_id or target.revoked_at is not None:
+        raise NotFound()
+    target.revoked_at = utcnow()
+    audit.record(
+        db,
+        "auth.session_revoked",
+        audit.RequestMeta.from_request(request),
+        actor_id=session.user_id,
+        target_type="session",
+        target_id=target.id,
+    )
+    db.commit()
+
+
+@router.post("/sessions/revoke-others", status_code=status.HTTP_204_NO_CONTENT)
+def revoke_other_sessions(session: CurrentSession, request: Request, db: DB) -> None:
+    auth.revoke_all_sessions(db, session.user_id, except_id=session.id)
+    audit.record(
+        db,
+        "auth.sessions_revoked",
+        audit.RequestMeta.from_request(request),
+        actor_id=session.user_id,
     )
     db.commit()

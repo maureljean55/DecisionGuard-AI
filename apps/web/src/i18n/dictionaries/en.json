@@ -838,5 +838,164 @@
       ]
     ],
     "photoCredits": "Photos: Unsplash (Dellon Thomas, Jakub Żerdzicki, Mohammad Rahmani)"
+  },
+  "dash": {
+    "nav": {
+      "overview": "Overview",
+      "team": "Team",
+      "activity": "Activity",
+      "settings": "Settings",
+      "soon": "Coming soon",
+      "decisions": "Decisions",
+      "analyses": "Analyses",
+      "reports": "Reports",
+      "monitoring": "Monitoring",
+      "account": "My account",
+      "logout": "Sign out",
+      "newOrg": "New organisation",
+      "switchOrg": "Switch organisation",
+      "menu": "Menu",
+      "close": "Close",
+      "workspace": "Workspace"
+    },
+    "roles": {
+      "owner": "Owner",
+      "admin": "Administrator",
+      "analyst": "Analyst",
+      "viewer": "Viewer"
+    },
+    "plans": {
+      "starter": "Pilot"
+    },
+    "common": {
+      "save": "Save",
+      "saved": "Changes saved.",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "you": "You",
+      "loading": "Loading…",
+      "error": "Something went wrong. Please try again.",
+      "readOnly": "Only owners and administrators can change this information.",
+      "since": "since"
+    },
+    "verify": {
+      "text": "Confirm your e-mail address to secure your account.",
+      "resend": "Resend e-mail",
+      "sent": "E-mail sent."
+    },
+    "overview": {
+      "hello": "Hello {name}",
+      "subtitle": "Here is where things stand in {org}.",
+      "members": "Members",
+      "pending": "Pending invitations",
+      "role": "Your role",
+      "plan": "Plan",
+      "nextTitle": "Next steps",
+      "steps": {
+        "verify": "Confirm your e-mail address",
+        "org": "Fill in your organisation",
+        "invite": "Invite a colleague",
+        "decision": "Submit your first decision"
+      },
+      "soonTag": "Coming soon",
+      "decisionsTitle": "Your decisions",
+      "decisionsEmpty": "The analysis module is opening soon. You will be able to submit your first decision as soon as it goes live: we will let you know by e-mail.",
+      "decisionsCta": "Tell us about your decision",
+      "activityTitle": "Recent activity",
+      "activityAll": "See all",
+      "activityEmpty": "No activity yet."
+    },
+    "team": {
+      "title": "Team",
+      "subtitle": "The people who have access to {org}.",
+      "membersTitle": "Members",
+      "name": "Name",
+      "role": "Role",
+      "joined": "Joined",
+      "actions": "Actions",
+      "remove": "Remove",
+      "leave": "Leave organisation",
+      "removeConfirm": "Remove {name} from the organisation? They will lose access immediately.",
+      "leaveConfirm": "Leave {org}? You will lose access to this workspace.",
+      "roleChanged": "Role updated.",
+      "inviteTitle": "Invite a member",
+      "inviteBody": "They receive a link, valid for 7 days, to join the organisation.",
+      "email": "E-mail address",
+      "invite": "Send invitation",
+      "invited": "Invitation sent to {email}.",
+      "pendingTitle": "Pending invitations",
+      "pendingEmpty": "No pending invitations.",
+      "expires": "Expires {date}",
+      "revoke": "Cancel",
+      "revokeConfirm": "Cancel the invitation sent to {email}?",
+      "roleHelp": {
+        "owner": "Full rights, including billing.",
+        "admin": "Manages the team and the organisation.",
+        "analyst": "Creates and analyses decisions.",
+        "viewer": "Reads analyses."
+      }
+    },
+    "activity": {
+      "title": "Activity",
+      "subtitle": "The log of sensitive actions in the organisation.",
+      "empty": "No activity recorded.",
+      "more": "Show more",
+      "system": "System",
+      "actions": {
+        "auth.register": "created their account",
+        "org.create": "created the organisation",
+        "org.update": "updated the organisation",
+        "member.role_change": "changed a role",
+        "member.remove": "removed a member",
+        "member.leave": "left the organisation",
+        "invitation.create": "sent an invitation",
+        "invitation.revoke": "cancelled an invitation",
+        "invitation.accept": "joined the organisation"
+      },
+      "other": "performed an action ({code})",
+      "forbidden": "Only owners and administrators can view the activity log."
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Information about {org}.",
+      "name": "Organisation name",
+      "country": "Country",
+      "currency": "Reporting currency",
+      "language": "Report language",
+      "slug": "Identifier",
+      "created": "Created on"
+    },
+    "account": {
+      "title": "My account",
+      "subtitle": "Your personal details and account security.",
+      "profileTitle": "Profile",
+      "fullName": "Full name",
+      "email": "E-mail address",
+      "verified": "Verified",
+      "unverified": "Not verified",
+      "language": "Interface language",
+      "passwordTitle": "Password",
+      "current": "Current password",
+      "new": "New password",
+      "change": "Change password",
+      "changed": "Password changed. Your other sessions have been signed out.",
+      "sessionsTitle": "Active sessions",
+      "sessionsBody": "Devices currently signed in to your account.",
+      "thisDevice": "This device",
+      "lastSeen": "Last active {date}",
+      "revoke": "Sign out",
+      "revokeOthers": "Sign out all other devices",
+      "revokeOthersConfirm": "Sign out all your other devices?",
+      "unknownDevice": "Unknown device"
+    },
+    "newOrg": {
+      "title": "New organisation",
+      "subtitle": "Create a separate workspace, for example for a subsidiary. You will be its owner.",
+      "submit": "Create organisation"
+    },
+    "noOrg": {
+      "title": "No organisation",
+      "body": "You do not belong to any organisation yet. Create yours, or ask a colleague to invite you."
+    }
   }
 }

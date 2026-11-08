@@ -838,5 +838,164 @@
       ]
     ],
     "photoCredits": "Photos : Unsplash (Dellon Thomas, Jakub Żerdzicki, Mohammad Rahmani)"
+  },
+  "dash": {
+    "nav": {
+      "overview": "Vue d'ensemble",
+      "team": "Équipe",
+      "activity": "Activité",
+      "settings": "Paramètres",
+      "soon": "Bientôt",
+      "decisions": "Décisions",
+      "analyses": "Analyses",
+      "reports": "Rapports",
+      "monitoring": "Surveillance",
+      "account": "Mon compte",
+      "logout": "Se déconnecter",
+      "newOrg": "Nouvelle organisation",
+      "switchOrg": "Changer d'organisation",
+      "menu": "Menu",
+      "close": "Fermer",
+      "workspace": "Espace de travail"
+    },
+    "roles": {
+      "owner": "Propriétaire",
+      "admin": "Administrateur",
+      "analyst": "Analyste",
+      "viewer": "Lecteur"
+    },
+    "plans": {
+      "starter": "Pilote"
+    },
+    "common": {
+      "save": "Enregistrer",
+      "saved": "Modifications enregistrées.",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "you": "Vous",
+      "loading": "Chargement…",
+      "error": "Une erreur est survenue. Réessayez.",
+      "readOnly": "Seuls les propriétaires et administrateurs peuvent modifier ces informations.",
+      "since": "depuis le"
+    },
+    "verify": {
+      "text": "Confirmez votre adresse e-mail pour sécuriser votre compte.",
+      "resend": "Renvoyer l'e-mail",
+      "sent": "E-mail envoyé."
+    },
+    "overview": {
+      "hello": "Bonjour {name}",
+      "subtitle": "Voici l'état de votre espace {org}.",
+      "members": "Membres",
+      "pending": "Invitations en attente",
+      "role": "Votre rôle",
+      "plan": "Formule",
+      "nextTitle": "Prochaines étapes",
+      "steps": {
+        "verify": "Confirmer votre adresse e-mail",
+        "org": "Renseigner votre organisation",
+        "invite": "Inviter un collègue",
+        "decision": "Soumettre votre première décision"
+      },
+      "soonTag": "Bientôt",
+      "decisionsTitle": "Vos décisions",
+      "decisionsEmpty": "Le module d'analyse est en cours d'ouverture. Vous pourrez y soumettre votre première décision dès sa mise en service : nous vous préviendrons par e-mail.",
+      "decisionsCta": "Nous parler de votre décision",
+      "activityTitle": "Activité récente",
+      "activityAll": "Tout voir",
+      "activityEmpty": "Aucune activité pour l'instant."
+    },
+    "team": {
+      "title": "Équipe",
+      "subtitle": "Les personnes qui ont accès à l'espace {org}.",
+      "membersTitle": "Membres",
+      "name": "Nom",
+      "role": "Rôle",
+      "joined": "Arrivée",
+      "actions": "Actions",
+      "remove": "Retirer",
+      "leave": "Quitter l'organisation",
+      "removeConfirm": "Retirer {name} de l'organisation ? La personne perdra immédiatement l'accès.",
+      "leaveConfirm": "Quitter {org} ? Vous perdrez l'accès à cet espace.",
+      "roleChanged": "Rôle mis à jour.",
+      "inviteTitle": "Inviter un membre",
+      "inviteBody": "La personne reçoit un lien valable 7 jours pour rejoindre l'organisation.",
+      "email": "Adresse e-mail",
+      "invite": "Envoyer l'invitation",
+      "invited": "Invitation envoyée à {email}.",
+      "pendingTitle": "Invitations en attente",
+      "pendingEmpty": "Aucune invitation en attente.",
+      "expires": "Expire le {date}",
+      "revoke": "Annuler",
+      "revokeConfirm": "Annuler l'invitation envoyée à {email} ?",
+      "roleHelp": {
+        "owner": "Tous les droits, y compris la facturation.",
+        "admin": "Gère l'équipe et l'organisation.",
+        "analyst": "Crée et analyse des décisions.",
+        "viewer": "Consulte les analyses."
+      }
+    },
+    "activity": {
+      "title": "Activité",
+      "subtitle": "Le journal des actions sensibles de l'organisation.",
+      "empty": "Aucune activité enregistrée.",
+      "more": "Afficher plus",
+      "system": "Système",
+      "actions": {
+        "auth.register": "a créé son compte",
+        "org.create": "a créé l'organisation",
+        "org.update": "a modifié l'organisation",
+        "member.role_change": "a changé un rôle",
+        "member.remove": "a retiré un membre",
+        "member.leave": "a quitté l'organisation",
+        "invitation.create": "a envoyé une invitation",
+        "invitation.revoke": "a annulé une invitation",
+        "invitation.accept": "a rejoint l'organisation"
+      },
+      "other": "a effectué une action ({code})",
+      "forbidden": "Seuls les propriétaires et administrateurs peuvent consulter le journal d'activité."
+    },
+    "settings": {
+      "title": "Paramètres",
+      "subtitle": "Les informations de l'organisation {org}.",
+      "name": "Nom de l'organisation",
+      "country": "Pays",
+      "currency": "Devise de référence",
+      "language": "Langue des rapports",
+      "slug": "Identifiant",
+      "created": "Créée le"
+    },
+    "account": {
+      "title": "Mon compte",
+      "subtitle": "Vos informations personnelles et la sécurité de votre compte.",
+      "profileTitle": "Profil",
+      "fullName": "Nom complet",
+      "email": "Adresse e-mail",
+      "verified": "Vérifiée",
+      "unverified": "Non vérifiée",
+      "language": "Langue de l'interface",
+      "passwordTitle": "Mot de passe",
+      "current": "Mot de passe actuel",
+      "new": "Nouveau mot de passe",
+      "change": "Changer le mot de passe",
+      "changed": "Mot de passe modifié. Vos autres sessions ont été fermées.",
+      "sessionsTitle": "Sessions actives",
+      "sessionsBody": "Les appareils actuellement connectés à votre compte.",
+      "thisDevice": "Cet appareil",
+      "lastSeen": "Dernière activité {date}",
+      "revoke": "Déconnecter",
+      "revokeOthers": "Déconnecter tous les autres appareils",
+      "revokeOthersConfirm": "Déconnecter tous vos autres appareils ?",
+      "unknownDevice": "Appareil inconnu"
+    },
+    "newOrg": {
+      "title": "Nouvelle organisation",
+      "subtitle": "Créez un espace séparé, par exemple pour une filiale. Vous en serez propriétaire.",
+      "submit": "Créer l'organisation"
+    },
+    "noOrg": {
+      "title": "Aucune organisation",
+      "body": "Vous n'appartenez encore à aucune organisation. Créez la vôtre, ou demandez à un collègue de vous inviter."
+    }
   }
 }

@@ -373,7 +373,16 @@ def list_audit_logs(
     items = list(ctx.db.scalars(q.order_by(AuditLog.id.desc()).limit(limit + 1)))
     has_more = len(items) > limit
     items = items[:limit]
-    return AuditLogPage(
-        items=[AuditLogOut.model_validate(i) for i in items],
-        next_before_id=items[-1].id if has_more else None,
-    )
+    actor_ids = {i.actor_user_id for i in items if i.actor_user_id}
+    actors = {
+        u.id: u
+        for u in (ctx.db.scalars(select(User).where(User.id.in_(actor_ids))) if actor_ids else [])
+    }
+    out = []
+    for i in items:
+        row = AuditLogOut.model_validate(i)
+        actor = actors.get(i.actor_user_id) if i.actor_user_id else None
+        if actor:
+            row.actor_name, row.actor_email = actor.full_name, actor.email
+        out.append(row)
+    return AuditLogPage(items=out, next_before_id=items[-1].id if has_more else None)

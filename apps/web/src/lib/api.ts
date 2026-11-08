@@ -46,3 +46,20 @@ export async function getMe(): Promise<Me | null> {
     return null;
   }
 }
+
+/** Authenticated GET from the server, forwarding the session cookie. */
+export async function apiGet<T>(path: string): Promise<{ status: number; data: T | null }> {
+  const jar = await cookies();
+  const session = jar.get("dg_session");
+  if (!session) return { status: 401, data: null };
+  try {
+    const res = await fetch(`${API_URL}${path}`, {
+      headers: { cookie: `dg_session=${session.value}` },
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000),
+    });
+    return { status: res.status, data: res.ok ? ((await res.json()) as T) : null };
+  } catch {
+    return { status: 0, data: null };
+  }
+}

@@ -1,82 +1,52 @@
-import { Building2, MailWarning, ShieldCheck } from "lucide-react";
+import { Building2 } from "lucide-react";
+import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { LogoutButton, ResendVerification } from "@/components/app/session-actions";
+import { CreateOrgForm } from "@/components/dashboard/forms";
+import { PageSkeleton } from "@/components/dashboard/page-title";
 import { hasLocale, type Locale } from "@/i18n/config";
-import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
+import { getDictionary } from "@/i18n/dictionaries";
 import { getMe } from "@/lib/api";
-import { fmt } from "@/lib/format";
 
-async function Workspace({ dict, lang }: { dict: Dictionary; lang: Locale }) {
-  const me = await getMe();
-  if (!me) redirect(`/${lang}/login?next=${encodeURIComponent(`/${lang}/app`)}`);
-
+/** Entry point: opens the last organisation visited, or offers to create one. */
+async function Entry({ lang }: { lang: Locale }) {
+  const [me, dict, jar] = await Promise.all([
+    getMe(),
+    getDictionary(lang),
+    cookies(),
+  ]);
+  if (!me) redirect(`/${lang}/login`);
+  if (me.memberships.length) {
+    const last = jar.get("dg_org")?.value;
+    const target =
+      me.memberships.find((m) => m.organization.id === last) ??
+      me.memberships[0];
+    redirect(`/${lang}/app/${target.organization.id}`);
+  }
+  const d = dict.dash;
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6">
-      {!me.user.email_verified && (
-        <div
-          role="status"
-          className="mb-8 flex flex-col gap-3 rounded-lg border border-risk-moderate/40 bg-risk-moderate/10 px-4 py-3 text-ink sm:flex-row sm:items-center sm:justify-between"
-        >
-          <span className="flex items-center gap-2 text-sm">
-            <MailWarning className="size-4 shrink-0 text-risk-moderate" aria-hidden />
-            {dict.app.verifyBanner}
-          </span>
-          <ResendVerification label={dict.app.resend} doneLabel={dict.app.resent} />
-        </div>
-      )}
-
-      <h1 className="font-display text-3xl text-ink">
-        {fmt(dict.app.welcome, { name: me.user.full_name })}
+    <div className="mx-auto max-w-xl">
+      <span className="flex size-12 items-center justify-center rounded-xl border border-teal/30 bg-teal/10">
+        <Building2 className="size-5 text-teal" aria-hidden />
+      </span>
+      <h1 className="mt-5 font-display text-[2rem] font-medium text-ink">
+        {d.noOrg.title}
       </h1>
-      <p className="mt-2 text-muted">{dict.app.subtitle}</p>
-
-      <section className="mt-10">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">
-          {dict.app.organizations}
-        </h2>
-        <ul className="mt-4 grid gap-4 sm:grid-cols-2">
-          {me.memberships.map((m) => (
-            <li key={m.organization.id} className="rounded-lg border border-line bg-surface p-5">
-              <Building2 className="size-5 text-blue-500" aria-hidden />
-              <p className="mt-3 font-semibold text-ink">{m.organization.name}</p>
-              <p className="mt-1 text-sm text-muted">
-                {dict.app.role} : {dict.auth.roles[m.role]}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <p className="mt-2 text-sm leading-relaxed text-muted">{d.noOrg.body}</p>
+      <div className="mt-8 rounded-2xl border border-line bg-abyss/70 p-6">
+        <CreateOrgForm d={d} lang={lang} />
+      </div>
     </div>
   );
 }
 
-export default async function AppHome({ params }: PageProps<"/[lang]/app">) {
+export default async function Page({ params }: PageProps<"/[lang]/app">) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const dict = await getDictionary(lang);
-
   return (
-    <>
-      <header className="border-b border-white/10 bg-navy-950 text-white">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3 sm:px-6">
-          <span className="flex items-center gap-2 font-semibold tracking-tight">
-            <ShieldCheck className="size-5 text-blue-500" aria-hidden />
-            DecisionGuard
-          </span>
-          <div className="[&_button]:border-white/20 [&_button]:text-white [&_button:hover]:bg-white/10">
-            <LogoutButton label={dict.app.logout} lang={lang} />
-          </div>
-        </div>
-      </header>
-      <main className="flex-1">
-        <Suspense
-          fallback={<div className="mx-auto mt-10 h-32 max-w-4xl animate-pulse rounded-lg bg-line" />}
-        >
-          <Workspace dict={dict} lang={lang} />
-        </Suspense>
-      </main>
-    </>
+    <Suspense fallback={<PageSkeleton />}>
+      <Entry lang={lang} />
+    </Suspense>
   );
 }
