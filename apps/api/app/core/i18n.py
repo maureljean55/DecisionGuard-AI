@@ -70,6 +70,18 @@ MESSAGES: dict[str, dict[Locale, str]] = {
         "fr": "Le formulaire de contact est momentanément indisponible.",
         "en": "The contact form is temporarily unavailable.",
     },
+    "quota.exceeded": {
+        "fr": "Votre formule permet {limit} analyses par mois : la limite est atteinte.",
+        "en": "Your plan allows {limit} analyses per month: the limit has been reached.",
+    },
+    "analysis.not_collecting": {
+        "fr": "Cette analyse n'attend plus de réponses.",
+        "en": "This analysis is no longer waiting for answers.",
+    },
+    "analysis.not_retryable": {
+        "fr": "Seule une analyse en échec peut être relancée.",
+        "en": "Only a failed analysis can be retried.",
+    },
     "invitation.email_mismatch": {
         "fr": "Cette invitation a été envoyée à une autre adresse e-mail.",
         "en": "This invitation was sent to a different e-mail address.",

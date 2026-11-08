@@ -50,6 +50,23 @@ Les tables `users`, `auth_sessions`, `user_tokens` sont globales (identité) et 
 
 **Limites connues.** Pas encore d'authentification à deux facteurs ni de SSO (prévus pour Business/Enterprise). L'IP client fiable dépend de la configuration du proxy en production (`FORWARDED_ALLOW_IPS`). Envoi d'e-mails synchrone en tâche de fond FastAPI, à basculer sur Celery au M4.
 
+## Décisions et file d'analyse (M4)
+
+```
+Soumission ─► quota mensuel (formule) ─► pré-vérification par règles ─► questions ?
+                                                                         │ oui : collecting_info
+                                                                         ▼ toutes traitées
+                                   pending ─► worker : analyzing → simulating → verifying → reporting ─► completed
+                                      ▲            │ échec : retry (backoff 30 s → 30 min), 3 essais max ─► failed
+                                      └── reprise des tâches bloquées (heartbeat > délai)
+```
+
+- **Pré-vérification** (`app/analyses/precheck.py`) : règles déterministes, sans IA (montant, échéance, périmètre, contexte, alternatives). L'utilisateur répond ou indique « je ne sais pas » : l'information manquante est conservée comme telle.
+- **Quotas** (`app/core/plans.py`) : analyses par mois calendaire selon la formule (starter 5, professional 30, business 100, enterprise sur mesure), vérifiés côté serveur (HTTP 402 `quota.exceeded`). Une analyse annulée libère sa place ; une relance n'est pas recomptée.
+- **File d'attente en base** plutôt que Celery/Redis : un service de moins, compatible Supabase, transactionnelle et soumise à la RLS. Le worker (`python -m app.worker`) se connecte avec `dg_app` ; seules deux fonctions `SECURITY DEFINER` (`claim_next_analysis`, `recover_stale_analyses`) touchent la file toutes entreprises confondues, et ne renvoient que `(id, organization_id)`. Tout le traitement se fait ensuite dans le contexte RLS de l'entreprise.
+- **Pas de faux résultats** : tant qu'aucun moteur n'est configuré (`DG_ANALYSIS_ENGINE=none`), les analyses restent en file avec `waiting_reason = engine_unavailable`. Le moteur multi-agents (M5) implémente `AnalysisPipeline` (`app/worker/pipeline.py`).
+- **Hébergement du worker** : il tourne dans Docker en local. En production, Vercel ne peut pas héberger un processus permanent : un petit hôte (Railway, Fly.io, Scaleway…) sera nécessaire à l'arrivée du moteur (M5).
+
 ## Backend (`apps/api`)
 
 | Module | Rôle | Milestone |
@@ -58,7 +75,7 @@ Les tables `users`, `auth_sessions`, `user_tokens` sont globales (identité) et 
 | `app/db` | moteur SQLAlchemy, session, base déclarative | M1 |
 | `app/api` | routes HTTP | M1+ |
 | `app/auth`, `app/orgs` | authentification, organisations, membres, invitations, audit | M2 ✅ |
-| `app/decisions` | décisions, analyses, statuts | M4 |
+| `app/decisions`, `app/analyses`, `app/worker` | décisions, questions, quotas, file d'analyse | M4 ✅ |
 | `app/llm` | interface fournisseur, mock, suivi de consommation | M5 |
 | `app/agents` | orchestrateur LangGraph, agents spécialisés, audit | M5, M7 |
 | `app/risk_engine` | calculs déterministes, heatmap, corrélations | M6 |

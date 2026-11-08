@@ -962,7 +962,9 @@
         "decision.update": "a modifié une décision",
         "decision.archive": "a archivé une décision",
         "decision.reopen": "a repassé une décision en brouillon",
-        "decision.delete": "a supprimé une décision"
+        "decision.delete": "a supprimé une décision",
+        "analysis.answer": "a répondu à une question d'analyse",
+        "analysis.retry": "a relancé une analyse"
       },
       "other": "a effectué une action ({code})",
       "forbidden": "Seuls les propriétaires et administrateurs peuvent consulter le journal d'activité."
@@ -1118,6 +1120,56 @@
         "Les scores sont recalculés et comparés aux précédents",
         "Vous êtes alerté, avec le niveau de certitude de l'information"
       ]
+    },
+    "analysis": {
+      "title": "Analyse",
+      "status": {
+        "collecting_info": "Questions en attente",
+        "pending": "En file d'attente",
+        "analyzing": "Analyse en cours",
+        "simulating": "Simulations",
+        "verifying": "Vérification",
+        "reporting": "Rédaction du rapport",
+        "completed": "Terminée",
+        "failed": "Échec",
+        "canceled": "Annulée"
+      },
+      "steps": [
+        "Informations",
+        "File d'attente",
+        "Analyse",
+        "Simulations",
+        "Vérification",
+        "Rapport"
+      ],
+      "questionsTitle": "Quelques précisions avant l'analyse",
+      "questionsIntro": "Ces informations manquent pour analyser la décision correctement. Répondez, ou indiquez que vous ne savez pas : l'information manquante sera signalée comme telle dans le rapport.",
+      "questions": {
+        "amount": "Quel est le montant engagé, même approximatif ?",
+        "deadline": "À quelle date la décision doit-elle être prise ?",
+        "scope": "Qu'est-ce qui est déjà décidé, et qu'est-ce qui reste ouvert ?",
+        "context": "Quel est le contexte : marché, concurrents, contraintes déjà connues ?",
+        "alternatives": "Quelles autres options avez-vous envisagées ?"
+      },
+      "answer": "Répondre",
+      "unknown": "Je ne sais pas",
+      "save": "Enregistrer",
+      "answered": "Répondu",
+      "markedUnknown": "Inconnu",
+      "yourAnswer": "Votre réponse",
+      "engineWaiting": "La décision est prête et placée en file d'attente. Le moteur d'analyse multi-agents est en cours d'ouverture : l'analyse démarrera automatiquement dès sa mise en service, sans autre action de votre part.",
+      "queued": "En file d'attente : l'analyse démarrera dans quelques instants.",
+      "running": "Analyse en cours. Cette page se met à jour automatiquement.",
+      "completedNote": "Analyse terminée.",
+      "failed": "L'analyse a échoué après plusieurs tentatives ({code}). Vous pouvez la relancer sans consommer votre quota.",
+      "retry": "Relancer l'analyse",
+      "history": "Historique des analyses",
+      "attempt": "tentative",
+      "usage": "Analyses ce mois-ci",
+      "usageValue": "{used} sur {limit}",
+      "unlimited": "illimité",
+      "queueTitle": "Toutes les analyses",
+      "empty": "Aucune analyse pour l'instant. Soumettez une décision pour lancer la première."
     }
   }
 }

@@ -1,4 +1,4 @@
-import { BarChart3, Check, ChevronRight, Hourglass } from "lucide-react";
+import { BarChart3, Check, ChevronRight, Gauge } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -12,7 +12,8 @@ import { hasLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { apiGet } from "@/lib/api";
 import { loadOrg } from "@/lib/dash-data";
-import type { Decision } from "@/lib/types";
+import { fmt } from "@/lib/format";
+import type { Analysis, Usage } from "@/lib/types";
 
 async function Analyses({
   params,
@@ -28,41 +29,71 @@ async function Analyses({
   ]);
   const d = dict.dash;
   const A = d.analyses;
-  const queue =
-    (await apiGet<Decision[]>(`/orgs/${org.id}/decisions?status=submitted`))
-      .data ?? [];
-  const base = `/${lang}/app/${org.id}/decisions`;
+  const N = d.analysis;
+  const [list, usage] = await Promise.all([
+    apiGet<Analysis[]>(`/orgs/${org.id}/analyses`),
+    apiGet<Usage>(`/orgs/${org.id}/usage`),
+  ]);
+  const items = (list.data ?? []).filter((a) => a.status !== "canceled");
+  const u = usage.data;
+  const pct = u?.limit
+    ? Math.min(100, Math.round((u.used / u.limit) * 100))
+    : 0;
 
   return (
     <>
       <PageTitle title={A.title} subtitle={A.subtitle} />
-      <div className="mb-6 flex items-center gap-2.5 rounded-2xl border border-line bg-abyss/60 px-5 py-3.5 text-sm text-muted">
-        <Hourglass className="size-4 shrink-0 text-risk-moderate" aria-hidden />
-        {A.status}
-      </div>
-      {queue.length ? (
+
+      {u && (
+        <div className="mb-6 rounded-2xl border border-line bg-abyss/70 p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+            <span className="flex items-center gap-2 text-muted">
+              <Gauge className="size-4 text-teal" aria-hidden />
+              {N.usage}
+            </span>
+            <span className="font-mono text-ink">
+              {u.limit === null
+                ? `${u.used} · ${N.unlimited}`
+                : fmt(N.usageValue, {
+                    used: String(u.used),
+                    limit: String(u.limit),
+                  })}
+            </span>
+          </div>
+          {u.limit !== null && (
+            <div
+              className="mt-3 h-1.5 overflow-hidden rounded-full bg-line"
+              aria-hidden
+            >
+              <div
+                className={`h-full rounded-full ${pct >= 100 ? "bg-risk-critical" : pct >= 80 ? "bg-risk-moderate" : "bg-teal"}`}
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {items.length ? (
         <div className="space-y-6">
-          <Panel title={`${A.queueTitle} · ${queue.length}`}>
+          <Panel title={`${N.queueTitle} · ${items.length}`}>
             <ul className="divide-y divide-line">
-              {queue.map((x) => (
-                <li key={x.id}>
+              {items.map((a) => (
+                <li key={a.id}>
                   <Link
-                    href={`${base}/${x.id}`}
+                    href={`/${lang}/app/${org.id}/decisions/${a.decision_id}`}
                     className="group flex items-center gap-4 py-3 first:pt-0 last:pb-0"
                   >
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-ink group-hover:text-teal">
-                        {x.title}
+                        {a.decision_title}
                       </p>
                       <p className="mt-0.5 text-xs text-muted">
-                        {d.decisions.categories[x.category]} ·{" "}
-                        {d.decisions.detail.submittedOn}{" "}
-                        {x.submitted_at && (
-                          <LocalTime iso={x.submitted_at} lang={lang} />
-                        )}
+                        <LocalTime iso={a.created_at} lang={lang} withTime />
+                        {a.attempts > 1 ? ` · ${a.attempts} ${N.attempt}` : ""}
                       </p>
                     </div>
-                    <StatusBadge status={x.status} d={d} />
+                    <StatusBadge status="submitted" d={d} analysis={a} />
                     <ChevronRight
                       className="size-4 shrink-0 text-muted"
                       aria-hidden
@@ -93,11 +124,14 @@ async function Analyses({
         <ModuleEmpty
           icon={BarChart3}
           title={A.queueTitle}
-          body={A.queueEmpty}
+          body={N.empty}
           whatTitle={A.whatTitle}
           what={A.what}
         >
-          <Link href={base} className={`${buttonGhost} mt-6`}>
+          <Link
+            href={`/${lang}/app/${org.id}/decisions`}
+            className={`${buttonGhost} mt-6`}
+          >
             {A.goDecisions}
           </Link>
         </ModuleEmpty>

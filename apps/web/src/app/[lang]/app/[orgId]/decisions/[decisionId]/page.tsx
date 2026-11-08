@@ -1,8 +1,9 @@
-import { ArrowLeft, Hourglass, PencilLine } from "lucide-react";
+import { ArrowLeft, PencilLine } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 
+import { AnalysisPanel } from "@/components/dashboard/analysis";
 import { DecisionActions } from "@/components/dashboard/decisions";
 import { LocalTime } from "@/components/dashboard/local-time";
 import { PageSkeleton } from "@/components/dashboard/page-title";
@@ -14,7 +15,7 @@ import { apiGet, getMe } from "@/lib/api";
 import { loadOrg } from "@/lib/dash-data";
 import { fmt } from "@/lib/format";
 import { canDeleteDecision, canWriteDecisions } from "@/lib/permissions";
-import type { Decision } from "@/lib/types";
+import type { Analysis, Decision } from "@/lib/types";
 
 async function DecisionPage({
   params,
@@ -35,6 +36,10 @@ async function DecisionPage({
   );
   if (!res.data) notFound();
   const x = res.data;
+  const history =
+    (await apiGet<Analysis[]>(`/orgs/${org.id}/decisions/${x.id}/analyses`))
+      .data ?? [];
+  const analysis = history[0] ?? null;
   const d = dict.dash;
   const T = d.decisions.detail;
   const amount = formatAmount(x.amount, x.currency, lang);
@@ -54,7 +59,7 @@ async function DecisionPage({
             <h1 className="font-display text-[2rem] font-medium leading-tight text-ink sm:text-[2.4rem]">
               {x.title}
             </h1>
-            <StatusBadge status={x.status} d={d} />
+            <StatusBadge status={x.status} d={d} analysis={x.latest_analysis} />
           </div>
           <p className="mt-2 text-sm text-muted">
             {x.created_by_name
@@ -76,17 +81,14 @@ async function DecisionPage({
           )}
         />
       </div>
-
-      {x.status === "submitted" && (
-        <div
-          role="status"
-          className="mb-6 flex gap-3 rounded-2xl border border-risk-moderate/30 bg-risk-moderate/[0.07] px-5 py-4 text-sm leading-relaxed text-ink"
-        >
-          <Hourglass
-            className="mt-0.5 size-4 shrink-0 text-risk-moderate"
-            aria-hidden
+      {analysis && analysis.status !== "canceled" && (
+        <div className="mb-6">
+          <AnalysisPanel
+            d={d}
+            orgId={org.id}
+            analysis={analysis}
+            canWrite={canWriteDecisions(org.role)}
           />
-          {T.pending}
         </div>
       )}
       {x.status === "draft" && (

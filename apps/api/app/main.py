@@ -5,6 +5,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.analyses.routes import router as analyses_router
 from app.api.health import router as health_router
 from app.auth.routes import router as auth_router
 from app.contact.routes import router as contact_router
@@ -44,6 +45,7 @@ def create_app() -> FastAPI:
     app.include_router(orgs_router)
     app.include_router(contact_router)
     app.include_router(decisions_router)
+    app.include_router(analyses_router)
 
     logging.getLogger(__name__).info(
         "application started",

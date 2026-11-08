@@ -71,6 +71,16 @@ services:
       timeout: 3s
       retries: 5
 
+  worker:
+    # Analysis queue worker (database-backed queue, see app/worker).
+    build: ./apps/api
+    command: ["python", "-m", "app.worker"]
+    env_file: [.env]
+    environment: *db-urls
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    restart: unless-stopped
+
   web:
     build: ./apps/web
     environment:

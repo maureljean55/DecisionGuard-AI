@@ -29,7 +29,13 @@ import {
   canReadAudit,
   canWriteDecisions,
 } from "@/lib/permissions";
-import type { AuditPage, Decision, Invitation, Member } from "@/lib/types";
+import type {
+  AuditPage,
+  Decision,
+  Invitation,
+  Member,
+  Usage,
+} from "@/lib/types";
 
 function Stat({
   icon: Icon,
@@ -67,7 +73,7 @@ async function Overview({
   if (!me) redirect(`/${lang}/login`);
   const d = dict.dash;
   const manager = canManageMembers(org.role);
-  const [members, invitations, audit, decisions] = await Promise.all([
+  const [members, invitations, audit, decisions, usage] = await Promise.all([
     apiGet<Member[]>(`/orgs/${org.id}/members`),
     manager
       ? apiGet<Invitation[]>(`/orgs/${org.id}/invitations`)
@@ -76,6 +82,7 @@ async function Overview({
       ? apiGet<AuditPage>(`/orgs/${org.id}/audit-logs?limit=5`)
       : Promise.resolve({ status: 200, data: null }),
     apiGet<Decision[]>(`/orgs/${org.id}/decisions`),
+    apiGet<Usage>(`/orgs/${org.id}/usage`),
   ]);
   const memberCount = members.data?.length ?? 0;
   const steps = [
@@ -135,8 +142,14 @@ async function Overview({
         />
         <Stat
           icon={Sparkles}
-          label={d.overview.plan}
-          value={(d.plans as Record<string, string>)[org.plan] ?? org.plan}
+          label={`${d.analysis.usage} · ${(d.plans as Record<string, string>)[org.plan] ?? org.plan}`}
+          value={
+            usage.data
+              ? usage.data.limit === null
+                ? String(usage.data.used)
+                : `${usage.data.used} / ${usage.data.limit}`
+              : "—"
+          }
         />
       </div>
 
@@ -174,7 +187,11 @@ async function Overview({
                           {d.decisions.categories[x.category]}
                         </span>
                       </span>
-                      <StatusBadge status={x.status} d={d} />
+                      <StatusBadge
+                        status={x.status}
+                        d={d}
+                        analysis={x.latest_analysis}
+                      />
                     </Link>
                   </li>
                 ))}

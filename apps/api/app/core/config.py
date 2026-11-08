@@ -77,6 +77,12 @@ class Settings(BaseSettings):
     default_locale: Locale = "fr"
     supported_locales: tuple[Locale, ...] = ("fr", "en")
 
+    # --- Analysis worker ---
+    # "none": no engine yet; queued analyses wait honestly instead of producing fake results.
+    analysis_engine: Literal["none"] = "none"
+    worker_poll_seconds: float = Field(default=5.0, gt=0)
+    analysis_timeout_seconds: int = Field(default=900, ge=30)
+
     # LLM provider: "mock" is deterministic and clearly labelled; never used in production.
     llm_provider: Literal["mock", "anthropic", "openai"] = "mock"
     llm_api_key: SecretStr | None = None

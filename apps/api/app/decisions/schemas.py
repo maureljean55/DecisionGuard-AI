@@ -5,6 +5,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.analyses.schemas import AnalysisSummary
 from app.models.decision import DecisionCategory, DecisionStatus
 
 Amount = Field(default=None, ge=0, le=Decimal("1e15"), max_digits=18, decimal_places=2)
@@ -50,3 +51,4 @@ class DecisionOut(BaseModel):
     updated_at: datetime
     created_by_user_id: uuid.UUID | None
     created_by_name: str | None = None
+    latest_analysis: AnalysisSummary | None = None

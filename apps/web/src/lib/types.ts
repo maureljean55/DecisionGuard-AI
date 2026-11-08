@@ -112,4 +112,51 @@ export interface Decision {
   updated_at: string;
   created_by_user_id: string | null;
   created_by_name: string | null;
+  latest_analysis: AnalysisSummary | null;
+}
+
+export type AnalysisStatus =
+  | "collecting_info"
+  | "pending"
+  | "analyzing"
+  | "simulating"
+  | "verifying"
+  | "reporting"
+  | "completed"
+  | "failed"
+  | "canceled";
+
+export interface AnalysisSummary {
+  id: string;
+  status: AnalysisStatus;
+  waiting_reason: string | null;
+  error_code: string | null;
+  attempts: number;
+  created_at: string;
+  finished_at: string | null;
+  open_questions: number;
+}
+
+export interface Question {
+  id: string;
+  key: string;
+  answer: string | null;
+  unknown: boolean;
+  answered_at: string | null;
+}
+
+export interface Analysis extends AnalysisSummary {
+  decision_id: string;
+  decision_title: string | null;
+  max_attempts: number;
+  started_at: string | null;
+  updated_at: string;
+  questions: Question[];
+}
+
+export interface Usage {
+  plan: string;
+  period_start: string;
+  used: number;
+  limit: number | null;
 }

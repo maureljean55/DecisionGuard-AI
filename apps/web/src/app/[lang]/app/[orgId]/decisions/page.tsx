@@ -103,7 +103,11 @@ async function Decisions({
                       <p className="truncate font-medium text-ink group-hover:text-teal">
                         {x.title}
                       </p>
-                      <StatusBadge status={x.status} d={d} />
+                      <StatusBadge
+                        status={x.status}
+                        d={d}
+                        analysis={x.latest_analysis}
+                      />
                     </div>
                     <p className="mt-1 truncate text-xs text-muted">
                       {d.decisions.categories[x.category]}

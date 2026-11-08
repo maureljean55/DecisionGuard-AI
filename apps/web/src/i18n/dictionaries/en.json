@@ -962,7 +962,9 @@
         "decision.update": "updated a decision",
         "decision.archive": "archived a decision",
         "decision.reopen": "moved a decision back to draft",
-        "decision.delete": "deleted a decision"
+        "decision.delete": "deleted a decision",
+        "analysis.answer": "answered an analysis question",
+        "analysis.retry": "retried an analysis"
       },
       "other": "performed an action ({code})",
       "forbidden": "Only owners and administrators can view the activity log."
@@ -1118,6 +1120,56 @@
         "Scores are recalculated and compared with previous ones",
         "You are alerted, with how certain the information is"
       ]
+    },
+    "analysis": {
+      "title": "Analysis",
+      "status": {
+        "collecting_info": "Questions pending",
+        "pending": "Queued",
+        "analyzing": "Analysing",
+        "simulating": "Simulations",
+        "verifying": "Verification",
+        "reporting": "Writing report",
+        "completed": "Completed",
+        "failed": "Failed",
+        "canceled": "Cancelled"
+      },
+      "steps": [
+        "Information",
+        "Queue",
+        "Analysis",
+        "Simulations",
+        "Verification",
+        "Report"
+      ],
+      "questionsTitle": "A few details before the analysis",
+      "questionsIntro": "This information is missing to analyse the decision properly. Answer, or say you do not know: missing information will be flagged as such in the report.",
+      "questions": {
+        "amount": "What amount is at stake, even approximately?",
+        "deadline": "By when must the decision be made?",
+        "scope": "What is already decided, and what is still open?",
+        "context": "What is the context: market, competitors, known constraints?",
+        "alternatives": "Which other options have you considered?"
+      },
+      "answer": "Answer",
+      "unknown": "I don't know",
+      "save": "Save",
+      "answered": "Answered",
+      "markedUnknown": "Unknown",
+      "yourAnswer": "Your answer",
+      "engineWaiting": "The decision is ready and queued. The multi-agent analysis engine is opening soon: the analysis will start automatically as soon as it goes live, with nothing more to do on your side.",
+      "queued": "Queued: the analysis will start in a moment.",
+      "running": "Analysis in progress. This page updates automatically.",
+      "completedNote": "Analysis completed.",
+      "failed": "The analysis failed after several attempts ({code}). You can retry it without using your quota.",
+      "retry": "Retry analysis",
+      "history": "Analysis history",
+      "attempt": "attempt",
+      "usage": "Analyses this month",
+      "usageValue": "{used} of {limit}",
+      "unlimited": "unlimited",
+      "queueTitle": "All analyses",
+      "empty": "No analyses yet. Submit a decision to start the first one."
     }
   }
 }

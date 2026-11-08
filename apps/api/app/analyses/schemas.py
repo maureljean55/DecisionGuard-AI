@@ -1,0 +1,56 @@
+import uuid
+from datetime import date, datetime
+
+from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+from app.models import AnalysisStatus
+
+
+class QuestionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    key: str
+    answer: str | None
+    unknown: bool
+    answered_at: datetime | None
+
+
+class AnalysisSummary(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    status: AnalysisStatus
+    waiting_reason: str | None
+    error_code: str | None
+    attempts: int
+    created_at: datetime
+    finished_at: datetime | None
+    open_questions: int = 0
+
+
+class AnalysisOut(AnalysisSummary):
+    decision_id: uuid.UUID
+    decision_title: str | None = None
+    max_attempts: int
+    started_at: datetime | None
+    updated_at: datetime
+    questions: list[QuestionOut] = []
+
+
+class AnswerIn(BaseModel):
+    answer: str | None = Field(default=None, max_length=2000)
+    unknown: bool = False
+
+    @model_validator(mode="after")
+    def _answer_or_unknown(self) -> "AnswerIn":
+        if not self.unknown and not (self.answer or "").strip():
+            raise ValueError("answer is required unless unknown is true")
+        return self
+
+
+class UsageOut(BaseModel):
+    plan: str
+    period_start: date
+    used: int
+    limit: int | None
