@@ -1,8 +1,5 @@
 import Link from "next/link";
-import { Suspense } from "react";
 
-import { LocaleSwitcher } from "@/components/locale-switcher";
-import { SystemStatus, SystemStatusFallback } from "@/components/system-status";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 
@@ -71,18 +68,6 @@ export function SiteFooter({ dict, lang }: { dict: Dictionary; lang: Locale }) {
               </ul>
             </nav>
           ))}
-        </div>
-      </div>
-      <div className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4 text-xs text-muted sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <p className="max-w-xl">{dict.footer.disclaimer}</p>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-            <Suspense fallback={<SystemStatusFallback />}>
-              <SystemStatus dict={dict.status} />
-            </Suspense>
-            <LocaleSwitcher current={lang} label={dict.nav.language} />
-            <span>© 2026 DecisionGuard</span>
-          </div>
         </div>
       </div>
     </footer>
