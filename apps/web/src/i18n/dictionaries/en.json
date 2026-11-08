@@ -1468,6 +1468,102 @@
       "counts": "{s} supported · {w} weak · {u} unsupported",
       "failed": "The audit could not be completed ({code}). Findings are shown without review.",
       "excluded": "Excluded from the index"
+    },
+    "charts": {
+      "table": "Show data",
+      "noData": "No data yet.",
+      "breakdown": {
+        "title": "Where the score comes from",
+        "subtitle": "Each part of the index, in points out of 100.",
+        "rest": "Room to 100",
+        "sum": "{parts} = {total}, rounded to {score}",
+        "line": "{label}: {pct}% × {w} = {pts} points",
+        "explain": {
+          "peak": "Your most severe risk scores {max} out of 25.",
+          "concentration": "Average of your 5 most severe risks.",
+          "breadth": "{n} serious risks (severity ≥ 10) out of {total}.",
+          "uncertainty": "'I don't know' answers and missing information."
+        },
+        "col": {
+          "part": "Part",
+          "value": "Value",
+          "weight": "Weight",
+          "points": "Points"
+        }
+      },
+      "domains": {
+        "title": "Risk by domain",
+        "subtitle": "The most severe risk raised by each agent, out of 25.",
+        "count": "{n} risks",
+        "col": {
+          "agent": "Domain",
+          "max": "Max severity",
+          "count": "Risks"
+        }
+      },
+      "tornado": {
+        "title": "Sensitivity",
+        "subtitle": "Index if a domain's risks were one notch less likely (left) or more likely (right).",
+        "down": "Less likely",
+        "up": "More likely",
+        "base": "Current index {n}",
+        "col": {
+          "agent": "Domain",
+          "down": "One notch down",
+          "up": "One notch up",
+          "swing": "Swing"
+        }
+      },
+      "history": {
+        "title": "Score over time",
+        "subtitle": "The index of every analysis of this dossier.",
+        "single": "Only one analysis so far. The line appears after the dossier is analysed again.",
+        "col": {
+          "date": "Analysis",
+          "score": "Index"
+        }
+      },
+      "portfolio": {
+        "title": "Dossier map",
+        "subtitle": "Each bubble is a dossier: amount committed and risk index. Bigger bubbles carry more findings.",
+        "amount": "Amount ({cur}, log scale)",
+        "index": "Risk index",
+        "excluded": "{n} dossiers without an amount or in another currency are not plotted.",
+        "col": {
+          "title": "Dossier",
+          "amount": "Amount",
+          "index": "Index",
+          "findings": "Risks"
+        }
+      },
+      "levelsChart": {
+        "title": "Levels breakdown",
+        "subtitle": "Number of analysed dossiers per risk level.",
+        "col": {
+          "level": "Level",
+          "count": "Dossiers"
+        }
+      },
+      "evidence": {
+        "title": "Evidence quality",
+        "subtitle": "What the findings rest on, and what the audit says.",
+        "basis": "Basis",
+        "audit": "Audit opinion",
+        "col": {
+          "kind": "Category",
+          "count": "Findings",
+          "share": "Share"
+        }
+      },
+      "activity": {
+        "title": "Activity",
+        "subtitle": "Analyses started per month.",
+        "quota": "Quota {n}/month",
+        "col": {
+          "month": "Month",
+          "count": "Analyses"
+        }
+      }
     }
   }
 }

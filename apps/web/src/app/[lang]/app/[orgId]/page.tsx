@@ -28,6 +28,13 @@ import {
 } from "@/components/dashboard/cockpit";
 import { LocalTime } from "@/components/dashboard/local-time";
 import { PageSkeleton } from "@/components/dashboard/page-title";
+import {
+  ActivityBars,
+  EvidenceQuality,
+  level25,
+  LevelDistribution,
+  PortfolioMap,
+} from "@/components/dashboard/charts";
 import { IndexChip } from "@/components/dashboard/risk";
 import { formatAmount, StatusBadge } from "@/components/dashboard/status";
 import { hasLocale, type Locale } from "@/i18n/config";
@@ -40,6 +47,7 @@ import { fmt } from "@/lib/format";
 import { canReadAudit, canWriteDecisions } from "@/lib/permissions";
 import { ALERT, level, LEVEL_TEXT, MAJOR, severity } from "@/lib/risk";
 import type {
+  Analysis,
   AuditPage,
   Decision,
   EngineStatus,
@@ -68,7 +76,7 @@ async function Overview({
   const d = dict.dash;
   const C = d.cockpit;
   const base = `/${lang}/app/${org.id}`;
-  const [audit, decisionsRes, usageRes, findingsRes, engineRes] =
+  const [audit, decisionsRes, usageRes, findingsRes, engineRes, analysesRes] =
     await Promise.all([
       canReadAudit(org.role)
         ? apiGet<AuditPage>(`/orgs/${org.id}/audit-logs?limit=6`)
@@ -77,6 +85,7 @@ async function Overview({
       apiGet<Usage>(`/orgs/${org.id}/usage`),
       apiGet<OrgFinding[]>(`/orgs/${org.id}/findings`),
       apiGet<EngineStatus>("/engine"),
+      apiGet<Analysis[]>(`/orgs/${org.id}/analyses`),
     ]);
   const decisions = decisionsRes.data ?? [];
   const findings = findingsRes.data ?? [];
@@ -136,6 +145,41 @@ async function Overview({
     .slice(0, 7);
 
   const status = engine?.status ?? "unavailable";
+
+  // --- Portfolio charts
+  const scored = active.filter(
+    (x) =>
+      x.latest_analysis?.status === "completed" &&
+      x.latest_analysis.risk_score !== null,
+  );
+  const findingsPer = new Map<string, number>();
+  for (const f of findings)
+    findingsPer.set(f.decision_id, (findingsPer.get(f.decision_id) ?? 0) + 1);
+  const plotted = scored.filter(
+    (x) =>
+      x.amount !== null && Number(x.amount) > 0 && x.currency === org.currency,
+  );
+  const levelCounts = { low: 0, moderate: 0, high: 0, critical: 0 };
+  for (const x of scored)
+    levelCounts[level25(x.latest_analysis!.risk_score as number)] += 1;
+  const evidence = { fact: 0, estimate: 0, assumption: 0, ai_hypothesis: 0 };
+  const verdicts = { supported: 0, weak: 0, unsupported: 0, none: 0 };
+  for (const f of findings) {
+    evidence[f.evidence_type] += 1;
+    verdicts[f.audit_status ?? "none"] += 1;
+  }
+  const now = new Date();
+  const months = Array.from({ length: 6 }, (_, i) => {
+    const m = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 5 + i, 1),
+    );
+    return m.toISOString().slice(0, 7);
+  }).map((month) => ({
+    month,
+    count: (analysesRes.data ?? []).filter(
+      (a) => a.status !== "canceled" && a.created_at.slice(0, 7) === month,
+    ).length,
+  }));
   const firstSteps = [
     { label: d.overview.steps.verify, done: me.user.email_verified },
     { label: d.overview.steps.invite, href: `${base}/team`, done: false },
@@ -415,6 +459,32 @@ async function Overview({
             </div>
           )}
         </Plate>
+      </div>
+
+      {/* Portfolio charts */}
+      <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <PortfolioMap
+          d={d}
+          lang={lang}
+          currency={org.currency}
+          items={plotted.map((x) => ({
+            id: x.id,
+            title: x.title,
+            amount: Number(x.amount),
+            score: x.latest_analysis!.risk_score as number,
+            findings: findingsPer.get(x.id) ?? 0,
+          }))}
+          excluded={scored.length - plotted.length}
+          hrefFor={(id) => `${base}/decisions/${id}`}
+        />
+        <LevelDistribution d={d} counts={levelCounts} />
+        <EvidenceQuality d={d} evidence={evidence} audit={verdicts} />
+        <ActivityBars
+          d={d}
+          lang={lang}
+          months={months}
+          limit={usage?.limit ?? null}
+        />
       </div>
 
       {/* Dossiers + feed */}

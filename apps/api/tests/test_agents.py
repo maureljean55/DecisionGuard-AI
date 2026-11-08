@@ -389,6 +389,8 @@ def test_simulate_and_pdf_report(make_client) -> None:
         c.post(f"/orgs/{org}/analyses/{aid}/simulate", json={"all": {"likelihood": 3}}).status_code
         == 422
     )
+    sens = c.get(f"/orgs/{org}/analyses/{aid}/sensitivity").json()
+    assert len(sens) == 7 and all(x["base"] == base for x in sens)
     r = c.get(f"/orgs/{org}/analyses/{aid}/report.pdf")
     assert r.status_code == 200 and r.headers["content-type"] == "application/pdf"
     assert r.content.startswith(b"%PDF") and len(r.content) > 3000

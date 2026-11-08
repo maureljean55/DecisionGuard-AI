@@ -131,3 +131,17 @@ def scenarios(items: list[Item], inputs: Inputs, excluded: int = 0) -> list[dict
             }
         )
     return out
+
+
+def sensitivity(items: list[Item], inputs: Inputs, excluded: int = 0) -> list[dict]:
+    """For each agent: the index if its findings were one notch less / more likely.
+
+    Sorted by total swing, largest first (the tornado chart's order).
+    """
+    base = compute(items, inputs, excluded).score
+    out = []
+    for agent in sorted({it.agent for it in items}):
+        down = compute(shift(items, {agent: (-1, 0)}), inputs, excluded).score
+        up = compute(shift(items, {agent: (1, 0)}), inputs, excluded).score
+        out.append({"agent": agent, "down": down, "up": up, "base": base})
+    return sorted(out, key=lambda r: (r["up"] - r["down"], r["agent"]), reverse=True)

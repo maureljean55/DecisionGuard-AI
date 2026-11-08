@@ -1468,6 +1468,102 @@
       "counts": "{s} validés · {w} fragiles · {u} non étayés",
       "failed": "L'audit n'a pas pu être réalisé ({code}). Les constats sont affichés sans vérification.",
       "excluded": "Exclu de l'indice"
+    },
+    "charts": {
+      "table": "Voir les données",
+      "noData": "Pas encore de données.",
+      "breakdown": {
+        "title": "D'où vient le score",
+        "subtitle": "Chaque part de l'indice, en points sur 100.",
+        "rest": "Marge jusqu'à 100",
+        "sum": "{parts} = {total}, arrondi à {score}",
+        "line": "{label} : {pct} % × {w} = {pts} points",
+        "explain": {
+          "peak": "Votre risque le plus grave vaut {max} sur 25.",
+          "concentration": "Moyenne de vos 5 risques les plus graves.",
+          "breadth": "{n} risques sérieux (gravité ≥ 10) sur {total}.",
+          "uncertainty": "Réponses « je ne sais pas » et informations manquantes."
+        },
+        "col": {
+          "part": "Part",
+          "value": "Valeur",
+          "weight": "Poids",
+          "points": "Points"
+        }
+      },
+      "domains": {
+        "title": "Risque par domaine",
+        "subtitle": "Le risque le plus grave relevé par chaque agent, sur 25.",
+        "count": "{n} risques",
+        "col": {
+          "agent": "Domaine",
+          "max": "Gravité max",
+          "count": "Risques"
+        }
+      },
+      "tornado": {
+        "title": "Sensibilité",
+        "subtitle": "Indice si les risques d'un domaine étaient un cran moins probables (à gauche) ou plus probables (à droite).",
+        "down": "Moins probable",
+        "up": "Plus probable",
+        "base": "Indice actuel {n}",
+        "col": {
+          "agent": "Domaine",
+          "down": "Un cran de moins",
+          "up": "Un cran de plus",
+          "swing": "Écart"
+        }
+      },
+      "history": {
+        "title": "Évolution du score",
+        "subtitle": "L'indice de chaque analyse de ce dossier.",
+        "single": "Une seule analyse pour l'instant. La courbe apparaîtra après une nouvelle analyse du dossier.",
+        "col": {
+          "date": "Analyse",
+          "score": "Indice"
+        }
+      },
+      "portfolio": {
+        "title": "Carte des dossiers",
+        "subtitle": "Chaque bulle est un dossier : montant engagé et indice de risque. Plus la bulle est grande, plus il y a de risques relevés.",
+        "amount": "Montant ({cur}, échelle logarithmique)",
+        "index": "Indice de risque",
+        "excluded": "{n} dossiers sans montant ou dans une autre devise ne sont pas placés.",
+        "col": {
+          "title": "Dossier",
+          "amount": "Montant",
+          "index": "Indice",
+          "findings": "Risques"
+        }
+      },
+      "levelsChart": {
+        "title": "Répartition des niveaux",
+        "subtitle": "Nombre de dossiers analysés par niveau de risque.",
+        "col": {
+          "level": "Niveau",
+          "count": "Dossiers"
+        }
+      },
+      "evidence": {
+        "title": "Qualité des preuves",
+        "subtitle": "Sur quoi reposent les constats, et ce qu'en dit l'audit.",
+        "basis": "Fondement",
+        "audit": "Avis de l'audit",
+        "col": {
+          "kind": "Catégorie",
+          "count": "Constats",
+          "share": "Part"
+        }
+      },
+      "activity": {
+        "title": "Activité",
+        "subtitle": "Analyses lancées par mois.",
+        "quota": "Quota {n}/mois",
+        "col": {
+          "month": "Mois",
+          "count": "Analyses"
+        }
+      }
     }
   }
 }

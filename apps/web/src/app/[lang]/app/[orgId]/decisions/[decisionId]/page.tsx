@@ -5,6 +5,12 @@ import { Suspense } from "react";
 
 import { AgentResults } from "@/components/dashboard/agent-results";
 import { AnalysisPanel } from "@/components/dashboard/analysis";
+import {
+  DomainBars,
+  ScoreBreakdown,
+  ScoreHistory,
+  Tornado,
+} from "@/components/dashboard/charts";
 import { RiskPanel } from "@/components/dashboard/risk";
 import { DecisionActions } from "@/components/dashboard/decisions";
 import { LocalTime } from "@/components/dashboard/local-time";
@@ -42,6 +48,14 @@ async function DecisionPage({
     (await apiGet<Analysis[]>(`/orgs/${org.id}/decisions/${x.id}/analyses`))
       .data ?? [];
   const analysis = history[0] ?? null;
+  const sensitivity =
+    analysis?.status === "completed" && analysis.risk_score !== null
+      ? ((
+          await apiGet<
+            { agent: string; down: number; up: number; base: number }[]
+          >(`/orgs/${org.id}/analyses/${analysis.id}/sensitivity`)
+        ).data ?? [])
+      : [];
   const d = dict.dash;
   const T = d.decisions.detail;
   const amount = formatAmount(x.amount, x.currency, lang);
@@ -98,6 +112,45 @@ async function DecisionPage({
           <RiskPanel d={d} lang={lang} orgId={org.id} analysis={analysis} />
         </div>
       )}
+      {analysis &&
+        analysis.status === "completed" &&
+        analysis.risk_score !== null &&
+        analysis.risk_breakdown && (
+          <div className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <ScoreBreakdown
+              d={d}
+              lang={lang}
+              score={analysis.risk_score}
+              breakdown={analysis.risk_breakdown}
+            />
+            <DomainBars
+              d={d}
+              rows={analysis.agents
+                .filter((r) => r.agent !== "audit" && r.status === "completed")
+                .map((r) => ({
+                  agent: r.agent,
+                  count: r.findings.length,
+                  max: r.findings
+                    .filter((f) => f.audit_status !== "unsupported")
+                    .reduce((m, f) => Math.max(m, f.likelihood * f.impact), 0),
+                }))}
+            />
+            <Tornado d={d} rows={sensitivity} />
+            <ScoreHistory
+              d={d}
+              lang={lang}
+              points={history
+                .filter(
+                  (a) => a.status === "completed" && a.risk_score !== null,
+                )
+                .map((a) => ({
+                  at: a.finished_at ?? a.created_at,
+                  score: a.risk_score as number,
+                }))
+                .reverse()}
+            />
+          </div>
+        )}
       {analysis && (
         <div className="mb-8">
           <AgentResults d={d} analysis={analysis} />

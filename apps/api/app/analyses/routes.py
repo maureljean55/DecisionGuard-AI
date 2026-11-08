@@ -248,12 +248,7 @@ class SimulateIn(BaseModel):
     agents: dict[str, Shift] = Field(default_factory=dict, max_length=20)
 
 
-@router.post("/orgs/{org_id}/analyses/{analysis_id}/simulate")
-def simulate(analysis_id: uuid.UUID, body: SimulateIn, ctx: CanRead) -> dict:
-    """Recompute the risk index under adjusted assumptions. Read-only: nothing is stored."""
-    a = _get(ctx, analysis_id)
-    if a.status != AnalysisStatus.COMPLETED or a.risk_breakdown is None:
-        raise AppError(409, "analysis.not_completed")
+def _counted(ctx: OrgContext, a: Analysis) -> tuple[list[risk.Item], int]:
     rows = ctx.db.scalars(select(Finding).where(Finding.analysis_id == a.id))
     counted, excluded = [], 0
     for f in rows:
@@ -261,6 +256,27 @@ def simulate(analysis_id: uuid.UUID, body: SimulateIn, ctx: CanRead) -> dict:
             excluded += 1
             continue
         counted.append(risk.Item(f.agent, f.likelihood, f.impact))
+    return counted, excluded
+
+
+@router.get("/orgs/{org_id}/analyses/{analysis_id}/sensitivity")
+def sensitivity(analysis_id: uuid.UUID, ctx: CanRead) -> list[dict]:
+    """How much the index moves when each domain's likelihoods shift by one notch."""
+    a = _get(ctx, analysis_id)
+    if a.status != AnalysisStatus.COMPLETED or a.risk_breakdown is None:
+        raise AppError(409, "analysis.not_completed")
+    counted, excluded = _counted(ctx, a)
+    inputs = risk.Inputs(**a.risk_breakdown.get("inputs", {}))
+    return risk.sensitivity(counted, inputs, excluded)
+
+
+@router.post("/orgs/{org_id}/analyses/{analysis_id}/simulate")
+def simulate(analysis_id: uuid.UUID, body: SimulateIn, ctx: CanRead) -> dict:
+    """Recompute the risk index under adjusted assumptions. Read-only: nothing is stored."""
+    a = _get(ctx, analysis_id)
+    if a.status != AnalysisStatus.COMPLETED or a.risk_breakdown is None:
+        raise AppError(409, "analysis.not_completed")
+    counted, excluded = _counted(ctx, a)
     shifts = {
         agent: (body.all.likelihood + sh.likelihood, body.all.impact + sh.impact)
         for agent, sh in body.agents.items()

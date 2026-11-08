@@ -1,6 +1,6 @@
 """Deterministic risk engine: pure functions, no database."""
 
-from app.risk.engine import Inputs, Item, compute, level_of, scenarios, shift
+from app.risk.engine import Inputs, Item, compute, level_of, scenarios, sensitivity, shift
 
 
 def test_empty_is_zero() -> None:
@@ -45,3 +45,12 @@ def test_shift_clamps_and_scenarios_are_ordered() -> None:
     scores = [x["score"] for x in s]
     assert scores == sorted(scores)
     assert s[1]["score"] == compute([Item("finance", 3, 3), Item("strategy", 2, 4)]).score
+
+
+def test_sensitivity_is_sorted_by_swing() -> None:
+    items = [Item("finance", 4, 5), Item("finance", 3, 4), Item("people", 2, 2)]
+    rows = sensitivity(items, Inputs())
+    assert [r["agent"] for r in rows] == ["finance", "people"]
+    base = compute(items).score
+    assert all(r["base"] == base and r["down"] <= base <= r["up"] for r in rows)
+    assert rows[0]["up"] - rows[0]["down"] >= rows[1]["up"] - rows[1]["down"]
