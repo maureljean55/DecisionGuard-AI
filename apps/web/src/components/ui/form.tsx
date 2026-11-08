@@ -4,9 +4,9 @@ import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useId, useState, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from "react";
 
 const control =
-  "block w-full rounded-md border border-line bg-surface px-3 py-2.5 text-sm text-ink shadow-xs " +
-  "placeholder:text-muted/70 transition-colors focus:border-blue-500 focus:outline-none " +
-  "focus:ring-2 focus:ring-blue-500/25 disabled:opacity-60 aria-[invalid=true]:border-risk-critical";
+  "block w-full rounded-lg border border-line bg-night px-3.5 py-2.5 text-sm text-ink shadow-xs " +
+  "placeholder:text-muted/70 transition-colors focus:border-teal focus:outline-none " +
+  "focus:ring-2 focus:ring-teal/20 disabled:opacity-60 aria-[invalid=true]:border-risk-critical";
 
 interface FieldProps {
   label: string;
@@ -108,7 +108,7 @@ export function SubmitButton({ pending, children }: { pending: boolean; children
       type="submit"
       disabled={pending}
       aria-busy={pending}
-      className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-navy-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-blue-500 dark:hover:bg-blue-500/90"
+      className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-ink px-4 py-3 text-sm font-semibold text-night transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal disabled:cursor-not-allowed disabled:opacity-70"
     >
       {pending && <Loader2 className="size-4 animate-spin" aria-hidden />}
       {children}

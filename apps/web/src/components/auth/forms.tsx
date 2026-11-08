@@ -19,7 +19,7 @@ interface Props {
   lang: Locale;
 }
 
-const linkClass = "font-medium text-blue-500 hover:underline";
+const linkClass = "font-medium text-teal hover:text-ink";
 
 function useSubmit(dict: AuthDict) {
   const [pending, setPending] = useState(false);
