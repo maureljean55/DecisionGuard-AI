@@ -130,6 +130,10 @@ export interface MitigationAction {
   status: ActionStatus;
   done_at: string | null;
   created_at: string;
+  finding_title: string | null;
+  finding_agent: string | null;
+  finding_likelihood: number | null;
+  finding_impact: number | null;
 }
 
 export type AnalysisStatus =

@@ -1189,7 +1189,72 @@
         "deleteConfirm": "Supprimer cette action ?",
         "fromFinding": "Créer une action",
         "created": "Action créée : retrouvez-la dans « Suivi du dossier »."
-      }
+      },
+      "filters": {
+        "dossier": "Dossier",
+        "owner": "Responsable",
+        "status": "Statut",
+        "all": "Tous",
+        "apply": "Filtrer",
+        "reset": "Réinitialiser"
+      },
+      "cards": {
+        "nextIn": "Réanalyse dans {n} j",
+        "nextDue": "Réanalyse due",
+        "nextOff": "Réanalyse manuelle",
+        "deadlineIn": "Échéance dans {n} j",
+        "deadlinePast": "Échéance dépassée de {n} j",
+        "noDeadline": "Pas d'échéance",
+        "progress": "{done}/{total} actions terminées",
+        "noActions": "Aucune action",
+        "topRisks": "Risques principaux",
+        "covered": "Couvert",
+        "uncovered": "Sans action",
+        "open": "Ouvrir le dossier",
+        "notAnalysed": "Pas encore d'analyse terminée"
+      },
+      "uncovered": {
+        "title": "Risques majeurs sans action",
+        "subtitle": "Gravité ≥ 15 dans les dernières analyses, sans action liée.",
+        "empty": "Chaque risque majeur a au moins une action.",
+        "more": "+ {n} autres risques majeurs sans action."
+      },
+      "agenda": {
+        "title": "Échéancier",
+        "subtitle": "Les 60 prochains jours, retards en tête.",
+        "overdue": "En retard",
+        "empty": "Rien de prévu dans les 60 prochains jours.",
+        "kinds": {
+          "deadline": "Échéance de la décision",
+          "action": "Action",
+          "reanalysis": "Réanalyse automatique"
+        },
+        "today": "aujourd'hui",
+        "inDays": "dans {n} j",
+        "daysAgo": "il y a {n} j"
+      },
+      "board": {
+        "title": "Tableau des actions",
+        "empty": "Aucune action",
+        "prev": "Reculer",
+        "next": "Avancer",
+        "edit": "Modifier",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "noRisk": "Sans risque lié",
+        "risk": "Risque lié",
+        "priority": "Priorité"
+      },
+      "timeline": {
+        "title": "Historique du dossier",
+        "empty": "Pas encore d'événement.",
+        "analysis": "Analyse terminée, indice {score}/100",
+        "created": "Action créée : {title}",
+        "done": "Action terminée : {title}",
+        "submitted": "Décision soumise pour analyse"
+      },
+      "coverage": "{c}/{t} risques majeurs couverts par une action",
+      "countdown": "Prochaines dates"
     },
     "analysis": {
       "title": "Analyse",

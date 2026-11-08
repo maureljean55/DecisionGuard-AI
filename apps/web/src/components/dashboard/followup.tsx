@@ -1,7 +1,7 @@
 "use client";
 
 /** Follow-up of a decision: periodic re-analysis setting and mitigation actions. */
-import { Check, ListPlus, Loader2, Trash2 } from "lucide-react";
+import { Check, ListPlus, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -12,7 +12,6 @@ import type { ActionStatus, Member, MitigationAction } from "@/lib/types";
 import { useApiError } from "@/lib/use-api-error";
 
 import { ctaGhost } from "./cockpit";
-import { LocalTime } from "./local-time";
 
 type D = Dictionary["dash"];
 const field =
@@ -140,181 +139,142 @@ export function ActionStatusSelect({
   );
 }
 
-export function ActionsPanel({
+/** Add an action to a decision, optionally linked to one of its risks. */
+export function AddActionForm({
   d,
-  lang,
   orgId,
   decisionId,
-  actions,
   members,
-  canWrite,
+  risks,
 }: {
   d: D;
-  lang: string;
   orgId: string;
   decisionId: string;
-  actions: MitigationAction[];
   members: Member[];
-  canWrite: boolean;
+  /** Risks of the latest analysis, most severe first. */
+  risks: { id: string; title: string; severity: number; mitigation: string }[];
 }) {
   const P = d.monitoring.panel;
+  const B = d.monitoring.board;
   const router = useRouter();
   const [title, setTitle] = useState("");
+  const [risk, setRisk] = useState("");
   const [owner, setOwner] = useState("");
   const [due, setDue] = useState("");
   const [busy, setBusy] = useState(false);
   const { error, capture, setError } = useApiError(d.common.error);
-  const today = new Date().toISOString().slice(0, 10);
-
   return (
-    <div>
-      {actions.length === 0 ? (
-        <p className="text-sm text-muted">{d.monitoring.actionsEmpty}</p>
-      ) : (
-        <ul className="divide-y divide-line">
-          {actions.map((a) => {
-            const late =
-              a.status !== "done" && a.due_date !== null && a.due_date < today;
-            return (
-              <li
-                key={a.id}
-                className="flex flex-wrap items-center gap-3 py-3 first:pt-0"
-              >
-                <div className="min-w-0 flex-1">
-                  <p
-                    className={`text-sm ${a.status === "done" ? "text-muted line-through decoration-muted/50" : "text-ink"}`}
-                  >
-                    {a.title}
-                  </p>
-                  <p className="mt-0.5 text-xs text-muted">
-                    {a.owner_name ?? P.noOwner}
-                    {a.due_date && (
-                      <span className={late ? "text-risk-critical" : ""}>
-                        {" · "}
-                        {P.due}{" "}
-                        <LocalTime
-                          iso={`${a.due_date}T00:00:00Z`}
-                          lang={lang}
-                        />
-                      </span>
-                    )}
-                  </p>
-                </div>
-                <ActionStatusSelect
-                  d={d}
-                  orgId={orgId}
-                  action={a}
-                  canWrite={canWrite}
-                />
-                {canWrite && (
-                  <button
-                    type="button"
-                    aria-label={P.delete}
-                    title={P.delete}
-                    onClick={async () => {
-                      if (!window.confirm(P.deleteConfirm)) return;
-                      await api(`/orgs/${orgId}/actions/${a.id}`, {
-                        method: "DELETE",
-                      });
-                      router.refresh();
-                    }}
-                    className="flex size-8 items-center justify-center rounded-lg text-muted hover:bg-white/[0.06] hover:text-risk-critical"
-                  >
-                    <Trash2 className="size-4" />
-                  </button>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-
-      {canWrite && (
-        <form
-          className="mt-5 space-y-3 border-t border-line pt-5"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            setBusy(true);
-            setError(null);
-            try {
-              await api(`/orgs/${orgId}/decisions/${decisionId}/actions`, {
-                body: {
-                  title,
-                  owner_user_id: owner || null,
-                  due_date: due || null,
-                },
-              });
-              setTitle("");
-              setOwner("");
-              setDue("");
-              router.refresh();
-            } catch (err) {
-              capture(err);
-            } finally {
-              setBusy(false);
-            }
-          }}
-        >
-          <p className="text-sm font-medium text-ink">{P.add}</p>
-          {error && <Alert tone="error">{error}</Alert>}
-          <label htmlFor="action-title" className="sr-only">
-            {P.titleField}
+    <form
+      className="space-y-3"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        setBusy(true);
+        setError(null);
+        try {
+          await api(`/orgs/${orgId}/decisions/${decisionId}/actions`, {
+            body: {
+              title,
+              finding_id: risk || null,
+              owner_user_id: owner || null,
+              due_date: due || null,
+            },
+          });
+          setTitle("");
+          setRisk("");
+          setOwner("");
+          setDue("");
+          router.refresh();
+        } catch (err) {
+          capture(err);
+        } finally {
+          setBusy(false);
+        }
+      }}
+    >
+      <p className="text-sm font-medium text-ink">{P.add}</p>
+      {error && <Alert tone="error">{error}</Alert>}
+      {risks.length > 0 && (
+        <>
+          <label className="sr-only" htmlFor="action-risk">
+            {B.risk}
           </label>
-          <input
-            id="action-title"
-            required
-            minLength={3}
-            maxLength={300}
-            value={title}
-            placeholder={P.titleField}
-            onChange={(e) => setTitle(e.target.value)}
+          <select
+            id="action-risk"
+            value={risk}
+            onChange={(e) => {
+              setRisk(e.target.value);
+              const r = risks.find((x) => x.id === e.target.value);
+              if (r && !title.trim()) setTitle(r.mitigation.slice(0, 300));
+            }}
             className={`${field} w-full`}
-          />
-          <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_11rem_auto]">
-            <label className="sr-only" htmlFor="action-owner">
-              {P.owner}
-            </label>
-            <select
-              id="action-owner"
-              value={owner}
-              onChange={(e) => setOwner(e.target.value)}
-              className={field}
-            >
-              <option value="">
-                {P.owner} — {P.noOwner}
+          >
+            <option value="">
+              {B.risk} — {B.noRisk}
+            </option>
+            {risks.map((r) => (
+              <option key={r.id} value={r.id}>
+                {r.severity}/25 · {r.title}
               </option>
-              {members.map((m) => (
-                <option key={m.user_id} value={m.user_id}>
-                  {m.full_name}
-                </option>
-              ))}
-            </select>
-            <label className="sr-only" htmlFor="action-due">
-              {P.due}
-            </label>
-            <input
-              id="action-due"
-              type="date"
-              value={due}
-              onChange={(e) => setDue(e.target.value)}
-              className={field}
-            />
-            <button
-              type="submit"
-              disabled={busy || title.trim().length < 3}
-              className={ctaGhost}
-            >
-              {busy ? (
-                <Loader2 className="size-4 animate-spin" aria-hidden />
-              ) : (
-                <ListPlus className="size-4" aria-hidden />
-              )}
-              {P.create}
-            </button>
-          </div>
-        </form>
+            ))}
+          </select>
+        </>
       )}
-    </div>
+      <label htmlFor="action-title" className="sr-only">
+        {P.titleField}
+      </label>
+      <input
+        id="action-title"
+        required
+        minLength={3}
+        maxLength={300}
+        value={title}
+        placeholder={P.titleField}
+        onChange={(e) => setTitle(e.target.value)}
+        className={`${field} w-full`}
+      />
+      <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_11rem_auto]">
+        <label className="sr-only" htmlFor="action-owner">
+          {P.owner}
+        </label>
+        <select
+          id="action-owner"
+          value={owner}
+          onChange={(e) => setOwner(e.target.value)}
+          className={field}
+        >
+          <option value="">
+            {P.owner} — {P.noOwner}
+          </option>
+          {members.map((m) => (
+            <option key={m.user_id} value={m.user_id}>
+              {m.full_name}
+            </option>
+          ))}
+        </select>
+        <label className="sr-only" htmlFor="action-due">
+          {P.due}
+        </label>
+        <input
+          id="action-due"
+          type="date"
+          value={due}
+          onChange={(e) => setDue(e.target.value)}
+          className={field}
+        />
+        <button
+          type="submit"
+          disabled={busy || title.trim().length < 3}
+          className={ctaGhost}
+        >
+          {busy ? (
+            <Loader2 className="size-4 animate-spin" aria-hidden />
+          ) : (
+            <ListPlus className="size-4" aria-hidden />
+          )}
+          {P.create}
+        </button>
+      </div>
+    </form>
   );
 }
 

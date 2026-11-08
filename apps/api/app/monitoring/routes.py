@@ -56,6 +56,11 @@ class ActionOut(BaseModel):
     status: Status
     done_at: datetime | None
     created_at: datetime
+    # The risk this action addresses, when it was created from a finding.
+    finding_title: str | None = None
+    finding_agent: str | None = None
+    finding_likelihood: int | None = None
+    finding_impact: int | None = None
 
 
 def _meta(request: Request) -> audit.RequestMeta:
@@ -112,11 +117,23 @@ def _out(ctx: OrgContext, rows: list[MitigationAction]) -> list[ActionOut]:
         if owners
         else {}
     )
+    finding_ids = {r.finding_id for r in rows if r.finding_id}
+    findings = (
+        {f.id: f for f in ctx.db.scalars(select(Finding).where(Finding.id.in_(finding_ids)))}
+        if finding_ids
+        else {}
+    )
     out = []
     for r in rows:
         item = ActionOut.model_validate(r)
         item.decision_title = titles.get(r.decision_id)
         item.owner_name = names.get(r.owner_user_id) if r.owner_user_id else None
+        f = findings.get(r.finding_id) if r.finding_id else None
+        if f is not None:
+            item.finding_title = f.title
+            item.finding_agent = f.agent
+            item.finding_likelihood = f.likelihood
+            item.finding_impact = f.impact
         out.append(item)
     return out
 

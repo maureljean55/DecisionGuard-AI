@@ -1189,7 +1189,72 @@
         "deleteConfirm": "Delete this action?",
         "fromFinding": "Create an action",
         "created": "Action created: find it under 'Dossier follow-up'."
-      }
+      },
+      "filters": {
+        "dossier": "Dossier",
+        "owner": "Owner",
+        "status": "Status",
+        "all": "All",
+        "apply": "Filter",
+        "reset": "Reset"
+      },
+      "cards": {
+        "nextIn": "Re-analysis in {n} d",
+        "nextDue": "Re-analysis due",
+        "nextOff": "Manual re-analysis",
+        "deadlineIn": "Deadline in {n} d",
+        "deadlinePast": "Deadline passed {n} d ago",
+        "noDeadline": "No deadline",
+        "progress": "{done}/{total} actions done",
+        "noActions": "No actions",
+        "topRisks": "Main risks",
+        "covered": "Covered",
+        "uncovered": "No action",
+        "open": "Open dossier",
+        "notAnalysed": "No completed analysis yet"
+      },
+      "uncovered": {
+        "title": "Major risks without an action",
+        "subtitle": "Severity ≥ 15 in the latest analyses, with no linked action.",
+        "empty": "Every major risk has at least one action.",
+        "more": "+ {n} more major risks without an action."
+      },
+      "agenda": {
+        "title": "Schedule",
+        "subtitle": "The next 60 days, overdue items first.",
+        "overdue": "Overdue",
+        "empty": "Nothing scheduled in the next 60 days.",
+        "kinds": {
+          "deadline": "Decision deadline",
+          "action": "Action",
+          "reanalysis": "Automatic re-analysis"
+        },
+        "today": "today",
+        "inDays": "in {n} d",
+        "daysAgo": "{n} d ago"
+      },
+      "board": {
+        "title": "Action board",
+        "empty": "No actions",
+        "prev": "Move back",
+        "next": "Move forward",
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel",
+        "noRisk": "No linked risk",
+        "risk": "Linked risk",
+        "priority": "Priority"
+      },
+      "timeline": {
+        "title": "Dossier history",
+        "empty": "No events yet.",
+        "analysis": "Analysis completed, index {score}/100",
+        "created": "Action created: {title}",
+        "done": "Action done: {title}",
+        "submitted": "Decision submitted for analysis"
+      },
+      "coverage": "{c}/{t} major risks covered by an action",
+      "countdown": "Upcoming dates"
     },
     "analysis": {
       "title": "Analysis",
