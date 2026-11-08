@@ -1364,7 +1364,12 @@
       "evidenceMix": "Findings by evidence type",
       "empty": "No completed analysis yet. Submit a decision: the agents' reading will show here.",
       "queue": "All analyses",
-      "detail": "View dossier"
+      "detail": "View dossier",
+      "missingTag": "Not in this analysis",
+      "missingBody": "This agent is in service, but the analysis was run before it joined. Run the analysis again to get its reading.",
+      "outdated": "This analysis was run before {n} council agents joined. Run it again to get the full reading.",
+      "rerun": "Run again with the full council",
+      "rerunNote": "A new analysis is started: it counts towards your monthly quota. The current analysis stays available in the history."
     },
     "riskMap": {
       "eyebrow": "Mapping",

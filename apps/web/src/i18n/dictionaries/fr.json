@@ -1364,7 +1364,12 @@
       "evidenceMix": "Répartition par type de preuve",
       "empty": "Aucune analyse terminée pour l'instant. Soumettez une décision : la lecture des agents s'affichera ici.",
       "queue": "Toutes les analyses",
-      "detail": "Voir le dossier"
+      "detail": "Voir le dossier",
+      "missingTag": "Absent de cette analyse",
+      "missingBody": "Cet agent est en service, mais l'analyse a été faite avant son arrivée. Relancez l'analyse pour obtenir sa lecture.",
+      "outdated": "Cette analyse a été réalisée avant l'arrivée de {n} agents du conseil. Relancez-la pour obtenir la lecture complète.",
+      "rerun": "Relancer avec le conseil complet",
+      "rerunNote": "Une nouvelle analyse est lancée : elle compte dans votre quota mensuel. L'analyse actuelle reste consultable dans l'historique."
     },
     "riskMap": {
       "eyebrow": "Cartographie",

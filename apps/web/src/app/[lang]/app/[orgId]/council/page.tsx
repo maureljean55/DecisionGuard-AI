@@ -21,6 +21,7 @@ import {
   SeverityChip,
 } from "@/components/dashboard/cockpit";
 import { PageSkeleton } from "@/components/dashboard/page-title";
+import { RerunButton } from "@/components/dashboard/rerun";
 import { IndexChip } from "@/components/dashboard/risk";
 import { formatAmount } from "@/components/dashboard/status";
 import { hasLocale, type Locale } from "@/i18n/config";
@@ -30,7 +31,13 @@ import { apiGet } from "@/lib/api";
 import { loadOrg } from "@/lib/dash-data";
 import { fmt } from "@/lib/format";
 import { level, LEVEL_FILL, severity } from "@/lib/risk";
-import type { Analysis, Decision, EvidenceType } from "@/lib/types";
+import { canWriteDecisions } from "@/lib/permissions";
+import type {
+  Analysis,
+  Decision,
+  EngineStatus,
+  EvidenceType,
+} from "@/lib/types";
 
 const EVIDENCE: EvidenceType[] = [
   "fact",
@@ -111,6 +118,15 @@ async function Council({
   if (!analysis) notFound();
 
   const runs = new Map(analysis.agents.map((r) => [r.agent, r]));
+  const engine = (await apiGet<EngineStatus>("/engine")).data;
+  const inService = new Set(engine?.agents_active ?? []);
+  // Agents in service now that did not take part in this (older) analysis.
+  const absent = AGENT_CATALOG.filter(
+    (a) =>
+      inService.has(a.key) &&
+      !runs.has(a.key) &&
+      !(a.key === "scenarios" && analysis.scenarios?.length),
+  );
   const all = analysis.agents.flatMap((r) => r.findings);
   const done = analysis.agents.filter(
     (r) => r.status === "completed" && r.agent !== "audit",
@@ -204,6 +220,28 @@ async function Council({
         />
       </div>
 
+      {absent.length > 0 && (
+        <Plate className="mt-5 flex flex-col gap-4 border-electric/30 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="max-w-2xl">
+            <p className="text-sm font-medium text-ink">
+              {fmt(K.outdated, { n: String(absent.length) })}
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-muted">
+              {K.rerunNote}
+            </p>
+          </div>
+          {canWriteDecisions(org.role) && (
+            <RerunButton
+              label={K.rerun}
+              errorLabel={d.common.error}
+              orgId={org.id}
+              decisionId={selected.id}
+              href={`${base}/decisions/${selected.id}`}
+            />
+          )}
+        </Plate>
+      )}
+
       {/* Composition */}
       <div className="mb-3 mt-7 flex items-center justify-between gap-3">
         <h2 className="font-display text-xl font-semibold text-ink">
@@ -289,6 +327,29 @@ async function Council({
                     })}
                   </p>
                 )}
+              </li>
+            );
+          }
+          if (!run && inService.has(a.key)) {
+            return (
+              <li
+                key={a.key}
+                className="flex flex-col rounded-2xl border border-dashed border-electric/30 p-5"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <p className="font-display text-lg font-semibold text-ink">
+                    {info.name}
+                  </p>
+                  <span className="rounded-md border border-electric/30 px-1.5 py-0.5 font-mono text-[0.64rem] text-muted">
+                    {K.missingTag}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {info.angle}
+                </p>
+                <p className="mt-auto pt-4 text-xs leading-relaxed text-muted/90">
+                  {K.missingBody}
+                </p>
               </li>
             );
           }
