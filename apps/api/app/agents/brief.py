@@ -10,6 +10,32 @@ from app.db.base import utcnow
 
 Locale = Literal["fr", "en"]
 
+# OHADA member states (Organisation for the Harmonisation of Business Law in Africa).
+OHADA = frozenset("BJ BF CM CF KM CG CI GA GN GW GQ ML NE CD SN TD TG".split())
+# EU and EEA: the GDPR applies to organisations established there.
+EU_EEA = frozenset(
+    "AT BE BG HR CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE "
+    "IS LI NO".split()
+)
+
+
+def jurisdiction(country_code: str) -> str:
+    """Legal frameworks that follow from the organisation's country. Deterministic."""
+    code = (country_code or "").upper()
+    parts = [f"Organisation registered in country code {code or 'unknown'}."]
+    if code in OHADA:
+        parts.append("OHADA member state: OHADA Uniform Acts apply to business law.")
+    if code in EU_EEA:
+        parts.append("EU/EEA member: the GDPR applies to personal data processing.")
+    if code and code not in OHADA and code not in EU_EEA:
+        parts.append("Neither OHADA nor EU/EEA: national law governs; check local rules.")
+    parts.append(
+        "If personal data of EU residents is processed, the GDPR may apply wherever the "
+        "organisation is based."
+    )
+    return " ".join(parts)
+
+
 QUESTION_LABELS = {
     "amount": "Amount at stake",
     "deadline": "Deadline or timing",
@@ -86,6 +112,7 @@ def render(brief: DecisionBrief) -> str:
         f"<amount>{_e(amount)}</amount>",
         f"<deadline>{brief.deadline.isoformat() if brief.deadline else 'not provided'}</deadline>",
         f"<organization_country>{_e(brief.country_code) or 'unknown'}</organization_country>",
+        f"<jurisdiction>{_e(jurisdiction(brief.country_code))}</jurisdiction>",
         f"<description>\n{_e(brief.description)}\n</description>",
         f"<context>\n{_e(brief.context) or 'not provided'}\n</context>",
     ]

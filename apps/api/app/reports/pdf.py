@@ -35,7 +35,7 @@ LEVEL_COLOR = {
     "high": colors.HexColor("#e07b2a"),
     "critical": colors.HexColor("#d23c55"),
 }
-AGENT_ORDER = ["finance", "strategy", "operations"]
+AGENT_ORDER = ["finance", "strategy", "operations", "legal", "cyber", "people", "foresight"]
 
 T = {
     "fr": {
@@ -98,6 +98,10 @@ T = {
             "finance": "Finance",
             "strategy": "Stratégie",
             "operations": "Opérations",
+            "legal": "Juridique",
+            "cyber": "Cybersécurité",
+            "people": "Humain",
+            "foresight": "Prospective",
             "audit": "Audit",
         },
         "evidence_t": {
@@ -190,6 +194,10 @@ T = {
             "finance": "Finance",
             "strategy": "Strategy",
             "operations": "Operations",
+            "legal": "Legal",
+            "cyber": "Cybersecurity",
+            "people": "People",
+            "foresight": "Foresight",
             "audit": "Audit",
         },
         "evidence_t": {

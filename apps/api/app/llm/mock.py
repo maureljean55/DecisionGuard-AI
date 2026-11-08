@@ -4,7 +4,7 @@ It applies simple rules to the fields the customer filled in. It does not reason
 analysis it produces is flagged `simulated` so the interface can say so plainly.
 """
 
-from app.agents.brief import DecisionBrief
+from app.agents.brief import EU_EEA, OHADA, DecisionBrief
 from app.agents.schema import AgentFinding, AgentReport, AuditReport, FindingReview
 from app.llm.base import LLMRequest, LLMResult
 
@@ -256,7 +256,195 @@ def _operations(b: DecisionBrief) -> list[AgentFinding]:
     return out
 
 
-_RULES = {"finance": _finance, "strategy": _strategy, "operations": _operations}
+def _legal(b: DecisionBrief) -> list[AgentFinding]:
+    code = b.country_code.upper()
+    if code in OHADA:
+        frame = (
+            ("Cadre OHADA à vérifier", "OHADA framework to check"),
+            (
+                "L'organisation relève d'un État membre de l'OHADA : la forme de la structure, "
+                "les contrats et les sûretés doivent respecter les Actes uniformes.",
+                "The organisation is in an OHADA member state: the legal form, contracts and "
+                "securities must comply with the Uniform Acts.",
+            ),
+        )
+    elif code in EU_EEA:
+        frame = (
+            ("Données personnelles et RGPD", "Personal data and GDPR"),
+            (
+                "L'organisation est établie dans l'UE/EEE : tout traitement de données "
+                "personnelles lié à la décision doit respecter le RGPD.",
+                "The organisation is established in the EU/EEA: any personal data processing "
+                "linked to the decision must comply with the GDPR.",
+            ),
+        )
+    else:
+        frame = (
+            ("Cadre juridique national à valider", "National legal framework to confirm"),
+            (
+                "Ni OHADA ni UE/EEE : les règles applicables relèvent du droit national, à "
+                "faire confirmer localement.",
+                "Neither OHADA nor EU/EEA: the applicable rules come from national law, to be "
+                "confirmed locally.",
+            ),
+        )
+    return [
+        _f(
+            b,
+            frame[0],
+            frame[1],
+            "assumption",
+            ("Pays de l'organisation.", "Organisation's country."),
+            3,
+            3,
+            (
+                "Faire valider le montage par un avocat du pays concerné.",
+                "Have the arrangement reviewed by a lawyer in the country concerned.",
+            ),
+        ),
+        _f(
+            b,
+            ("Engagements contractuels à formaliser", "Contractual commitments to formalise"),
+            (
+                "Les contrats clés (partenaires, fournisseurs, bail) ne sont pas décrits : "
+                "les responsabilités en cas d'échec restent floues.",
+                "Key contracts (partners, suppliers, lease) are not described: liability if "
+                "things go wrong is unclear.",
+            ),
+            "ai_hypothesis",
+            ("Absence de mention dans la décision.", "Not mentioned in the decision."),
+            2,
+            3,
+            (
+                "Lister les contrats nécessaires et leurs clauses de sortie.",
+                "List the contracts required and their exit clauses.",
+            ),
+        ),
+    ]
+
+
+def _cyber(b: DecisionBrief) -> list[AgentFinding]:
+    out = [
+        _f(
+            b,
+            ("Protection des données sensibles", "Protection of sensitive data"),
+            (
+                "La décision ne précise pas quelles données seront manipulées ni qui y aura accès.",
+                "The decision does not say which data will be handled or who will access it.",
+            ),
+            "assumption",
+            ("Absence de mention dans la décision.", "Not mentioned in the decision."),
+            3,
+            3,
+            (
+                "Inventorier les données concernées et définir les accès.",
+                "Inventory the data involved and define access rights.",
+            ),
+        )
+    ]
+    if b.category == "technological" or _mentions(
+        b, "cloud", "erp", "logiciel", "software", "saas", "donnée", "data", "informatique"
+    ):
+        out.append(
+            _f(
+                b,
+                ("Dépendance à un prestataire informatique", "Dependence on an IT provider"),
+                (
+                    "Le projet repose sur un système ou un prestataire numérique : une panne "
+                    "ou un changement de conditions bloquerait l'activité.",
+                    "The project relies on a digital system or provider: an outage or a change "
+                    "of terms would halt operations.",
+                ),
+                "ai_hypothesis",
+                ("Dimension numérique dans la décision.", "Digital dimension in the decision."),
+                3,
+                4,
+                (
+                    "Prévoir un plan de continuité et une clause de réversibilité.",
+                    "Plan for continuity and a reversibility clause.",
+                ),
+            )
+        )
+    return out
+
+
+def _people(b: DecisionBrief) -> list[AgentFinding]:
+    out = [
+        _f(
+            b,
+            ("Conduite du changement", "Change management"),
+            (
+                "Les équipes touchées par la décision ne sont pas associées explicitement : "
+                "des résistances peuvent ralentir la mise en œuvre.",
+                "The teams affected are not explicitly involved: resistance may slow down "
+                "implementation.",
+            ),
+            "ai_hypothesis",
+            ("Absence de mention dans la décision.", "Not mentioned in the decision."),
+            3,
+            2,
+            (
+                "Désigner un responsable et un plan de communication interne.",
+                "Appoint an owner and an internal communication plan.",
+            ),
+        )
+    ]
+    if _mentions(b, "recrut", "équipe", "personne", "salari", "recruit", "team", "staff", "hire"):
+        out.append(
+            _f(
+                b,
+                ("Recrutement des compétences", "Hiring the skills needed"),
+                (
+                    "La décision suppose de constituer ou d'étoffer une équipe : les délais de "
+                    "recrutement peuvent décaler le calendrier.",
+                    "The decision requires building or growing a team: hiring lead times may "
+                    "push back the schedule.",
+                ),
+                "fact",
+                ("Équipe mentionnée dans la décision.", "Team mentioned in the decision."),
+                3,
+                3,
+                (
+                    "Chiffrer les profils clés et leur délai de recrutement local.",
+                    "Cost the key profiles and their local hiring lead time.",
+                ),
+            )
+        )
+    return out
+
+
+def _foresight(b: DecisionBrief) -> list[AgentFinding]:
+    return [
+        _f(
+            b,
+            ("Évolution du marché à cinq ans", "Five-year market outlook"),
+            (
+                "La décision est évaluée sur la situation actuelle : un changement de la "
+                "demande ou de la réglementation pourrait en modifier l'intérêt.",
+                "The decision is assessed on today's situation: a shift in demand or "
+                "regulation could change its value.",
+            ),
+            "ai_hypothesis",
+            ("Horizon long non abordé.", "Long horizon not addressed."),
+            2,
+            3,
+            (
+                "Définir deux indicateurs à suivre chaque trimestre.",
+                "Define two indicators to monitor every quarter.",
+            ),
+        )
+    ]
+
+
+_RULES = {
+    "finance": _finance,
+    "strategy": _strategy,
+    "operations": _operations,
+    "legal": _legal,
+    "cyber": _cyber,
+    "people": _people,
+    "foresight": _foresight,
+}
 
 _MISSING = {
     "amount": ("Montant engagé", "Amount at stake"),

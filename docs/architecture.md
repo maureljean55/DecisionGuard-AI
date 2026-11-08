@@ -137,3 +137,17 @@ Migrations Alembic dans `apps/api/migrations/versions`. Extensions activées : `
 - **Rapport PDF** (`app/reports/pdf.py`, ReportLab) : généré à la demande depuis les données
   stockées (`GET …/report.pdf`).
 - **Rattrapage** : `python -m app.risk.backfill` calcule l'indice des analyses antérieures au M6.
+
+## Conseil complet (M7)
+
+Sept spécialistes tournent en parallèle : Finance, Stratégie, Opérations, Juridique,
+Cybersécurité, Humain, Prospective, puis l'audit et le moteur de scénarios.
+
+- **Juridique** : reçoit un élément `<jurisdiction>` calculé par DecisionGuard à partir du pays de
+  l'organisation (membre OHADA, UE/EEE avec RGPD, ou droit national seul). Il ne cite un texte
+  précis que s'il en est sûr, sinon il décrit le problème en « hypothèse IA », et recommande une
+  validation par un avocat local quand l'enjeu le justifie.
+- **Prospective** : horizon de 3 à 10 ans ; chaque constat indique le signal qui le confirmerait.
+- **Incertitude** : le nombre d'informations manquantes est ramené à l'équivalent de trois agents,
+  pour que l'ajout de spécialistes ne gonfle pas mécaniquement l'indice.
+- Mesuré en local avec Claude Opus 5.5 : environ 135 s et 0,75 $ par analyse (audit compris).

@@ -220,8 +220,10 @@ def test_mock_pipeline_end_to_end(make_client, owner_db) -> None:
     a = c.get(f"/orgs/{org}/analyses/{aid}").json()
     assert a["status"] == "completed"
     assert (a["provider"], a["model"], a["simulated"]) == ("mock", "rules-v1", True)
-    assert [r["agent"] for r in a["agents"]] == ["finance", "strategy", "operations", "audit"]
-    specialists, audit = a["agents"][:3], a["agents"][3]
+    keys = [spec.key for spec in AGENTS]
+    assert keys == ["finance", "strategy", "operations", "legal", "cyber", "people", "foresight"]
+    assert [r["agent"] for r in a["agents"]] == [*keys, "audit"]
+    specialists, audit = a["agents"][:-1], a["agents"][-1]
     assert all(r["status"] == "completed" and r["findings"] for r in specialists)
     # M6: every finding is audited; the mock flags AI hypotheses as weak.
     assert audit["status"] == "completed" and audit["findings"] == []
@@ -281,7 +283,7 @@ def test_all_agents_failing_retries_then_starts_clean(make_client, owner_db) -> 
         conn.execute(text("UPDATE analyses SET next_attempt_at = now() WHERE id=:a"), {"a": aid})
     assert process_one(AgentPipeline(MockProvider()), "w") == "completed"
     with owner_db.connect() as conn:
-        assert conn.execute(text("SELECT count(*) FROM agent_runs")).scalar_one() == 4
+        assert conn.execute(text("SELECT count(*) FROM agent_runs")).scalar_one() == 8
 
 
 def test_non_retryable_failure_fails_immediately(make_client, owner_db) -> None:
@@ -317,7 +319,7 @@ def test_org_findings_and_engine_status(make_client) -> None:
     assert other.get(f"/orgs/{org}/findings").status_code == 404
     e = c.get("/engine").json()
     assert e["status"] == "unavailable" and e["agents_active"] == []  # tests run with engine none
-    assert e["agents_planned"] == ["legal", "cyber", "people", "foresight"]
+    assert e["agents_planned"] == []
     assert make_client().get("/engine").status_code == 401
 
 
@@ -394,3 +396,31 @@ def test_simulate_and_pdf_report(make_client) -> None:
     other = make_client()
     register(other, "y@beta.example.com")
     assert other.get(f"/orgs/{org}/analyses/{aid}/report.pdf").status_code == 404
+
+
+def test_jurisdiction_is_computed_from_the_country() -> None:
+    from app.agents.brief import jurisdiction
+
+    assert "OHADA member state" in jurisdiction("CM")
+    assert "GDPR applies" in jurisdiction("fr")
+    assert "national law governs" in jurisdiction("MA")
+    out = render(BRIEF)  # BRIEF is Cameroonian
+    assert "<jurisdiction>" in out and "OHADA" in out
+
+
+def test_mock_covers_the_m7_agents() -> None:
+    p = MockProvider()
+    legal = p.complete(_request("legal")).output
+    assert legal.findings[0].title == "Cadre OHADA à vérifier"
+    fr_org = DecisionBrief(**{**BRIEF.__dict__, "country_code": "FR", "locale": "en"})
+    assert p.complete(_request("legal", fr_org)).output.findings[0].title == (
+        "Personal data and GDPR"
+    )
+    assert p.complete(_request("cyber")).output.findings
+    assert p.complete(_request("people")).output.findings
+    assert all(
+        f.evidence_type == "ai_hypothesis"
+        for f in p.complete(_request("foresight")).output.findings
+    )
+    legal_prompt = system_prompt(next(a for a in AGENTS if a.key == "legal"), "fr")
+    assert "confident it exists" in legal_prompt and "lawyer" in legal_prompt

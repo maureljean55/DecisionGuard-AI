@@ -201,7 +201,8 @@ class AgentPipeline:
         inputs = risk.Inputs(
             unknown_answers=len(brief.unknowns()),
             failed_agents=len(outcomes) - len(succeeded),
-            missing_items=missing_items,
+            # Normalised to three agents, so adding specialists does not inflate uncertainty.
+            missing_items=round(missing_items * 3 / len(succeeded)),
         )
         excluded = len(stored) - len(counted)
         result = risk.compute(counted, inputs, excluded)

@@ -180,8 +180,8 @@ def retry_analysis(analysis_id: uuid.UUID, ctx: CanWrite, request: Request):
     return _out(ctx, a)
 
 
-# Audit (agent) and scenarios (deterministic engine) run since M6; the rest arrive in M7.
-PLANNED_AGENTS = ["legal", "cyber", "people", "foresight"]
+# Every agent of the roadmap runs since M7. Kept for future additions.
+PLANNED_AGENTS: list[str] = []
 
 
 @router.get("/engine", response_model=EngineOut)

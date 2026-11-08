@@ -1270,7 +1270,7 @@
         "unavailable": "Moteur d'analyse en attente"
       },
       "engineBody": {
-        "active": "{n} agents spécialisés sur {total} analysent chaque décision soumise. Les autres arrivent avec les prochaines versions.",
+        "active": "Les {n} agents du conseil analysent chaque décision soumise : sept spécialistes, un auditeur qui vérifie chaque constat et le moteur de scénarios.",
         "simulated": "Les analyses sont produites par des règles fixes, sans modèle d'IA, pour démonstration.",
         "unavailable": "Les décisions soumises sont mises en file d'attente et seront analysées dès la mise en service."
       },

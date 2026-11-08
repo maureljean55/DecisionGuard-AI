@@ -1270,7 +1270,7 @@
         "unavailable": "Analysis engine pending"
       },
       "engineBody": {
-        "active": "{n} of {total} specialist agents analyse every decision you submit. The others arrive with upcoming releases.",
+        "active": "All {n} council agents analyse every decision you submit: seven specialists, an auditor who checks every finding and the scenario engine.",
         "simulated": "Analyses come from fixed rules, without an AI model, for demonstration.",
         "unavailable": "Submitted decisions are queued and will be analysed as soon as the engine is live."
       },

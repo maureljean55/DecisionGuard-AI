@@ -15,7 +15,7 @@
 
 | # | Milestone |
 |---|---|
-| M7 | Agents Juridique (RGPD, OHADA, lois nationales), Cyber, Humain, Prospectif ⏳ Suivant |
+| M7 | Agents Juridique (RGPD, OHADA, lois nationales), Cyber, Humain, Prospectif ✅ |
 | M8 | Intelligence documentaire : upload sécurisé, extraction, pgvector, RAG avec sources |
 | M9 | Recommandations, feuille de route d'atténuation, rapports PDF complets FR/EN |
 

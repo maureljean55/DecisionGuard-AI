@@ -40,7 +40,11 @@ def main() -> None:
             inputs = risk.Inputs(
                 unknown_answers=len(unknown),
                 failed_agents=sum(1 for r in runs if r.status == "failed" and r.agent != "audit"),
-                missing_items=sum(len(r.missing_information or []) for r in runs),
+                missing_items=round(
+                    sum(len(r.missing_information or []) for r in runs)
+                    * 3
+                    / max(sum(1 for r in runs if r.status == "completed" and r.agent != "audit"), 1)
+                ),
             )
             excluded = len(findings) - len(counted)
             r = risk.compute(counted, inputs, excluded)
