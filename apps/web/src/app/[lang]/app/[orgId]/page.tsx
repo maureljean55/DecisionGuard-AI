@@ -16,11 +16,12 @@ import { Suspense, type ComponentType } from "react";
 import { ResendVerification } from "@/components/app/session-actions";
 import { PageSkeleton, PageTitle } from "@/components/dashboard/page-title";
 import { Panel, RoleBadge } from "@/components/dashboard/ui";
+import { LocalTime } from "@/components/dashboard/local-time";
 import { hasLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { apiGet, getMe } from "@/lib/api";
 import { loadOrg } from "@/lib/dash-data";
-import { describeAction, formatDate } from "@/lib/dash-format";
+import { describeAction } from "@/lib/dash-format";
 import { fmt } from "@/lib/format";
 import { canManageMembers, canReadAudit } from "@/lib/permissions";
 import type { AuditPage, Invitation, Member } from "@/lib/types";
@@ -220,7 +221,7 @@ async function Overview({
                       {describeAction(d, e)}
                     </span>
                     <span className="text-xs text-muted">
-                      {formatDate(e.created_at, lang, true)}
+                      <LocalTime iso={e.created_at} lang={lang} withTime />
                     </span>
                   </li>
                 ))}

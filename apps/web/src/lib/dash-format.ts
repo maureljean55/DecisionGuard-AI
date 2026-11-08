@@ -8,12 +8,14 @@ export function formatDate(
   iso: string,
   lang: string,
   withTime = false,
+  timeZone?: string,
 ): string {
   return new Intl.DateTimeFormat(lang === "fr" ? "fr-FR" : "en-GB", {
     day: "numeric",
     month: "short",
     year: "numeric",
     ...(withTime ? { hour: "2-digit", minute: "2-digit" } : {}),
+    ...(timeZone ? { timeZone } : {}),
   }).format(new Date(iso));
 }
 

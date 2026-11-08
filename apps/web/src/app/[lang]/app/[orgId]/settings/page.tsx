@@ -4,10 +4,10 @@ import { Suspense } from "react";
 import { OrgSettingsForm } from "@/components/dashboard/forms";
 import { PageSkeleton, PageTitle } from "@/components/dashboard/page-title";
 import { Panel } from "@/components/dashboard/ui";
+import { LocalTime } from "@/components/dashboard/local-time";
 import { hasLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { loadOrg } from "@/lib/dash-data";
-import { formatDate } from "@/lib/dash-format";
 import { fmt } from "@/lib/format";
 import { canUpdateOrg } from "@/lib/permissions";
 
@@ -39,7 +39,7 @@ async function Settings({
           <div>
             <dt className="text-xs text-muted">{d.settings.created}</dt>
             <dd className="mt-1 text-ink">
-              {formatDate(org.created_at, lang)}
+              <LocalTime iso={org.created_at} lang={lang} />
             </dd>
           </div>
         </dl>

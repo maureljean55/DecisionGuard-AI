@@ -26,17 +26,24 @@ import type {
   SessionInfo,
 } from "@/lib/types";
 import { describeAction } from "@/lib/dash-format";
+import { LocalTime } from "@/components/dashboard/local-time";
 import { useApiError } from "@/lib/use-api-error";
 
-import {
-  Avatar,
-  buttonGhost,
-  ConfirmButton,
-  formatDate,
-  RoleBadge,
-} from "./ui";
+import { Avatar, buttonGhost, ConfirmButton, RoleBadge } from "./ui";
 
 type D = Dictionary["dash"];
+
+/** Insert a React node in place of {date} in a translated sentence. */
+function withDate(template: string, node: React.ReactNode) {
+  const [before, after = ""] = template.split("{date}");
+  return (
+    <>
+      {before}
+      {node}
+      {after}
+    </>
+  );
+}
 
 function useMutation(errorText: string) {
   const router = useRouter();
@@ -325,7 +332,8 @@ export function MembersList({
                   )}
                 </p>
                 <p className="truncate text-xs text-muted">
-                  {mb.email} · {d.common.since} {formatDate(mb.joined_at, lang)}
+                  {mb.email} · {d.common.since}{" "}
+                  <LocalTime iso={mb.joined_at} lang={lang} />
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -465,7 +473,10 @@ export function PendingInvitations({
           <div className="min-w-0">
             <p className="truncate text-sm text-ink">{inv.email}</p>
             <p className="text-xs text-muted">
-              {fmt(d.team.expires, { date: formatDate(inv.expires_at, lang) })}
+              {withDate(
+                d.team.expires,
+                <LocalTime iso={inv.expires_at} lang={lang} />,
+              )}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -525,7 +536,7 @@ export function ActivityList({
               {describeAction(d, e)}
             </p>
             <p className="mt-0.5 text-xs text-muted">
-              {formatDate(e.created_at, lang, true)}
+              <LocalTime iso={e.created_at} lang={lang} withTime />
               {e.ip ? ` · ${e.ip}` : ""}
             </p>
           </li>
@@ -735,9 +746,10 @@ export function SessionsList({
                     )}
                   </p>
                   <p className="truncate text-xs text-muted">
-                    {fmt(d.account.lastSeen, {
-                      date: formatDate(s.last_seen_at, lang, true),
-                    })}
+                    {withDate(
+                      d.account.lastSeen,
+                      <LocalTime iso={s.last_seen_at} lang={lang} withTime />,
+                    )}
                     {s.ip ? ` · ${s.ip}` : ""}
                   </p>
                 </div>
