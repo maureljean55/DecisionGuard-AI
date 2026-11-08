@@ -13,6 +13,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  MessageCircleQuestion,
   Plus,
   Radar,
   ScrollText,
@@ -472,6 +473,11 @@ export function DashboardChrome({
               href: `${base}/council`,
               label: d.nav.council,
               icon: UsersRound,
+            },
+            {
+              href: `${base}/questions`,
+              label: d.nav.questions,
+              icon: MessageCircleQuestion,
             },
             { href: `${base}/risk-map`, label: d.nav.riskMap, icon: Grid3x3 },
             {

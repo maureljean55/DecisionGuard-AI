@@ -50,13 +50,25 @@ function kickWorker() {
   });
 }
 
-async function relay(request: NextRequest, ctx: RouteContext<"/api/[...path]">) {
+async function relay(
+  request: NextRequest,
+  ctx: RouteContext<"/api/[...path]">,
+) {
   const { path } = await ctx.params;
-  if (path.some((segment) => segment === "." || segment === ".." || segment === "")) {
-    return Response.json({ error: { code: "not_found", message: "Not found" } }, { status: 404 });
+  if (
+    path.some(
+      (segment) => segment === "." || segment === ".." || segment === "",
+    )
+  ) {
+    return Response.json(
+      { error: { code: "not_found", message: "Not found" } },
+      { status: 404 },
+    );
   }
 
-  const target = new URL(`${API_URL}/${path.map(encodeURIComponent).join("/")}`);
+  const target = new URL(
+    `${API_URL}/${path.map(encodeURIComponent).join("/")}`,
+  );
   target.search = request.nextUrl.search;
 
   const headers = new Headers();
@@ -93,7 +105,8 @@ async function relay(request: NextRequest, ctx: RouteContext<"/api/[...path]">) 
       body,
       redirect: "manual",
       cache: "no-store",
-      signal: AbortSignal.timeout(30_000),
+      // Questions to the analysis assistant wait for a model answer.
+      signal: AbortSignal.timeout(path.at(-1) === "ask" ? 120_000 : 30_000),
     });
   } catch {
     return Response.json(
@@ -107,14 +120,28 @@ async function relay(request: NextRequest, ctx: RouteContext<"/api/[...path]">) 
     const value = upstream.headers.get(name);
     if (value) out.set(name, value);
   }
-  for (const cookie of upstream.headers.getSetCookie()) out.append("set-cookie", cookie);
+  for (const cookie of upstream.headers.getSetCookie())
+    out.append("set-cookie", cookie);
 
-  if (request.method !== "GET" && upstream.ok && QUEUEING_WRITE.test(path.join("/"))) {
+  if (
+    request.method !== "GET" &&
+    upstream.ok &&
+    QUEUEING_WRITE.test(path.join("/"))
+  ) {
     kickWorker();
   }
 
   const noBody = upstream.status === 204 || upstream.status === 304;
-  return new Response(noBody ? null : upstream.body, { status: upstream.status, headers: out });
+  return new Response(noBody ? null : upstream.body, {
+    status: upstream.status,
+    headers: out,
+  });
 }
 
-export { relay as DELETE, relay as GET, relay as PATCH, relay as POST, relay as PUT };
+export {
+  relay as DELETE,
+  relay as GET,
+  relay as PATCH,
+  relay as POST,
+  relay as PUT,
+};

@@ -50,7 +50,7 @@ class AnthropicProvider:
                 ],
                 messages=[{"role": "user", "content": request.prompt}],
                 thinking={"type": "adaptive"},
-                output_config={"effort": self.effort},
+                output_config={"effort": request.effort or self.effort},
                 output_format=request.output,
                 extra_headers={"anthropic-beta": FALLBACK_BETA},
                 extra_body={"fallbacks": "default"},

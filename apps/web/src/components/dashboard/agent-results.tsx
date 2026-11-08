@@ -58,7 +58,8 @@ function FindingItem({ d, f, target }: { d: D; f: Finding; target: Target }) {
   const excluded = f.audit_status === "unsupported";
   return (
     <li
-      className={`border-t border-line py-4 first:border-t-0 first:pt-0 last:pb-0 ${excluded ? "opacity-60" : ""}`}
+      id={`finding-${f.id}`}
+      className={`scroll-mt-24 border-t border-line py-4 first:border-t-0 first:pt-0 last:pb-0 target:rounded-lg target:bg-electric/[0.08] target:ring-1 target:ring-electric/40 ${excluded ? "opacity-60" : ""}`}
     >
       <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
         <h4 className="min-w-0 text-sm font-semibold text-ink">{f.title}</h4>

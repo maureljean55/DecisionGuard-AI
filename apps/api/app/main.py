@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.analyses.routes import router as analyses_router
 from app.api.health import router as health_router
+from app.assistant.routes import router as assistant_router
 from app.auth.routes import router as auth_router
 from app.contact.routes import router as contact_router
 from app.core.config import get_settings
@@ -49,6 +50,7 @@ def create_app() -> FastAPI:
     app.include_router(decisions_router)
     app.include_router(analyses_router)
     app.include_router(monitoring_router)
+    app.include_router(assistant_router)
     app.include_router(worker_router)
 
     logging.getLogger(__name__).info(

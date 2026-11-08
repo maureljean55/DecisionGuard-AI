@@ -19,6 +19,8 @@ class LLMRequest:
     brief: "DecisionBrief"
     # Extra structured input for the deterministic mock (e.g. the findings under audit).
     context: object = None
+    # Overrides the provider's default reasoning effort (e.g. "medium" for chat answers).
+    effort: str | None = None
 
 
 @dataclass(frozen=True)

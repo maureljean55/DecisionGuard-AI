@@ -871,7 +871,8 @@
         "simulated": "Simulé",
         "unavailable": "En attente"
       },
-      "agentsLive": "{n}/{total} agents"
+      "agentsLive": "{n}/{total} agents",
+      "questions": "Questions"
     },
     "roles": {
       "owner": "Propriétaire",
@@ -1684,6 +1685,38 @@
           "count": "Analyses"
         }
       }
+    },
+    "questions": {
+      "eyebrow": "Assistant d'analyse",
+      "title": "Questions sur vos analyses",
+      "subtitle": "Posez vos questions sur un dossier analysé. L'assistant répond uniquement à partir de l'analyse et cite les constats sur lesquels il s'appuie.",
+      "pick": "Choisissez le dossier sur lequel vous voulez poser des questions",
+      "pickEmpty": "Aucune analyse terminée pour l'instant. Soumettez une décision : vous pourrez ensuite lui poser des questions ici.",
+      "findings": "{n} constats",
+      "change": "Changer de dossier",
+      "open": "Voir le dossier",
+      "welcome": "Je connais ce dossier : la décision, les constats des agents, l'avis de l'audit, l'indice de risque et les scénarios. Que voulez-vous savoir ?",
+      "suggestions": [
+        "Quel est le risque le plus grave, et pourquoi ?",
+        "Que faut-il faire en priorité ?",
+        "Pourquoi l'indice est-il à ce niveau ?",
+        "Quelles informations manquent pour mieux décider ?",
+        "Quels risques l'audit a-t-il jugés fragiles ?"
+      ],
+      "placeholder": "Votre question sur ce dossier…",
+      "send": "Envoyer",
+      "thinking": "L'assistant consulte le dossier…",
+      "sources": "Constats cités",
+      "confidence": {
+        "low": "Confiance faible",
+        "medium": "Confiance moyenne",
+        "high": "Confiance élevée"
+      },
+      "simulated": "Réponse simulée : aucun modèle d'IA n'a répondu.",
+      "clear": "Nouvelle conversation",
+      "limit": "Chaque question consulte l'IA : 30 questions par heure et par personne.",
+      "you": "Vous",
+      "assistant": "Assistant"
     }
   }
 }

@@ -489,6 +489,27 @@ def _audit(request: LLMRequest) -> AuditReport:
     )
 
 
+def _assistant(request: LLMRequest):  # type: ignore[no-untyped-def]
+    """Rule: cite the findings whose words overlap the question, else the most severe ones."""
+    from app.agents.assistant import AssistantAnswer
+
+    dossier = request.context
+    b = request.brief
+    words = {w for w in dossier.question.casefold().split() if len(w) > 3}
+    ranked = sorted(dossier.findings, key=lambda f: f.likelihood * f.impact, reverse=True)
+    matched = [f for f in ranked if words & set(f.title.casefold().split())] or ranked
+    picked = matched[:3]
+    lines = [f"[{f.ref}] {f.title} ({f.likelihood * f.impact}/25)" for f in picked]
+    answer = _t(
+        b,
+        "Réponse simulée par des règles fixes, sans modèle d'IA. Constats du dossier les plus "
+        "proches de votre question :\n" + "\n".join(lines),
+        "Simulated answer from fixed rules, without an AI model. Findings of the dossier "
+        "closest to your question:\n" + "\n".join(lines),
+    )
+    return AssistantAnswer(answer=answer, citations=[f.ref for f in picked], confidence="low")
+
+
 class MockProvider:
     name = "mock"
     simulated = True
@@ -496,6 +517,8 @@ class MockProvider:
     def complete(self, request: LLMRequest) -> LLMResult:
         if request.agent == "audit":
             return LLMResult(output=_audit(request), model=MODEL)
+        if request.agent == "assistant":
+            return LLMResult(output=_assistant(request), model=MODEL)
         b = request.brief
         findings = _RULES[request.agent](b)
         report = AgentReport(

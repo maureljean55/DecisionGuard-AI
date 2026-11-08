@@ -871,7 +871,8 @@
         "simulated": "Simulated",
         "unavailable": "Waiting"
       },
-      "agentsLive": "{n}/{total} agents"
+      "agentsLive": "{n}/{total} agents",
+      "questions": "Questions"
     },
     "roles": {
       "owner": "Owner",
@@ -1684,6 +1685,38 @@
           "count": "Analyses"
         }
       }
+    },
+    "questions": {
+      "eyebrow": "Analysis assistant",
+      "title": "Questions about your analyses",
+      "subtitle": "Ask questions about an analysed dossier. The assistant answers only from the analysis and cites the findings it relies on.",
+      "pick": "Choose the dossier you want to ask about",
+      "pickEmpty": "No completed analysis yet. Submit a decision: you can then ask questions about it here.",
+      "findings": "{n} findings",
+      "change": "Change dossier",
+      "open": "View dossier",
+      "welcome": "I know this dossier: the decision, the agents' findings, the audit's opinion, the risk index and the scenarios. What would you like to know?",
+      "suggestions": [
+        "What is the most serious risk, and why?",
+        "What should be done first?",
+        "Why is the index at this level?",
+        "What information is missing to decide better?",
+        "Which risks did the audit find weak?"
+      ],
+      "placeholder": "Your question about this dossier…",
+      "send": "Send",
+      "thinking": "The assistant is reading the dossier…",
+      "sources": "Findings cited",
+      "confidence": {
+        "low": "Low confidence",
+        "medium": "Medium confidence",
+        "high": "High confidence"
+      },
+      "simulated": "Simulated answer: no AI model answered.",
+      "clear": "New conversation",
+      "limit": "Each question uses the AI: 30 questions per hour per person.",
+      "you": "You",
+      "assistant": "Assistant"
     }
   }
 }

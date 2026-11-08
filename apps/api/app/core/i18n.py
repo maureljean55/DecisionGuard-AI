@@ -90,6 +90,14 @@ MESSAGES: dict[str, dict[Locale, str]] = {
         "fr": "Le responsable doit être membre de l'organisation.",
         "en": "The owner must be a member of the organisation.",
     },
+    "assistant.unavailable": {
+        "fr": "L'assistant n'est pas disponible pour le moment.",
+        "en": "The assistant is not available at the moment.",
+    },
+    "assistant.failed": {
+        "fr": "L'assistant n'a pas pu répondre ({code}). Réessayez dans un instant.",
+        "en": "The assistant could not answer ({code}). Please try again shortly.",
+    },
     "invitation.email_mismatch": {
         "fr": "Cette invitation a été envoyée à une autre adresse e-mail.",
         "en": "This invitation was sent to a different e-mail address.",
