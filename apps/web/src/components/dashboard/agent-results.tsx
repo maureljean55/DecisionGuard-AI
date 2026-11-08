@@ -1,9 +1,16 @@
-import { CircleAlert, FlaskConical, ShieldCheck } from "lucide-react";
+import {
+  CircleAlert,
+  FlaskConical,
+  MessageCircleQuestion,
+  ShieldCheck,
+} from "lucide-react";
+import Link from "next/link";
 
 import type { Dictionary } from "@/i18n/dictionaries";
 import { fmt } from "@/lib/format";
 import type { AgentRun, Analysis, EvidenceType, Finding } from "@/lib/types";
 
+import { HowToRead } from "./cockpit";
 import { CreateActionButton } from "./followup";
 
 type D = Dictionary["dash"];
@@ -53,7 +60,17 @@ const AUDIT_TONE = {
 
 type Target = { orgId: string; decisionId: string } | null;
 
-function FindingItem({ d, f, target }: { d: D; f: Finding; target: Target }) {
+function FindingItem({
+  d,
+  f,
+  target,
+  explainBase,
+}: {
+  d: D;
+  f: Finding;
+  target: Target;
+  explainBase?: string;
+}) {
   const R = d.results;
   const excluded = f.audit_status === "unsupported";
   return (
@@ -98,15 +115,26 @@ function FindingItem({ d, f, target }: { d: D; f: Finding; target: Target }) {
           <span className="text-risk-critical">· {d.audit.excluded}</span>
         )}
       </p>
-      {target && !excluded && (
-        <div className="mt-2.5">
-          <CreateActionButton
-            d={d}
-            orgId={target.orgId}
-            decisionId={target.decisionId}
-            findingId={f.id}
-            title={f.mitigation}
-          />
+      {((target && !excluded) || explainBase) && (
+        <div className="mt-2.5 flex flex-wrap gap-2">
+          {explainBase && (
+            <Link
+              href={`${explainBase}&ask=${encodeURIComponent(fmt(d.help.explainQuestion, { title: f.title }))}`}
+              className="inline-flex items-center gap-1 rounded-full border border-teal/30 px-2 py-0.5 text-[11px] text-teal transition-colors hover:bg-teal/10"
+            >
+              <MessageCircleQuestion className="size-3" aria-hidden />
+              {d.help.explain}
+            </Link>
+          )}
+          {target && !excluded && (
+            <CreateActionButton
+              d={d}
+              orgId={target.orgId}
+              decisionId={target.decisionId}
+              findingId={f.id}
+              title={f.mitigation}
+            />
+          )}
         </div>
       )}
     </li>
@@ -117,10 +145,12 @@ function AgentCard({
   d,
   run,
   target,
+  explainBase,
 }: {
   d: D;
   run: AgentRun;
   target: Target;
+  explainBase?: string;
 }) {
   const R = d.results;
   const name = (R.agents as Record<string, string>)[run.agent] ?? run.agent;
@@ -152,7 +182,13 @@ function AgentCard({
           {run.findings.length > 0 ? (
             <ul className="mt-5">
               {run.findings.map((f) => (
-                <FindingItem key={f.id} d={d} f={f} target={target} />
+                <FindingItem
+                  key={f.id}
+                  d={d}
+                  f={f}
+                  target={target}
+                  explainBase={explainBase}
+                />
               ))}
             </ul>
           ) : (
@@ -179,11 +215,14 @@ export function AgentResults({
   d,
   analysis,
   target = null,
+  explainBase,
 }: {
   d: D;
   analysis: Analysis;
   /** When set, each finding offers "Create an action" on this decision. */
   target?: Target;
+  /** Questions page for this dossier: each finding offers "Explain this risk". */
+  explainBase?: string;
 }) {
   const R = d.results;
   if (analysis.status !== "completed" || analysis.agents.length === 0)
@@ -216,6 +255,7 @@ export function AgentResults({
           </p>
         </div>
       )}
+      <HowToRead label={d.help.label} text={d.help.finding} />
       {audit && (
         <div className="flex gap-3 rounded-xl border border-line bg-abyss/70 px-4 py-3 text-sm leading-relaxed">
           <ShieldCheck
@@ -245,7 +285,13 @@ export function AgentResults({
       )}
       <div className="grid gap-4 xl:grid-cols-3">
         {specialists.map((run) => (
-          <AgentCard key={run.agent} d={d} run={run} target={target} />
+          <AgentCard
+            key={run.agent}
+            d={d}
+            run={run}
+            target={target}
+            explainBase={explainBase}
+          />
         ))}
       </div>
       <p className="text-xs leading-relaxed text-muted">{R.scaleNote}</p>

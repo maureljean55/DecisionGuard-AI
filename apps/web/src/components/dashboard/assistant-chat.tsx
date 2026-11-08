@@ -107,12 +107,15 @@ export function AssistantChat({
   analysisId,
   decisionHref,
   userName,
+  initialQuestion,
 }: {
   d: D;
   orgId: string;
   analysisId: string;
   decisionHref: string;
   userName: string;
+  /** Asked automatically once, e.g. from "Explain this risk". */
+  initialQuestion?: string;
 }) {
   const Q = d.questions;
   const [messages, setMessages] = useState<Message[]>([]);
@@ -156,6 +159,14 @@ export function AssistantChat({
       setBusy(false);
     }
   };
+
+  const asked = useRef(false);
+  useEffect(() => {
+    if (!initialQuestion || asked.current) return;
+    asked.current = true;
+    void ask(initialQuestion);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on arrival
+  }, [initialQuestion]);
 
   const findingHref = (c: Citation) =>
     `${decisionHref}#finding-${c.finding_id}`;

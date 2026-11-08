@@ -13,7 +13,7 @@ import type {
   Scenario,
 } from "@/lib/types";
 
-import { ctaGhost, Eyebrow, Plate } from "./cockpit";
+import { ctaGhost, Eyebrow, HowToRead, Plate } from "./cockpit";
 
 type D = Dictionary["dash"];
 const COMPONENTS: RiskComponent[] = [
@@ -271,17 +271,21 @@ export function RiskPanel({
         </div>
       </div>
       <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <RiskIndex
-          d={d}
-          score={analysis.risk_score}
-          levelKey={analysis.risk_level}
-          breakdown={analysis.risk_breakdown}
-        />
+        <div>
+          <RiskIndex
+            d={d}
+            score={analysis.risk_score}
+            levelKey={analysis.risk_level}
+            breakdown={analysis.risk_breakdown}
+          />
+          <HowToRead label={d.help.label} text={d.help.riskIndex} />
+        </div>
         <div>
           <p className="mb-3 font-mono text-[0.66rem] uppercase tracking-[0.12em] text-muted">
             {R.heatmap}
           </p>
           <Heatmap d={d} matrix={analysis.risk_breakdown.matrix} />
+          <HowToRead label={d.help.label} text={d.help.heatmap} />
         </div>
         <div>
           <p className="mb-3 font-mono text-[0.66rem] uppercase tracking-[0.12em] text-muted">
@@ -290,6 +294,7 @@ export function RiskPanel({
           {analysis.scenarios && (
             <Scenarios d={d} scenarios={analysis.scenarios} />
           )}
+          <HowToRead label={d.help.label} text={d.help.scenarios} />
         </div>
       </div>
       <p className="mt-6 text-[0.7rem] leading-relaxed text-muted">

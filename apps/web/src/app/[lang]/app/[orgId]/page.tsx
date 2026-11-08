@@ -21,6 +21,7 @@ import {
   AgentRadar,
   ctaPrimary,
   Eyebrow,
+  HowToRead,
   KpiTile,
   Plate,
   Ring,
@@ -329,6 +330,9 @@ async function Overview({
               <p className="mt-2 text-center text-[0.7rem] text-muted">
                 {C.radarNote}
               </p>
+              <div className="flex justify-center">
+                <HowToRead label={d.help.label} text={d.help.radar} />
+              </div>
             </div>
             <ul className="grid gap-2 sm:grid-cols-2">
               {perAgent.map((a) => (

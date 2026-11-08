@@ -1720,6 +1720,24 @@
       "dossierLabel": "Dossier",
       "searchDossier": "Rechercher un dossier",
       "pickHint": "Ouvrez le menu ci-dessus et choisissez un dossier : la conversation s'ouvrira ici."
+    },
+    "help": {
+      "label": "Comment lire ?",
+      "riskIndex": "Note globale du dossier, de 0 à 100, calculée sans IA par une formule fixe à partir des risques relevés. Moins de 25 : faible · 25 à 44 : modéré · 45 à 64 : élevé · 65 et plus : critique.",
+      "heatmap": "Chaque case compte les risques qui ont cette probabilité (de gauche à droite, 1 à 5) et cet impact (de bas en haut, 1 à 5). Plus une case est en haut à droite, plus les risques sont graves : traitez d'abord les cases rouges.",
+      "scenarios": "L'indice si les agents se sont trompés : favorable = risques un cran moins probables ; médian = estimation des agents ; défavorable = un cran plus probables ; sévère = plus probables et plus graves. Un grand écart signale une décision fragile.",
+      "breakdown": "L'indice est la somme de quatre parts : le risque le plus grave (pic), les cinq plus graves (concentration), la part de risques sérieux (étendue) et ce que vous ne savez pas (incertitude). Chaque part est multipliée par son poids, puis additionnée.",
+      "domains": "Une barre par agent : sa longueur indique le risque le plus grave relevé dans ce domaine, sur 25. La couleur suit le niveau : vert faible, jaune modéré, orange élevé, rouge critique.",
+      "tornado": "Pour chaque domaine : l'indice si ses risques étaient un cran moins probables (bleu, à gauche) ou plus probables (orange, à droite). La barre la plus large montre le domaine où agir fait le plus baisser le risque.",
+      "history": "L'indice de chaque analyse de ce dossier, dans l'ordre. Si la courbe descend, vos actions ou vos informations ont réduit le risque.",
+      "portfolio": "Une bulle par dossier : plus elle est à droite, plus le montant est élevé ; plus elle est haute, plus le risque est élevé ; plus elle est grosse, plus il y a de risques. Les dossiers en haut à droite sont chers et risqués.",
+      "levels": "Le nombre de dossiers analysés à chaque niveau de risque, d'après leur indice.",
+      "evidence": "Sur quoi reposent les risques : faits que vous avez fournis, estimations, hypothèses, hypothèses de l'IA. Beaucoup d'hypothèses = dossier peu documenté. En dessous, l'avis de l'audit : validé, fragile, non étayé.",
+      "activity": "Le nombre d'analyses lancées chaque mois. La ligne horizontale montre le quota mensuel de votre offre.",
+      "radar": "Une branche par agent. Plus le point s'éloigne du centre, plus le risque le plus grave de ce domaine est élevé. Les branches grisées sont des agents qui n'ont pas participé.",
+      "finding": "Probabilité (1 rare → 5 presque certain) × impact (1 négligeable → 5 critique) = gravité sur 25. Le badge indique le fondement : fait fourni, estimation, hypothèse ou hypothèse de l'IA. L'audit dit si le risque est validé, fragile ou non étayé (exclu du score).",
+      "explain": "Expliquer ce risque",
+      "explainQuestion": "Explique-moi simplement le risque « {title} » : d'où il vient, ce que signifient sa probabilité et son impact, et ce qu'il faut faire en premier."
     }
   }
 }

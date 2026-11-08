@@ -87,6 +87,9 @@ async function Questions({
               analysisId={selected.latest_analysis!.id}
               decisionHref={`${base}/decisions/${selected.id}`}
               userName={me.user.full_name}
+              initialQuestion={
+                typeof sp.ask === "string" ? sp.ask.slice(0, 1000) : undefined
+              }
             />
           ) : (
             <div className="flex flex-col items-center rounded-2xl border border-dashed border-line px-6 py-16 text-center">

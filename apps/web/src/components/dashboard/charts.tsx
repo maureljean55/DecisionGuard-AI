@@ -13,7 +13,7 @@ import { fmt } from "@/lib/format";
 import { level, LEVEL_FILL, type Level } from "@/lib/risk";
 import type { RiskBreakdown, RiskComponent } from "@/lib/types";
 
-import { Plate } from "./cockpit";
+import { HowToRead, Plate } from "./cockpit";
 
 type D = Dictionary["dash"];
 const C = {
@@ -42,10 +42,12 @@ export function ChartCard({
   subtitle,
   table,
   tableLabel,
+  help,
   children,
 }: {
   title: string;
   subtitle?: string;
+  help?: { label: string; text: string };
   table?: { head: string[]; rows: (string | number)[][] };
   tableLabel: string;
   children: ReactNode;
@@ -56,6 +58,7 @@ export function ChartCard({
       {subtitle && (
         <p className="mt-0.5 text-xs leading-relaxed text-muted">{subtitle}</p>
       )}
+      {help && <HowToRead label={help.label} text={help.text} />}
       <div className="mt-4 flex-1">{children}</div>
       {table && table.rows.length > 0 && (
         <details className="mt-4 text-xs">
@@ -155,6 +158,7 @@ export function ScoreBreakdown({
   };
   return (
     <ChartCard
+      help={{ label: d.help.label, text: d.help.breakdown }}
       title={T.title}
       subtitle={T.subtitle}
       tableLabel={d.charts.table}
@@ -242,6 +246,7 @@ export function DomainBars({
     d.agentCatalog[k as keyof typeof d.agentCatalog]?.name ?? k;
   return (
     <ChartCard
+      help={{ label: d.help.label, text: d.help.domains }}
       title={T.title}
       subtitle={T.subtitle}
       tableLabel={d.charts.table}
@@ -300,6 +305,7 @@ export function Tornado({
     d.agentCatalog[k as keyof typeof d.agentCatalog]?.name ?? k;
   return (
     <ChartCard
+      help={{ label: d.help.label, text: d.help.tornado }}
       title={T.title}
       subtitle={T.subtitle}
       tableLabel={d.charts.table}
@@ -399,6 +405,7 @@ export function ScoreHistory({
   const py = (v: number) => pad.t + (1 - v / 100) * (H - pad.t - pad.b);
   return (
     <ChartCard
+      help={{ label: d.help.label, text: d.help.history }}
       title={T.title}
       subtitle={T.subtitle}
       tableLabel={d.charts.table}
@@ -557,6 +564,7 @@ export function PortfolioMap({
   );
   return (
     <ChartCard
+      help={{ label: d.help.label, text: d.help.portfolio }}
       title={T.title}
       subtitle={T.subtitle}
       tableLabel={d.charts.table}
@@ -714,6 +722,7 @@ export function LevelDistribution({
   const max = Math.max(...LEVELS.map((l) => counts[l]), 1);
   return (
     <ChartCard
+      help={{ label: d.help.label, text: d.help.levels }}
       title={T.title}
       subtitle={T.subtitle}
       tableLabel={d.charts.table}
@@ -860,6 +869,7 @@ export function EvidenceQuality({
   const total = ev.reduce((s, p) => s + p.n, 0);
   return (
     <ChartCard
+      help={{ label: d.help.label, text: d.help.evidence }}
       title={T.title}
       subtitle={T.subtitle}
       tableLabel={d.charts.table}
@@ -906,6 +916,7 @@ export function ActivityBars({
   const top = Math.max(...months.map((m) => m.count), limit ?? 0, 1);
   return (
     <ChartCard
+      help={{ label: d.help.label, text: d.help.activity }}
       title={T.title}
       subtitle={T.subtitle}
       tableLabel={d.charts.table}

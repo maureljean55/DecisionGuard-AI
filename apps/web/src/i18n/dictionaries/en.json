@@ -1720,6 +1720,24 @@
       "dossierLabel": "Dossier",
       "searchDossier": "Search a dossier",
       "pickHint": "Open the menu above and choose a dossier: the conversation opens here."
+    },
+    "help": {
+      "label": "How to read",
+      "riskIndex": "The dossier's overall score, 0 to 100, calculated without AI by a fixed formula from the risks raised. Under 25: low · 25 to 44: moderate · 45 to 64: high · 65 and above: critical.",
+      "heatmap": "Each cell counts the risks with that likelihood (left to right, 1 to 5) and that impact (bottom to top, 1 to 5). The further up and right, the more severe: deal with the red cells first.",
+      "scenarios": "The index if the agents were wrong: favourable = risks one notch less likely; median = the agents' estimate; adverse = one notch more likely; severe = more likely and more severe. A wide gap means a fragile decision.",
+      "breakdown": "The index adds up four parts: the most severe risk (peak), the five most severe (concentration), the share of serious risks (breadth) and what you don't know (uncertainty). Each part is multiplied by its weight, then added.",
+      "domains": "One bar per agent: its length is the most severe risk raised in that domain, out of 25. The colour follows the level: green low, yellow moderate, orange high, red critical.",
+      "tornado": "For each domain: the index if its risks were one notch less likely (blue, left) or more likely (orange, right). The widest bar shows where acting lowers the risk most.",
+      "history": "The index of every analysis of this dossier, in order. If the line goes down, your actions or information reduced the risk.",
+      "portfolio": "One bubble per dossier: further right means a larger amount; higher means more risk; bigger means more risks raised. Dossiers in the top right are costly and risky.",
+      "levels": "The number of analysed dossiers at each risk level, based on their index.",
+      "evidence": "What the risks rest on: facts you supplied, estimates, assumptions, AI hypotheses. Many hypotheses = a thinly documented dossier. Below, the audit's opinion: supported, weak, unsupported.",
+      "activity": "The number of analyses started each month. The horizontal line is your plan's monthly quota.",
+      "radar": "One spoke per agent. The further a point is from the centre, the more severe that domain's worst risk. Greyed spokes are agents that did not take part.",
+      "finding": "Likelihood (1 rare → 5 almost certain) × impact (1 negligible → 5 critical) = severity out of 25. The badge gives the basis: supplied fact, estimate, assumption or AI hypothesis. The audit says whether the risk is supported, weak or unsupported (left out of the score).",
+      "explain": "Explain this risk",
+      "explainQuestion": "Explain the risk “{title}” in simple terms: where it comes from, what its likelihood and impact mean, and what to do first."
     }
   }
 }

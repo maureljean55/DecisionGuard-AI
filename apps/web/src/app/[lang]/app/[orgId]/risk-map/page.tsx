@@ -186,9 +186,7 @@ async function RiskMap({
             ) : (
               <p className="mt-4 text-sm text-muted">{M.pick}</p>
             )}
-            {!selected && (
-              <p className="mt-4 text-xs text-muted">{M.pick}</p>
-            )}
+            {!selected && <p className="mt-4 text-xs text-muted">{M.pick}</p>}
             <Link href={`${base}/decisions`} className={`${ctaGhost} mt-5`}>
               {d.cockpit.allDecisions}
             </Link>

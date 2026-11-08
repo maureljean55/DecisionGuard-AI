@@ -277,3 +277,23 @@ export function AgentRadar({
     </svg>
   );
 }
+
+/** "How to read" disclosure: a plain-language explanation under a chart or a figure. */
+export function HowToRead({ label, text }: { label: string; text: string }) {
+  return (
+    <details className="group mt-3 text-xs">
+      <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 rounded-full border border-line px-2.5 py-1 text-muted transition-colors hover:border-electric/40 hover:text-ink [&::-webkit-details-marker]:hidden">
+        <span
+          aria-hidden
+          className="flex size-4 items-center justify-center rounded-full bg-electric/20 font-mono text-[0.62rem] text-[#9dbcff]"
+        >
+          ?
+        </span>
+        {label}
+      </summary>
+      <p className="mt-2 max-w-prose rounded-lg border border-line bg-night/50 px-3 py-2 leading-relaxed text-ink/85">
+        {text}
+      </p>
+    </details>
+  );
+}

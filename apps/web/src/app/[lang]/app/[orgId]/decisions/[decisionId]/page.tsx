@@ -299,6 +299,11 @@ async function DecisionPage({
           <AgentResults
             d={d}
             analysis={analysis}
+            explainBase={
+              analysis.status === "completed"
+                ? `/${lang}/app/${org.id}/questions?dossier=${x.id}`
+                : undefined
+            }
             target={
               canWriteDecisions(org.role)
                 ? { orgId: org.id, decisionId: x.id }
