@@ -78,14 +78,18 @@ class Settings(BaseSettings):
     supported_locales: tuple[Locale, ...] = ("fr", "en")
 
     # --- Analysis worker ---
-    # "none": no engine yet; queued analyses wait honestly instead of producing fake results.
-    analysis_engine: Literal["none"] = "none"
+    # "none": no engine; queued analyses wait honestly instead of producing fake results.
+    # "agents": the multi-agent engine, using `llm_provider`.
+    analysis_engine: Literal["none", "agents"] = "none"
     worker_poll_seconds: float = Field(default=5.0, gt=0)
     analysis_timeout_seconds: int = Field(default=900, ge=30)
 
     # LLM provider: "mock" is deterministic and clearly labelled; never used in production.
-    llm_provider: Literal["mock", "anthropic", "openai"] = "mock"
+    llm_provider: Literal["mock", "anthropic"] = "mock"
     llm_api_key: SecretStr | None = None
+    llm_model: str = "claude-opus-5-5"
+    llm_effort: Literal["low", "medium", "high", "xhigh", "max"] = "high"
+    llm_timeout_seconds: float = Field(default=300.0, gt=0)
 
     @field_validator(
         "llm_api_key",
@@ -104,6 +108,8 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _check_production_safety(self) -> "Settings":
+        if self.llm_provider == "anthropic" and self.llm_api_key is None:
+            raise ValueError("DG_LLM_API_KEY is required when DG_LLM_PROVIDER=anthropic")
         if self.environment == "production":
             if self.secret_key.get_secret_value() == _INSECURE_DEV_SECRET:
                 raise ValueError("DG_SECRET_KEY must be set in production")

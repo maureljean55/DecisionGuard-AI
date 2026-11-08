@@ -94,6 +94,11 @@ class Analysis(UUIDPrimaryKey, Timestamps, Base):
     quota_period: Mapped[date] = mapped_column(Date)
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Which engine produced the results. `simulated` is true for the mock provider: the UI
+    # must then say plainly that no real model was involved.
+    provider: Mapped[str | None] = mapped_column(String(32))
+    model: Mapped[str | None] = mapped_column(String(64))
+    simulated: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"))
 
 
 class DecisionQuestion(UUIDPrimaryKey, Base):

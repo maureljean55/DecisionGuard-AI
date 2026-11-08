@@ -101,3 +101,24 @@ Migrations Alembic dans `apps/api/migrations/versions`. Extensions activées : `
 
 - **Stockage objet** (documents, rapports) : choix entre S3 compatible managé (UE) et alternative auto-hébergée, à trancher en M8. MinIO n'est pas retenu par défaut à cause de l'évolution de sa distribution communautaire.
 - **Paiement en ligne** : facturation manuelle au départ ; Stripe (Europe) puis Mobile Money (Afrique) derrière une interface commune, en fin de feuille de route.
+
+## Moteur d'analyse (M5)
+
+`DG_ANALYSIS_ENGINE=agents` branche `AgentPipeline` (`app/agents/orchestrator.py`) sur le worker.
+
+- **Dossier de décision** (`app/agents/brief.py`) : instantané figé de la décision et des réponses,
+  rendu dans des balises `<decision>` avec échappement HTML. Le prompt système demande de traiter
+  ce contenu comme des données et d'ignorer toute instruction qu'il contiendrait.
+- **Agents** (`app/agents/specs.py`) : Finance, Stratégie, Opérations. Même dossier, angle propre,
+  prompt système stable par agent et par langue (mis en cache côté fournisseur).
+- **Sortie structurée** (`app/agents/schema.py`) : chaque constat porte un type de preuve
+  (`fact`, `assumption`, `estimate`, `ai_hypothesis`), une probabilité et un impact de 1 à 5
+  (appréciation de l'agent, pas encore le score calculé du M6), un fondement et une atténuation.
+- **Étapes** : `analyzing` (appels en parallèle, sans accès base) → `verifying` (normalisation,
+  dédoublonnage, bornes) → `reporting` (provenance). Un agent en échec n'annule pas les autres ;
+  si tous échouent, l'analyse est relancée (erreur temporaire) ou échoue tout de suite
+  (clé invalide, refus).
+- **Fournisseurs** (`app/llm/`) : `anthropic` (SDK officiel, `messages.parse`, réflexion
+  adaptative, repli serveur en cas de refus) et `mock`, déterministe, fondé sur des règles fixes.
+  Les analyses produites par `mock` sont marquées `simulated` et l'interface l'affiche.
+- **Stockage** : tables `agent_runs` et `findings` (migration 0006), sous RLS comme le reste.

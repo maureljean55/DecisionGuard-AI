@@ -58,4 +58,10 @@ class NoEnginePipeline:
 def get_pipeline(engine: str) -> AnalysisPipeline:
     if engine == "none":
         return NoEnginePipeline()
+    if engine == "agents":
+        from app.agents.orchestrator import AgentPipeline
+        from app.core.config import get_settings
+        from app.llm import get_provider
+
+        return AgentPipeline(get_provider(get_settings()))
     raise ValueError(f"unknown analysis engine: {engine}")

@@ -152,6 +152,34 @@ export interface Analysis extends AnalysisSummary {
   started_at: string | null;
   updated_at: string;
   questions: Question[];
+  provider: string | null;
+  model: string | null;
+  simulated: boolean;
+  agents: AgentRun[];
+}
+
+export type EvidenceType = "fact" | "assumption" | "estimate" | "ai_hypothesis";
+
+export interface Finding {
+  id: string;
+  title: string;
+  description: string;
+  evidence_type: EvidenceType;
+  basis: string;
+  likelihood: number;
+  impact: number;
+  mitigation: string;
+}
+
+export interface AgentRun {
+  agent: string;
+  status: "completed" | "failed";
+  model: string | null;
+  summary: string | null;
+  confidence: "low" | "medium" | "high" | null;
+  missing_information: string[];
+  error_code: string | null;
+  findings: Finding[];
 }
 
 export interface Usage {

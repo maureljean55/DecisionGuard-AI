@@ -106,12 +106,16 @@ def process_one(pipeline: AnalysisPipeline, worker_id: str) -> str:
             db.refresh(a)
             if a.status == AnalysisStatus.CANCELED:
                 return "canceled"
-            code = "timeout" if isinstance(exc, AnalysisTimeout) else "pipeline_error"
+            if isinstance(exc, AnalysisTimeout):
+                code = "timeout"
+            else:
+                code = getattr(exc, "error_code", None) or "pipeline_error"
             log.exception("analysis failed", extra={"analysis_id": str(a.id), "code": code})
             a.error_code = code
             a.error_message = type(exc).__name__  # never leak tenant data into logs/messages
             a.locked_by = None
-            if a.attempts >= a.max_attempts:
+            # A non-retryable failure (bad credentials, refusal) fails at once.
+            if a.attempts >= a.max_attempts or getattr(exc, "retryable", True) is False:
                 outcome = _finish(db, a, AnalysisStatus.FAILED)
             else:
                 a.status = AnalysisStatus.PENDING

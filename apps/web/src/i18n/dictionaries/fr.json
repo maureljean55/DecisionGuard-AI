@@ -1161,7 +1161,7 @@
       "queued": "En file d'attente : l'analyse démarrera dans quelques instants.",
       "running": "Analyse en cours. Cette page se met à jour automatiquement.",
       "completedNote": "Analyse terminée.",
-      "failed": "L'analyse a échoué après plusieurs tentatives ({code}). Vous pouvez la relancer sans consommer votre quota.",
+      "failed": "L'analyse a échoué ({code}). Vous pouvez la relancer sans consommer votre quota.",
       "retry": "Relancer l'analyse",
       "history": "Historique des analyses",
       "attempt": "tentative",
@@ -1170,6 +1170,37 @@
       "unlimited": "illimité",
       "queueTitle": "Toutes les analyses",
       "empty": "Aucune analyse pour l'instant. Soumettez une décision pour lancer la première."
+    },
+    "results": {
+      "title": "Lecture des agents",
+      "simulatedTitle": "Résultats simulés",
+      "simulatedBody": "Ces résultats sont produits par des règles fixes, pour montrer le fonctionnement du service. Aucun modèle d'IA n'a analysé cette décision : ne vous appuyez pas dessus pour décider.",
+      "producedBy": "Produit par {model}",
+      "agents": {
+        "finance": "Finance",
+        "strategy": "Stratégie",
+        "operations": "Opérations"
+      },
+      "confidence": "Confiance {level}",
+      "levels": {
+        "low": "faible",
+        "medium": "moyenne",
+        "high": "élevée"
+      },
+      "evidence": {
+        "fact": "Fait",
+        "assumption": "Hypothèse",
+        "estimate": "Estimation",
+        "ai_hypothesis": "Hypothèse IA"
+      },
+      "likelihood": "Probabilité",
+      "impact": "Impact",
+      "basis": "Fondement",
+      "mitigation": "Atténuation",
+      "missing": "Ce qui changerait l'analyse",
+      "agentFailed": "Cet agent n'a pas pu rendre son analyse ({code}). Les autres résultats restent valables.",
+      "noFindings": "Aucun risque relevé sous cet angle.",
+      "scaleNote": "Probabilité et impact sont l'appréciation de chaque agent, sur une échelle de 1 à 5. Le score de risque calculé arrivera avec le moteur de risque."
     }
   }
 }

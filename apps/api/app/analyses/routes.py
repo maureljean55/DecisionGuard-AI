@@ -6,13 +6,28 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Request, status
 from sqlalchemy import select
 
+from app.agents.specs import AGENTS
 from app.analyses import service
-from app.analyses.schemas import AnalysisOut, AnswerIn, QuestionOut, UsageOut
+from app.analyses.schemas import (
+    AgentRunOut,
+    AnalysisOut,
+    AnswerIn,
+    FindingOut,
+    QuestionOut,
+    UsageOut,
+)
 from app.core import audit
 from app.core.errors import AppError, NotFound
 from app.core.permissions import Permission
 from app.db.base import utcnow
-from app.models import Analysis, AnalysisStatus, Decision, DecisionQuestion
+from app.models import (
+    AgentRun,
+    Analysis,
+    AnalysisStatus,
+    Decision,
+    DecisionQuestion,
+    Finding,
+)
 from app.orgs.deps import Member, OrgContext, require
 
 router = APIRouter(tags=["analyses"])
@@ -41,6 +56,27 @@ def _out(ctx: OrgContext, a: Analysis, with_questions: bool = True) -> AnalysisO
     out.decision_title = title
     out.questions = [QuestionOut.model_validate(q) for q in qs]
     out.open_questions = sum(1 for q in qs if q.answered_at is None)
+    if with_questions:
+        out.agents = _agents(ctx, a.id)
+    return out
+
+
+_AGENT_ORDER = {spec.key: i for i, spec in enumerate(AGENTS)}
+
+
+def _agents(ctx: OrgContext, analysis_id: uuid.UUID) -> list[AgentRunOut]:
+    runs = list(ctx.db.scalars(select(AgentRun).where(AgentRun.analysis_id == analysis_id)))
+    findings = ctx.db.scalars(
+        select(Finding).where(Finding.analysis_id == analysis_id).order_by(Finding.position)
+    )
+    by_run: dict[uuid.UUID, list[FindingOut]] = {}
+    for f in findings:
+        by_run.setdefault(f.agent_run_id, []).append(FindingOut.model_validate(f))
+    out = []
+    for r in sorted(runs, key=lambda r: _AGENT_ORDER.get(r.agent, 99)):
+        item = AgentRunOut.model_validate(r)
+        item.findings = by_run.get(r.id, [])
+        out.append(item)
     return out
 
 

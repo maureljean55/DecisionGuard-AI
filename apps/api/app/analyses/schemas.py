@@ -29,6 +29,32 @@ class AnalysisSummary(BaseModel):
     open_questions: int = 0
 
 
+class FindingOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    title: str
+    description: str
+    evidence_type: str
+    basis: str
+    likelihood: int
+    impact: int
+    mitigation: str
+
+
+class AgentRunOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    agent: str
+    status: str
+    model: str | None
+    summary: str | None
+    confidence: str | None
+    missing_information: list[str]
+    error_code: str | None
+    findings: list[FindingOut] = []
+
+
 class AnalysisOut(AnalysisSummary):
     decision_id: uuid.UUID
     decision_title: str | None = None
@@ -36,6 +62,10 @@ class AnalysisOut(AnalysisSummary):
     started_at: datetime | None
     updated_at: datetime
     questions: list[QuestionOut] = []
+    provider: str | None = None
+    model: str | None = None
+    simulated: bool = False
+    agents: list[AgentRunOut] = []
 
 
 class AnswerIn(BaseModel):

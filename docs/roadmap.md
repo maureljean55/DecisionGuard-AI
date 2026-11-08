@@ -8,8 +8,8 @@
 | M2 | Authentification, organisations, membres, rôles, isolation (RLS), journal d'audit | ✅ Terminé |
 | M3 | Espace entreprise responsive (ordinateur/tablette/mobile, PWA) : tableau de bord, navigation, gestion d'équipe, paramètres | ✅ Terminé |
 | M4 | Décisions, questions complémentaires, file d'analyse (worker, retries, reprise), quotas | ✅ Terminé |
-| M5 | Orchestrateur LangGraph, interface LLM + mock, agents Financier / Stratégique / Opérationnel | ⏳ Suivant |
-| M6 | Moteur de risque déterministe, heatmap 5×5, agent d'audit, scénarios, rapport PDF de base | |
+| M5 | Orchestrateur, interface LLM (Claude + mock simulé), agents Financier / Stratégique / Opérationnel | ✅ |
+| M6 | Moteur de risque déterministe, heatmap 5×5, agent d'audit, scénarios, rapport PDF de base | ⏳ Suivant |
 
 ## Phase V1 — commercialisable
 

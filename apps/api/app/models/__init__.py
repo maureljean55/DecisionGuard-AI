@@ -1,5 +1,6 @@
 """Import every model here so Alembic and SQLAlchemy see the full metadata."""
 
+from app.models.agent import AgentRun, EvidenceType, Finding
 from app.models.analysis import ACTIVE, RUNNING, Analysis, AnalysisStatus, DecisionQuestion
 from app.models.audit import AuditLog
 from app.models.decision import Decision, DecisionCategory, DecisionStatus
@@ -10,6 +11,9 @@ from app.models.tenancy import Invitation, Membership, Organization
 __all__ = [
     "ACTIVE",
     "RUNNING",
+    "AgentRun",
+    "EvidenceType",
+    "Finding",
     "Analysis",
     "AnalysisStatus",
     "DecisionQuestion",

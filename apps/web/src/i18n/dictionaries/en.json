@@ -1161,7 +1161,7 @@
       "queued": "Queued: the analysis will start in a moment.",
       "running": "Analysis in progress. This page updates automatically.",
       "completedNote": "Analysis completed.",
-      "failed": "The analysis failed after several attempts ({code}). You can retry it without using your quota.",
+      "failed": "The analysis failed ({code}). You can retry it without using your quota.",
       "retry": "Retry analysis",
       "history": "Analysis history",
       "attempt": "attempt",
@@ -1170,6 +1170,37 @@
       "unlimited": "unlimited",
       "queueTitle": "All analyses",
       "empty": "No analyses yet. Submit a decision to start the first one."
+    },
+    "results": {
+      "title": "What the agents found",
+      "simulatedTitle": "Simulated results",
+      "simulatedBody": "These results come from fixed rules, to show how the service works. No AI model analysed this decision: do not rely on them to decide.",
+      "producedBy": "Produced by {model}",
+      "agents": {
+        "finance": "Finance",
+        "strategy": "Strategy",
+        "operations": "Operations"
+      },
+      "confidence": "{level} confidence",
+      "levels": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "evidence": {
+        "fact": "Fact",
+        "assumption": "Assumption",
+        "estimate": "Estimate",
+        "ai_hypothesis": "AI hypothesis"
+      },
+      "likelihood": "Likelihood",
+      "impact": "Impact",
+      "basis": "Basis",
+      "mitigation": "Mitigation",
+      "missing": "What would change the assessment",
+      "agentFailed": "This agent could not return its analysis ({code}). The other results still stand.",
+      "noFindings": "No risk raised from this angle.",
+      "scaleNote": "Likelihood and impact are each agent's own assessment, on a 1 to 5 scale. The calculated risk score arrives with the risk engine."
     }
   }
 }

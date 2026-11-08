@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 
+import { AgentResults } from "@/components/dashboard/agent-results";
 import { AnalysisPanel } from "@/components/dashboard/analysis";
 import { DecisionActions } from "@/components/dashboard/decisions";
 import { LocalTime } from "@/components/dashboard/local-time";
@@ -89,6 +90,11 @@ async function DecisionPage({
             analysis={analysis}
             canWrite={canWriteDecisions(org.role)}
           />
+        </div>
+      )}
+      {analysis && (
+        <div className="mb-8">
+          <AgentResults d={d} analysis={analysis} />
         </div>
       )}
       {x.status === "draft" && (
