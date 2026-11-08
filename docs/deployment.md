@@ -77,3 +77,22 @@ Puis redéployer (un push suffit). L'adresse d'expédition doit être validée d
 - Les fonctions Vercel (Hobby) sont limitées à 300 s : suffisant pour l'API, **pas** pour les analyses multi-agents longues (M4–M5), qui nécessiteront un worker dédié.
 - Les projets Supabase gratuits sont mis en pause après une semaine d'inactivité.
 - Domaine personnalisé : à configurer dans Vercel (*Settings → Domains*) puis mettre à jour `DG_PUBLIC_WEB_URL`.
+
+## Moteur d'analyse sur Vercel (M5)
+
+Vercel n'héberge pas de processus permanent. Les analyses sont donc traitées à la demande :
+
+- le relais du site appelle `/internal/worker/tick` avec `after()` dès qu'une écriture peut avoir mis
+  une analyse en file (soumission, réponse aux questions, relance) ;
+- un Cron Vercel quotidien (`apps/api/vercel.json`) sert de filet de sécurité ;
+- les fonctions API peuvent durer jusqu'à 300 s, et une analyse prend environ 40 s.
+
+Variables du projet `decisionguard-api` (Production) :
+
+| Variable | Valeur |
+|---|---|
+| `DG_ANALYSIS_ENGINE` | `agents` |
+| `DG_LLM_PROVIDER` | `anthropic` |
+| `DG_LLM_API_KEY` | clé Claude (sensible, à renouveler avant expiration) |
+| `DG_ANALYSIS_TIMEOUT_SECONDS` | `240` |
+| `CRON_SECRET` | même valeur que `DG_RELAY_SECRET` (sensible) |
