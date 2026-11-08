@@ -83,6 +83,8 @@ class Settings(BaseSettings):
     analysis_engine: Literal["none", "agents"] = "none"
     worker_poll_seconds: float = Field(default=5.0, gt=0)
     analysis_timeout_seconds: int = Field(default=900, ge=30)
+    # Serverless: wall-clock budget of one /internal/worker/tick call (function max duration).
+    worker_tick_max_seconds: int = Field(default=290, ge=30)
 
     # LLM provider: "mock" is deterministic and clearly labelled; never used in production.
     llm_provider: Literal["mock", "anthropic"] = "mock"

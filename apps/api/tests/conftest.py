@@ -19,6 +19,10 @@ os.environ.update(
     DG_REDIS_URL="",
     DG_RELAY_SECRET="test-relay-secret",
     DG_PUBLIC_WEB_URL="http://web.test",
+    # Never call a real model from tests, whatever the local .env says.
+    DG_ANALYSIS_ENGINE="none",
+    DG_LLM_PROVIDER="mock",
+    DG_LLM_API_KEY="",
 )
 
 from collections.abc import Iterator  # noqa: E402

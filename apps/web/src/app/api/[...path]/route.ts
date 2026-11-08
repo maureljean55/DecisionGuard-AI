@@ -4,7 +4,10 @@
  * The browser only ever talks to the web origin: session cookies stay first-party,
  * no CORS is needed, and the API can live on a private network.
  */
-import type { NextRequest } from "next/server";
+import { after, type NextRequest } from "next/server";
+
+// Room for one analysis run triggered after the response (see `kickWorker`).
+export const maxDuration = 300;
 
 const API_URL = process.env.API_URL ?? "http://localhost:8000";
 // Shared with the API: lets it trust the browser IP we forward (rate limits, audit log).
@@ -19,6 +22,28 @@ const FORWARDED_REQUEST_HEADERS = [
 ];
 const FORWARDED_RESPONSE_HEADERS = ["content-type", "cache-control", "retry-after"];
 const MAX_BODY_BYTES = 1_000_000; // JSON API; file uploads will get a dedicated path
+// Writes that can queue an analysis: create/submit/update a decision, answer, retry.
+const QUEUEING_WRITE = /^orgs\/[^/]+\/(decisions|analyses)(\/|$)/;
+
+/**
+ * Serverless hosting has no permanent worker: after a write that may have queued an
+ * analysis, ask the API to process the queue. Runs after the response is sent.
+ */
+function kickWorker() {
+  if (!RELAY_SECRET) return; // local dev: the Docker worker polls the queue itself
+  after(async () => {
+    try {
+      await fetch(`${API_URL}/internal/worker/tick`, {
+        method: "POST",
+        headers: { "x-dg-relay-secret": RELAY_SECRET },
+        cache: "no-store",
+        signal: AbortSignal.timeout(295_000),
+      });
+    } catch {
+      // The scheduled run will pick the job up later.
+    }
+  });
+}
 
 async function relay(request: NextRequest, ctx: RouteContext<"/api/[...path]">) {
   const { path } = await ctx.params;
@@ -78,6 +103,10 @@ async function relay(request: NextRequest, ctx: RouteContext<"/api/[...path]">) 
     if (value) out.set(name, value);
   }
   for (const cookie of upstream.headers.getSetCookie()) out.append("set-cookie", cookie);
+
+  if (request.method !== "GET" && upstream.ok && QUEUEING_WRITE.test(path.join("/"))) {
+    kickWorker();
+  }
 
   const noBody = upstream.status === 204 || upstream.status === 304;
   return new Response(noBody ? null : upstream.body, { status: upstream.status, headers: out });

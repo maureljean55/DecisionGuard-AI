@@ -314,3 +314,21 @@ def test_engine_unavailable_is_an_exception_type() -> None:
     with pytest.raises(EngineUnavailable):
         NoEnginePipeline().run(None)  # type: ignore[arg-type]
     assert uuid.UUID(int=0)  # keep import used
+
+
+# ------------------------------------------------------------------ serverless tick
+
+
+def test_worker_tick_requires_the_shared_secret(make_client, owner_db) -> None:
+    c, org = _setup(make_client)
+    aid = _submit(c, org)["latest_analysis"]["id"]
+    anon = make_client()
+    assert anon.post("/internal/worker/tick").status_code == 404
+    assert (
+        anon.post("/internal/worker/tick", headers={"x-dg-relay-secret": "nope"}).status_code == 404
+    )
+    r = anon.get("/internal/worker/tick", headers={"authorization": "Bearer test-relay-secret"})
+    assert r.status_code == 200 and r.json() == {"outcomes": ["waiting"]}  # engine "none" in tests
+    assert _analysis(owner_db, aid)["waiting_reason"] == "engine_unavailable"
+    r = anon.post("/internal/worker/tick", headers={"x-dg-relay-secret": "test-relay-secret"})
+    assert r.json() == {"outcomes": ["idle"]}

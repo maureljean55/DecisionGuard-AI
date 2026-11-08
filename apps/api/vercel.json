@@ -1,10 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "regions": ["cdg1"],
+  "regions": [
+    "cdg1"
+  ],
   "functions": {
     "app/main.py": {
-      "maxDuration": 60,
+      "maxDuration": 300,
       "excludeFiles": "{tests/**,migrations/**,.venv/**,.pytest_cache/**,.ruff_cache/**,Dockerfile,alembic.ini}"
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/internal/worker/tick",
+      "schedule": "0 6 * * *"
+    }
+  ]
 }
