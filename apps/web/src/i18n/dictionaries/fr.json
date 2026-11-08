@@ -98,6 +98,33 @@
       "admin": "administrateur",
       "analyst": "analyste",
       "viewer": "lecteur"
+    },
+    "loginPanel": {
+      "title": "Content de vous revoir.",
+      "body": "Vos dossiers, vos analyses et votre équipe vous attendent. La chouette a gardé un œil dessus.",
+      "notes": [
+        "Session sécurisée",
+        "Données hébergées à Paris"
+      ]
+    },
+    "registerPanel": {
+      "eyebrow": "Accès pilote",
+      "title": "Ce qui vous attend.",
+      "steps": [
+        {
+          "t": "Créez votre espace",
+          "b": "Votre compte et celui de votre entreprise, en une étape."
+        },
+        {
+          "t": "Décrivez une décision",
+          "b": "Quelques lignes, les montants, l'échéance. On vous demande ce qui manque."
+        },
+        {
+          "t": "Recevez votre analyse",
+          "b": "Risques, scores, scénarios et plan d'action, vérifiés par l'auditeur."
+        }
+      ],
+      "trust": "Vos données restent isolées de celles des autres entreprises et hébergées dans l'Union européenne."
     }
   },
   "app": {

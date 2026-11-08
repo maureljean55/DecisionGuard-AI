@@ -98,6 +98,33 @@
       "admin": "administrator",
       "analyst": "analyst",
       "viewer": "viewer"
+    },
+    "loginPanel": {
+      "title": "Welcome back.",
+      "body": "Your files, analyses and team are waiting. The owl kept an eye on them.",
+      "notes": [
+        "Secure session",
+        "Data hosted in Paris"
+      ]
+    },
+    "registerPanel": {
+      "eyebrow": "Pilot access",
+      "title": "What to expect.",
+      "steps": [
+        {
+          "t": "Create your workspace",
+          "b": "Your account and your company's, in one step."
+        },
+        {
+          "t": "Describe a decision",
+          "b": "A few lines, amounts, deadline. We ask for whatever is missing."
+        },
+        {
+          "t": "Get your analysis",
+          "b": "Risks, scores, scenarios and action plan, checked by the auditor."
+        }
+      ],
+      "trust": "Your data stays isolated from other companies and is hosted in the European Union."
     }
   },
   "app": {
