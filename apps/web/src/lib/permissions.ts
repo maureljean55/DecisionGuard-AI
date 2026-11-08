@@ -23,3 +23,7 @@ export function canManageMember(actor: Role, target: Role): boolean {
   if (actor === "owner") return true;
   return actor === "admin" && target !== "owner";
 }
+
+export const canWriteDecisions = (r: Role) => r !== "viewer";
+export const canDeleteDecision = (r: Role, createdBy: string | null, me: string) =>
+  r === "owner" || r === "admin" || (r === "analyst" && createdBy === me);

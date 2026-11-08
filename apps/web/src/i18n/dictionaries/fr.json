@@ -856,7 +856,9 @@
       "switchOrg": "Changer d'organisation",
       "menu": "Menu",
       "close": "Fermer",
-      "workspace": "Espace de travail"
+      "workspace": "Espace de travail",
+      "groupAnalysis": "Analyse",
+      "groupOrg": "Organisation"
     },
     "roles": {
       "owner": "Propriétaire",
@@ -903,7 +905,11 @@
       "decisionsCta": "Nous parler de votre décision",
       "activityTitle": "Activité récente",
       "activityAll": "Tout voir",
-      "activityEmpty": "Aucune activité pour l'instant."
+      "activityEmpty": "Aucune activité pour l'instant.",
+      "decisionsCount": "{n} décision(s) en cours",
+      "decisionsNone": "Aucune décision pour l'instant. Décrivez la première : l'analyse démarrera dès l'ouverture du moteur.",
+      "newDecision": "Nouvelle décision",
+      "allDecisions": "Toutes les décisions"
     },
     "team": {
       "title": "Équipe",
@@ -950,7 +956,13 @@
         "member.leave": "a quitté l'organisation",
         "invitation.create": "a envoyé une invitation",
         "invitation.revoke": "a annulé une invitation",
-        "invitation.accept": "a rejoint l'organisation"
+        "invitation.accept": "a rejoint l'organisation",
+        "decision.create": "a créé une décision",
+        "decision.submit": "a soumis une décision pour analyse",
+        "decision.update": "a modifié une décision",
+        "decision.archive": "a archivé une décision",
+        "decision.reopen": "a repassé une décision en brouillon",
+        "decision.delete": "a supprimé une décision"
       },
       "other": "a effectué une action ({code})",
       "forbidden": "Seuls les propriétaires et administrateurs peuvent consulter le journal d'activité."
@@ -996,6 +1008,116 @@
     "noOrg": {
       "title": "Aucune organisation",
       "body": "Vous n'appartenez encore à aucune organisation. Créez la vôtre, ou demandez à un collègue de vous inviter."
+    },
+    "decisions": {
+      "title": "Décisions",
+      "subtitle": "Les décisions que votre organisation veut analyser.",
+      "new": "Nouvelle décision",
+      "tabs": {
+        "active": "En cours",
+        "draft": "Brouillons",
+        "submitted": "Soumises",
+        "archived": "Archivées"
+      },
+      "status": {
+        "draft": "Brouillon",
+        "submitted": "En attente d'analyse",
+        "archived": "Archivée"
+      },
+      "categories": {
+        "strategic": "Stratégique",
+        "financial": "Financière",
+        "operational": "Opérationnelle",
+        "technological": "Technologique",
+        "organizational": "Organisationnelle",
+        "commercial": "Commerciale",
+        "legal": "Juridique"
+      },
+      "empty": "Aucune décision ici pour l'instant.",
+      "emptyCta": "Décrivez votre première décision : quelques lignes suffisent pour commencer.",
+      "readOnly": "Votre rôle de lecteur permet de consulter les décisions, pas d'en créer.",
+      "form": {
+        "title": "Titre de la décision",
+        "titleHint": "Une phrase claire, par exemple : Ouvrir une filiale à Douala.",
+        "description": "Description",
+        "descriptionHint": "Ce que vous envisagez de faire, pourquoi, et ce qui est déjà décidé.",
+        "category": "Catégorie",
+        "amount": "Montant engagé",
+        "amountHint": "Optionnel. Budget ou investissement concerné.",
+        "currency": "Devise",
+        "deadline": "Échéance",
+        "deadlineHint": "Optionnel. Date à laquelle la décision doit être prise.",
+        "context": "Contexte complémentaire",
+        "contextHint": "Optionnel. Marché, concurrents, contraintes, informations déjà connues.",
+        "saveDraft": "Enregistrer en brouillon",
+        "submit": "Soumettre pour analyse",
+        "save": "Enregistrer les modifications"
+      },
+      "detail": {
+        "back": "Toutes les décisions",
+        "by": "Créée par {name}",
+        "updated": "Mise à jour",
+        "submittedOn": "Soumise le",
+        "amount": "Montant",
+        "deadline": "Échéance",
+        "category": "Catégorie",
+        "none": "Non renseigné",
+        "description": "Description",
+        "context": "Contexte",
+        "edit": "Modifier",
+        "submit": "Soumettre pour analyse",
+        "archive": "Archiver",
+        "reopen": "Repasser en brouillon",
+        "restore": "Restaurer",
+        "delete": "Supprimer",
+        "deleteConfirm": "Supprimer définitivement la décision « {title} » ?",
+        "archiveConfirm": "Archiver cette décision ? Elle n'apparaîtra plus dans la liste en cours.",
+        "pending": "Cette décision attend son analyse. Le moteur d'analyse multi-agents est en cours d'ouverture : l'analyse démarrera automatiquement dès sa mise en service.",
+        "draftNote": "Brouillon : complétez la décision puis soumettez-la pour analyse."
+      }
+    },
+    "analyses": {
+      "title": "Analyses",
+      "subtitle": "Le suivi des analyses de vos décisions.",
+      "queueTitle": "En attente d'analyse",
+      "queueEmpty": "Aucune décision n'attend d'analyse. Soumettez une décision pour la placer ici.",
+      "goDecisions": "Voir les décisions",
+      "whatTitle": "Ce que contiendra chaque analyse",
+      "what": [
+        "Les risques identifiés par sept agents spécialisés, avec leur cause",
+        "Un score probabilité × impact calculé par le moteur, sans IA",
+        "La vérification de l'auditeur : calculs, sources, cohérence",
+        "Quatre scénarios : optimiste, réaliste, pessimiste, crise"
+      ],
+      "status": "Le moteur d'analyse est en cours d'ouverture."
+    },
+    "reports": {
+      "title": "Rapports",
+      "subtitle": "Les rapports de décision de votre organisation.",
+      "empty": "Aucun rapport pour l'instant.",
+      "emptyBody": "Un rapport est produit à la fin de chaque analyse. Il pourra être exporté en PDF, en français ou en anglais.",
+      "whatTitle": "Contenu d'un rapport",
+      "what": [
+        "Synthèse pour la direction",
+        "Hypothèses et informations manquantes",
+        "Risques par catégorie et matrice 5 × 5",
+        "Scénarios et exposition financière",
+        "Recommandations et plan d'atténuation",
+        "Sources, niveau de confiance et limites"
+      ]
+    },
+    "monitoring": {
+      "title": "Surveillance",
+      "subtitle": "Le suivi des risques après la décision.",
+      "empty": "Aucune surveillance active.",
+      "emptyBody": "Une fois une décision analysée, vous pourrez activer sa surveillance : DecisionGuard suivra les sources que vous approuvez et vous alertera quand un risque évolue.",
+      "whatTitle": "Comment fonctionnera la surveillance",
+      "what": [
+        "Vous choisissez les sources à suivre et la fréquence",
+        "Chaque changement détecté est daté et sourcé",
+        "Les scores sont recalculés et comparés aux précédents",
+        "Vous êtes alerté, avec le niveau de certitude de l'information"
+      ]
     }
   }
 }

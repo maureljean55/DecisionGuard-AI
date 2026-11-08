@@ -34,7 +34,7 @@ from app.core.email import test_outbox  # noqa: E402
 
 TABLES = (
     "audit_logs, invitations, memberships, organizations, user_tokens, auth_sessions, users, "
-    "rate_limits"
+    "rate_limits, decisions"
 )
 
 # Simulates Supabase: these roles back its public Data API and, by default, receive

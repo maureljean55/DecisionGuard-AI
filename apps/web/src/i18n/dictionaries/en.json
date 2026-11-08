@@ -856,7 +856,9 @@
       "switchOrg": "Switch organisation",
       "menu": "Menu",
       "close": "Close",
-      "workspace": "Workspace"
+      "workspace": "Workspace",
+      "groupAnalysis": "Analysis",
+      "groupOrg": "Organisation"
     },
     "roles": {
       "owner": "Owner",
@@ -903,7 +905,11 @@
       "decisionsCta": "Tell us about your decision",
       "activityTitle": "Recent activity",
       "activityAll": "See all",
-      "activityEmpty": "No activity yet."
+      "activityEmpty": "No activity yet.",
+      "decisionsCount": "{n} active decision(s)",
+      "decisionsNone": "No decisions yet. Describe the first one: analysis will start as soon as the engine opens.",
+      "newDecision": "New decision",
+      "allDecisions": "All decisions"
     },
     "team": {
       "title": "Team",
@@ -950,7 +956,13 @@
         "member.leave": "left the organisation",
         "invitation.create": "sent an invitation",
         "invitation.revoke": "cancelled an invitation",
-        "invitation.accept": "joined the organisation"
+        "invitation.accept": "joined the organisation",
+        "decision.create": "created a decision",
+        "decision.submit": "submitted a decision for analysis",
+        "decision.update": "updated a decision",
+        "decision.archive": "archived a decision",
+        "decision.reopen": "moved a decision back to draft",
+        "decision.delete": "deleted a decision"
       },
       "other": "performed an action ({code})",
       "forbidden": "Only owners and administrators can view the activity log."
@@ -996,6 +1008,116 @@
     "noOrg": {
       "title": "No organisation",
       "body": "You do not belong to any organisation yet. Create yours, or ask a colleague to invite you."
+    },
+    "decisions": {
+      "title": "Decisions",
+      "subtitle": "The decisions your organisation wants analysed.",
+      "new": "New decision",
+      "tabs": {
+        "active": "Active",
+        "draft": "Drafts",
+        "submitted": "Submitted",
+        "archived": "Archived"
+      },
+      "status": {
+        "draft": "Draft",
+        "submitted": "Awaiting analysis",
+        "archived": "Archived"
+      },
+      "categories": {
+        "strategic": "Strategic",
+        "financial": "Financial",
+        "operational": "Operational",
+        "technological": "Technology",
+        "organizational": "Organisational",
+        "commercial": "Commercial",
+        "legal": "Legal"
+      },
+      "empty": "No decisions here yet.",
+      "emptyCta": "Describe your first decision: a few lines are enough to start.",
+      "readOnly": "Your viewer role lets you read decisions, not create them.",
+      "form": {
+        "title": "Decision title",
+        "titleHint": "One clear sentence, for example: Open a subsidiary in Douala.",
+        "description": "Description",
+        "descriptionHint": "What you plan to do, why, and what is already decided.",
+        "category": "Category",
+        "amount": "Amount at stake",
+        "amountHint": "Optional. Budget or investment involved.",
+        "currency": "Currency",
+        "deadline": "Deadline",
+        "deadlineHint": "Optional. Date by which the decision must be made.",
+        "context": "Additional context",
+        "contextHint": "Optional. Market, competitors, constraints, facts already known.",
+        "saveDraft": "Save as draft",
+        "submit": "Submit for analysis",
+        "save": "Save changes"
+      },
+      "detail": {
+        "back": "All decisions",
+        "by": "Created by {name}",
+        "updated": "Updated",
+        "submittedOn": "Submitted on",
+        "amount": "Amount",
+        "deadline": "Deadline",
+        "category": "Category",
+        "none": "Not provided",
+        "description": "Description",
+        "context": "Context",
+        "edit": "Edit",
+        "submit": "Submit for analysis",
+        "archive": "Archive",
+        "reopen": "Back to draft",
+        "restore": "Restore",
+        "delete": "Delete",
+        "deleteConfirm": "Permanently delete the decision “{title}”?",
+        "archiveConfirm": "Archive this decision? It will no longer appear in the active list.",
+        "pending": "This decision is awaiting analysis. The multi-agent analysis engine is opening soon: analysis will start automatically as soon as it goes live.",
+        "draftNote": "Draft: complete the decision, then submit it for analysis."
+      }
+    },
+    "analyses": {
+      "title": "Analyses",
+      "subtitle": "Tracking the analysis of your decisions.",
+      "queueTitle": "Awaiting analysis",
+      "queueEmpty": "No decision is awaiting analysis. Submit a decision to place it here.",
+      "goDecisions": "See decisions",
+      "whatTitle": "What each analysis will contain",
+      "what": [
+        "Risks identified by seven specialist agents, with their cause",
+        "A probability × impact score computed by the engine, not the AI",
+        "The auditor's check: calculations, sources, consistency",
+        "Four scenarios: optimistic, realistic, pessimistic, crisis"
+      ],
+      "status": "The analysis engine is opening soon."
+    },
+    "reports": {
+      "title": "Reports",
+      "subtitle": "Your organisation's decision reports.",
+      "empty": "No reports yet.",
+      "emptyBody": "A report is produced at the end of each analysis. It can be exported as a PDF, in French or English.",
+      "whatTitle": "What a report contains",
+      "what": [
+        "Executive summary",
+        "Assumptions and missing information",
+        "Risks by category and 5 × 5 matrix",
+        "Scenarios and financial exposure",
+        "Recommendations and mitigation plan",
+        "Sources, confidence level and limitations"
+      ]
+    },
+    "monitoring": {
+      "title": "Monitoring",
+      "subtitle": "Tracking risks after the decision.",
+      "empty": "No active monitoring.",
+      "emptyBody": "Once a decision has been analysed, you can switch on monitoring: DecisionGuard will follow the sources you approve and alert you when a risk changes.",
+      "whatTitle": "How monitoring will work",
+      "what": [
+        "You choose which sources to follow and how often",
+        "Every change detected is dated and sourced",
+        "Scores are recalculated and compared with previous ones",
+        "You are alerted, with how certain the information is"
+      ]
     }
   }
 }

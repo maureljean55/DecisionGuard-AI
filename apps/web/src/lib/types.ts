@@ -86,3 +86,30 @@ export interface SessionInfo {
   user_agent: string | null;
   current: boolean;
 }
+
+export type DecisionCategory =
+  | "strategic"
+  | "financial"
+  | "operational"
+  | "technological"
+  | "organizational"
+  | "commercial"
+  | "legal";
+export type DecisionStatus = "draft" | "submitted" | "archived";
+
+export interface Decision {
+  id: string;
+  title: string;
+  description: string;
+  context: string | null;
+  category: DecisionCategory;
+  status: DecisionStatus;
+  amount: string | null;
+  currency: string | null;
+  deadline: string | null;
+  submitted_at: string | null;
+  created_at: string;
+  updated_at: string;
+  created_by_user_id: string | null;
+  created_by_name: string | null;
+}

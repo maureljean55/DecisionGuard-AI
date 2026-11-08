@@ -12,6 +12,7 @@ from app.core.config import get_settings
 from app.core.csrf import CSRFMiddleware
 from app.core.errors import install_error_handlers
 from app.core.logging import configure_logging
+from app.decisions.routes import router as decisions_router
 from app.orgs.routes import router as orgs_router
 
 
@@ -42,6 +43,7 @@ def create_app() -> FastAPI:
     app.include_router(auth_router)
     app.include_router(orgs_router)
     app.include_router(contact_router)
+    app.include_router(decisions_router)
 
     logging.getLogger(__name__).info(
         "application started",

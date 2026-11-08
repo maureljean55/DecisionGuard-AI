@@ -44,7 +44,9 @@ type NavItem = {
   href: string;
   label: string;
   icon: ComponentType<{ className?: string }>;
+  exact?: boolean;
 };
+type NavGroup = { label?: string; items: NavItem[] };
 
 function useOutsideClose<T extends HTMLElement>(
   open: boolean,
@@ -76,16 +78,10 @@ function Sidebar({
 }: {
   d: D;
   lang: string;
-  nav: NavItem[];
+  nav: NavGroup[];
   pathname: string;
   onNavigate?: () => void;
 }) {
-  const soon = [
-    { label: d.nav.decisions, icon: FileText },
-    { label: d.nav.analyses, icon: BarChart3 },
-    { label: d.nav.reports, icon: ScrollText },
-    { label: d.nav.monitoring, icon: Radar },
-  ];
   const isActive = (href: string, exact: boolean) =>
     exact
       ? pathname === href
@@ -114,46 +110,38 @@ function Sidebar({
         aria-label={d.nav.workspace}
         className="flex-1 space-y-6 overflow-y-auto px-3 pb-4"
       >
-        <ul className="space-y-0.5">
-          {nav.map((item, i) => {
-            const active = isActive(item.href, i === 0);
-            const Icon = item.icon;
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={onNavigate}
-                  aria-current={active ? "page" : undefined}
-                  className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
-                    active
-                      ? "bg-white/[0.07] font-medium text-ink shadow-[inset_2px_0_0_0_var(--teal)]"
-                      : "text-muted hover:bg-white/[0.04] hover:text-ink"
-                  }`}
-                >
-                  <Icon className={`size-4 ${active ? "text-teal" : ""}`} />
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-
-        <div>
-          <p className="px-3 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-muted/70">
-            {d.nav.soon}
-          </p>
-          <ul className="mt-2 space-y-0.5">
-            {soon.map(({ label, icon: Icon }) => (
-              <li
-                key={label}
-                className="flex cursor-not-allowed items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-muted/50"
-              >
-                <Icon className="size-4" />
-                {label}
-              </li>
-            ))}
-          </ul>
-        </div>
+        {nav.map((group, gi) => (
+          <div key={gi}>
+            {group.label && (
+              <p className="mb-2 px-3 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-muted/70">
+                {group.label}
+              </p>
+            )}
+            <ul className="space-y-0.5">
+              {group.items.map((item) => {
+                const active = isActive(item.href, item.exact ?? false);
+                const Icon = item.icon;
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={onNavigate}
+                      aria-current={active ? "page" : undefined}
+                      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
+                        active
+                          ? "bg-white/[0.07] font-medium text-ink shadow-[inset_2px_0_0_0_var(--teal)]"
+                          : "text-muted hover:bg-white/[0.04] hover:text-ink"
+                      }`}
+                    >
+                      <Icon className={`size-4 ${active ? "text-teal" : ""}`} />
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
 
       <div className="border-t border-line p-3">
@@ -327,20 +315,55 @@ export function DashboardChrome({
   }, [fromUrl]);
 
   const base = org ? `/${lang}/app/${org.organization.id}` : `/${lang}/app`;
-  const nav: NavItem[] = org
+  const nav: NavGroup[] = org
     ? [
-        { href: base, label: d.nav.overview, icon: LayoutDashboard },
-        { href: `${base}/team`, label: d.nav.team, icon: Users },
-        ...(canReadAudit(org.role)
-          ? [
-              {
-                href: `${base}/activity`,
-                label: d.nav.activity,
-                icon: Activity,
-              },
-            ]
-          : []),
-        { href: `${base}/settings`, label: d.nav.settings, icon: Settings },
+        {
+          items: [
+            {
+              href: base,
+              label: d.nav.overview,
+              icon: LayoutDashboard,
+              exact: true,
+            },
+          ],
+        },
+        {
+          label: d.nav.groupAnalysis,
+          items: [
+            {
+              href: `${base}/decisions`,
+              label: d.nav.decisions,
+              icon: FileText,
+            },
+            {
+              href: `${base}/analyses`,
+              label: d.nav.analyses,
+              icon: BarChart3,
+            },
+            { href: `${base}/reports`, label: d.nav.reports, icon: ScrollText },
+            {
+              href: `${base}/monitoring`,
+              label: d.nav.monitoring,
+              icon: Radar,
+            },
+          ],
+        },
+        {
+          label: d.nav.groupOrg,
+          items: [
+            { href: `${base}/team`, label: d.nav.team, icon: Users },
+            ...(canReadAudit(org.role)
+              ? [
+                  {
+                    href: `${base}/activity`,
+                    label: d.nav.activity,
+                    icon: Activity,
+                  },
+                ]
+              : []),
+            { href: `${base}/settings`, label: d.nav.settings, icon: Settings },
+          ],
+        },
       ]
     : [];
 

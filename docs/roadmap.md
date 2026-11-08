@@ -7,7 +7,7 @@
 | M1 | Fondations : monorepo, Docker, API + santé, frontend FR/EN, CI, docs | ✅ Terminé |
 | M2 | Authentification, organisations, membres, rôles, isolation (RLS), journal d'audit | ✅ Terminé |
 | M3 | Espace entreprise responsive (ordinateur/tablette/mobile, PWA) : tableau de bord, navigation, gestion d'équipe, paramètres | ✅ Terminé |
-| M4 | Soumission de décision, questions complémentaires, analyses asynchrones (Celery), statuts | ⏳ Suivant |
+| M4 | Soumission de décision, questions complémentaires, analyses asynchrones (Celery), statuts | 🟡 En cours : décisions (création, brouillon, soumission, archivage) livrées |
 | M5 | Orchestrateur LangGraph, interface LLM + mock, agents Financier / Stratégique / Opérationnel | |
 | M6 | Moteur de risque déterministe, heatmap 5×5, agent d'audit, scénarios, rapport PDF de base | |
 

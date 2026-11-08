@@ -15,6 +15,7 @@ import { Suspense, type ComponentType } from "react";
 
 import { ResendVerification } from "@/components/app/session-actions";
 import { PageSkeleton, PageTitle } from "@/components/dashboard/page-title";
+import { StatusBadge } from "@/components/dashboard/status";
 import { Panel, RoleBadge } from "@/components/dashboard/ui";
 import { LocalTime } from "@/components/dashboard/local-time";
 import { hasLocale, type Locale } from "@/i18n/config";
@@ -23,8 +24,12 @@ import { apiGet, getMe } from "@/lib/api";
 import { loadOrg } from "@/lib/dash-data";
 import { describeAction } from "@/lib/dash-format";
 import { fmt } from "@/lib/format";
-import { canManageMembers, canReadAudit } from "@/lib/permissions";
-import type { AuditPage, Invitation, Member } from "@/lib/types";
+import {
+  canManageMembers,
+  canReadAudit,
+  canWriteDecisions,
+} from "@/lib/permissions";
+import type { AuditPage, Decision, Invitation, Member } from "@/lib/types";
 
 function Stat({
   icon: Icon,
@@ -62,7 +67,7 @@ async function Overview({
   if (!me) redirect(`/${lang}/login`);
   const d = dict.dash;
   const manager = canManageMembers(org.role);
-  const [members, invitations, audit] = await Promise.all([
+  const [members, invitations, audit, decisions] = await Promise.all([
     apiGet<Member[]>(`/orgs/${org.id}/members`),
     manager
       ? apiGet<Invitation[]>(`/orgs/${org.id}/invitations`)
@@ -70,6 +75,7 @@ async function Overview({
     canReadAudit(org.role)
       ? apiGet<AuditPage>(`/orgs/${org.id}/audit-logs?limit=5`)
       : Promise.resolve({ status: 200, data: null }),
+    apiGet<Decision[]>(`/orgs/${org.id}/decisions`),
   ]);
   const memberCount = members.data?.length ?? 0;
   const steps = [
@@ -80,7 +86,11 @@ async function Overview({
       done: memberCount > 1,
       href: `/${lang}/app/${org.id}/team`,
     },
-    { label: d.overview.steps.decision, done: false, soon: true },
+    {
+      label: d.overview.steps.decision,
+      done: (decisions.data ?? []).some((x) => x.status === "submitted"),
+      href: `/${lang}/app/${org.id}/decisions/new`,
+    },
   ];
   const firstName = me.user.full_name.split(" ")[0];
 
@@ -131,22 +141,64 @@ async function Overview({
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
-        <Panel title={d.overview.decisionsTitle}>
-          <div className="flex flex-col items-start gap-4 py-4">
-            <span className="flex size-11 items-center justify-center rounded-xl border border-line bg-night">
-              <FileText className="size-5 text-muted" aria-hidden />
-            </span>
-            <p className="max-w-lg text-sm leading-relaxed text-muted">
-              {d.overview.decisionsEmpty}
-            </p>
+        <Panel
+          title={d.overview.decisionsTitle}
+          action={
             <Link
-              href={`/${lang}/contact`}
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-teal hover:text-ink"
+              href={`/${lang}/app/${org.id}/decisions`}
+              className="text-sm text-teal hover:text-ink"
             >
-              {d.overview.decisionsCta}
+              {d.overview.allDecisions}
+            </Link>
+          }
+        >
+          {decisions.data && decisions.data.length ? (
+            <>
+              <p className="mb-3 text-xs text-muted">
+                {fmt(d.overview.decisionsCount, {
+                  n: String(decisions.data.length),
+                })}
+              </p>
+              <ul className="divide-y divide-line">
+                {decisions.data.slice(0, 4).map((x) => (
+                  <li key={x.id}>
+                    <Link
+                      href={`/${lang}/app/${org.id}/decisions/${x.id}`}
+                      className="group flex items-center justify-between gap-3 py-3 first:pt-0"
+                    >
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-medium text-ink group-hover:text-teal">
+                          {x.title}
+                        </span>
+                        <span className="text-xs text-muted">
+                          {d.decisions.categories[x.category]}
+                        </span>
+                      </span>
+                      <StatusBadge status={x.status} d={d} />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <div className="flex flex-col items-start gap-4 py-4">
+              <span className="flex size-11 items-center justify-center rounded-xl border border-line bg-night">
+                <FileText className="size-5 text-muted" aria-hidden />
+              </span>
+              <p className="max-w-lg text-sm leading-relaxed text-muted">
+                {d.overview.decisionsNone}
+              </p>
+            </div>
+          )}
+          {canWriteDecisions(org.role) && (
+            <Link
+              href={`/${lang}/app/${org.id}/decisions/new`}
+              className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal hover:text-ink"
+            >
+              {d.overview.newDecision}
               <ArrowRight className="size-4" aria-hidden />
             </Link>
-          </div>
+          )}
         </Panel>
 
         <Panel title={d.overview.nextTitle}>
@@ -168,11 +220,6 @@ async function Overview({
                   >
                     {s.label}
                   </span>
-                  {s.soon && (
-                    <span className="ml-auto rounded-full border border-line px-2 py-0.5 text-[0.65rem] text-muted">
-                      {d.overview.soonTag}
-                    </span>
-                  )}
                 </span>
               );
               return (
