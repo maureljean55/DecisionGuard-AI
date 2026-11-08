@@ -1716,7 +1716,10 @@
       "clear": "New conversation",
       "limit": "Each question uses the AI: 30 questions per hour per person.",
       "you": "You",
-      "assistant": "Assistant"
+      "assistant": "Assistant",
+      "dossierLabel": "Dossier",
+      "searchDossier": "Search a dossier",
+      "pickHint": "Open the menu above and choose a dossier: the conversation opens here."
     }
   }
 }

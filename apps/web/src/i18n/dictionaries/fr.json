@@ -1716,7 +1716,10 @@
       "clear": "Nouvelle conversation",
       "limit": "Chaque question consulte l'IA : 30 questions par heure et par personne.",
       "you": "Vous",
-      "assistant": "Assistant"
+      "assistant": "Assistant",
+      "dossierLabel": "Dossier",
+      "searchDossier": "Rechercher un dossier",
+      "pickHint": "Ouvrez le menu ci-dessus et choisissez un dossier : la conversation s'ouvrira ici."
     }
   }
 }
