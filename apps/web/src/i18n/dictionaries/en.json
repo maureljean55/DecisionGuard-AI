@@ -858,7 +858,20 @@
       "close": "Close",
       "workspace": "Workspace",
       "groupAnalysis": "Analysis",
-      "groupOrg": "Organisation"
+      "groupOrg": "Organisation",
+      "council": "Agent council",
+      "riskMap": "Risk map",
+      "simulator": "Scenario simulator",
+      "search": "Search",
+      "searchPlaceholder": "Search a dossier…",
+      "space": "Workspace",
+      "engineLabel": "Analysis engine",
+      "engine": {
+        "active": "Active",
+        "simulated": "Simulated",
+        "unavailable": "Waiting"
+      },
+      "agentsLive": "{n}/{total} agents"
     },
     "roles": {
       "owner": "Owner",
@@ -1201,6 +1214,198 @@
       "agentFailed": "This agent could not return its analysis ({code}). The other results still stand.",
       "noFindings": "No risk raised from this angle.",
       "scaleNote": "Likelihood and impact are each agent's own assessment, on a 1 to 5 scale. The calculated risk score arrives with the risk engine."
+    },
+    "agentCatalog": {
+      "finance": {
+        "name": "Finance",
+        "angle": "Financial exposure, cash, returns, currency."
+      },
+      "strategy": {
+        "name": "Strategy",
+        "angle": "Position, competition, alternatives, reversibility."
+      },
+      "operations": {
+        "name": "Operations",
+        "angle": "Timeline, capacity, suppliers, continuity."
+      },
+      "audit": {
+        "name": "Audit",
+        "angle": "Reviews the other agents and checks every claim."
+      },
+      "scenarios": {
+        "name": "Scenarios",
+        "angle": "Simulates favourable, median and adverse outcomes."
+      },
+      "legal": {
+        "name": "Legal",
+        "angle": "GDPR, OHADA, national law and contracts."
+      },
+      "cyber": {
+        "name": "Cybersecurity",
+        "angle": "Data, systems, providers and exposure."
+      },
+      "people": {
+        "name": "People",
+        "angle": "Teams, skills, change management."
+      },
+      "foresight": {
+        "name": "Foresight",
+        "angle": "Trends, weak signals, long horizon."
+      }
+    },
+    "levels": {
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "severityNote": "Severity = likelihood × impact, each out of 5, as assessed by the agents. The calculated risk score arrives with the risk engine.",
+    "cockpit": {
+      "eyebrow": "Decision cockpit",
+      "engineTitle": {
+        "active": "Multi-agent engine active",
+        "simulated": "Engine in simulated mode",
+        "unavailable": "Analysis engine pending"
+      },
+      "engineBody": {
+        "active": "{n} of {total} specialist agents analyse every decision you submit. The others arrive with upcoming releases.",
+        "simulated": "Analyses come from fixed rules, without an AI model, for demonstration.",
+        "unavailable": "Submitted decisions are queued and will be analysed as soon as the engine is live."
+      },
+      "newDecision": "New decision",
+      "majorRisks": "Major risks",
+      "majorRisksSub": "severity ≥ 15 out of {n} findings",
+      "activeDossiers": "Active dossiers",
+      "activeSub": "{a} in analysis · {q} awaiting answers",
+      "usage": "Analyses this month",
+      "usageSub": "{plan} plan",
+      "unlimited": "unlimited",
+      "facts": "Established facts",
+      "factsSub": "of findings rest on a supplied fact",
+      "councilEyebrow": "Agent council",
+      "councilTitle": "What each agent raises",
+      "radarNote": "Highest severity raised per agent, out of 25",
+      "planned": "Planned · {m}",
+      "agentFindings": "{n} findings · max {s}/25",
+      "agentNone": "No findings",
+      "focusEyebrow": "Top point of attention",
+      "focusEmpty": "No findings yet. Submit a decision: the most serious risk raised by the agents will show here.",
+      "focusOpen": "Open dossier",
+      "byAgent": "Raised by the {agent} agent",
+      "simulated": "Simulated",
+      "tableEyebrow": "Dossiers",
+      "tableTitle": "Decisions in progress",
+      "colDossier": "Dossier",
+      "colSeverity": "Max severity",
+      "colAgents": "Agents",
+      "colPhase": "Stage",
+      "open": "Open",
+      "tableEmpty": "No decisions yet.",
+      "allDecisions": "All decisions",
+      "feedTitle": "Recent signals",
+      "feedEmpty": "Agent alerts and team activity will show here.",
+      "feedAll": "All activity",
+      "alert": "{level} alert"
+    },
+    "dossiers": {
+      "eyebrow": "Decision governance",
+      "title": "Decision dossiers",
+      "subtitle": "Follow each decision, from entry to the agents' reading.",
+      "engaged": "Amount committed",
+      "engagedSub": "active dossiers in {cur}",
+      "engagedOther": "+ {n} in other currencies",
+      "inAnalysis": "In analysis",
+      "inAnalysisSub": "{q} awaiting answers",
+      "major": "Major risks",
+      "majorSub": "severity ≥ 15",
+      "done": "Completed analyses",
+      "doneSub": "dossiers with the agents' reading",
+      "search": "Search a dossier",
+      "searchButton": "Search",
+      "tabs": {
+        "all": "All",
+        "draft": "Drafts",
+        "submitted": "Submitted",
+        "archived": "Archived"
+      },
+      "featured": "Most exposed dossier",
+      "riskByAgent": "Max severity per agent",
+      "topFindings": "Main findings",
+      "open": "Open dossier",
+      "council": "Agent council",
+      "others": "Other dossiers",
+      "noMatch": "No dossier matches these criteria.",
+      "amount": "Amount",
+      "severity": "Severity",
+      "noAmount": "Not quantified",
+      "notAnalysed": "Not analysed yet"
+    },
+    "council": {
+      "eyebrow": "Agent council",
+      "title": "The agents' combined reading",
+      "subtitle": "Each agent analyses the decision from its own angle. Every finding states its basis: fact, assumption, estimate or AI hypothesis.",
+      "dossier": "Dossier analysed",
+      "show": "Show",
+      "findings": "Findings",
+      "findingsSub": "{n} agents returned their analysis",
+      "facts": "Established facts",
+      "factsSub": "the rest: assumptions and estimates",
+      "confidence": "Stated confidence",
+      "confidenceSub": "given the information available",
+      "composition": "Council composition",
+      "live": "{n}/{total} live",
+      "plannedTag": "Planned for {m}",
+      "plannedBody": "This agent joins the council with release {m}.",
+      "maxSeverity": "Max severity",
+      "findingsN": "{n} findings",
+      "failed": "Agent failed",
+      "evidenceMix": "Findings by evidence type",
+      "empty": "No completed analysis yet. Submit a decision: the agents' reading will show here.",
+      "queue": "All analyses",
+      "detail": "View dossier"
+    },
+    "riskMap": {
+      "eyebrow": "Mapping",
+      "title": "Risk map",
+      "subtitle": "Findings from all your active dossiers, placed by the likelihood and impact the agents assessed.",
+      "likelihood": "Likelihood",
+      "impact": "Impact",
+      "cell": "{n} findings",
+      "selected": "Likelihood {l} · Impact {i}",
+      "pick": "Pick a cell on the map to list its findings.",
+      "empty": "The map fills in as soon as a decision has been analysed.",
+      "clear": "Show all",
+      "top": "Most severe findings",
+      "scale": {
+        "l": [
+          "Rare",
+          "Unlikely",
+          "Possible",
+          "Likely",
+          "Almost certain"
+        ],
+        "i": [
+          "Negligible",
+          "Minor",
+          "Moderate",
+          "Major",
+          "Critical"
+        ]
+      }
+    },
+    "simulator": {
+      "eyebrow": "Scenarios",
+      "title": "Scenario simulator",
+      "subtitle": "Stress-test a decision against shocks: rates, demand, prices, delays.",
+      "emptyTitle": "The simulator arrives with the risk engine",
+      "emptyBody": "It will use the agents' findings and a calculated risk model, not invented figures, so it is not available yet.",
+      "whatTitle": "What you will be able to do",
+      "what": [
+        "Vary key assumptions: rates, currency, demand, delays, prices.",
+        "Compare favourable, median and adverse scenarios.",
+        "See which risks tip into the critical zone.",
+        "Attach scenarios to the decision report."
+      ]
     }
   }
 }

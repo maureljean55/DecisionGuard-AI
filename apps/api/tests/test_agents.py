@@ -284,3 +284,24 @@ def test_agent_results_are_tenant_isolated(make_client) -> None:
     other = make_client()
     register(other, "intrus@beta.example.com")
     assert other.get(f"/orgs/{org}/analyses/{aid}").status_code == 404
+
+
+def test_org_findings_and_engine_status(make_client) -> None:
+    c, org, aid = _submit(make_client)
+    assert c.get(f"/orgs/{org}/findings").json() == []  # nothing completed yet
+    process_one(AgentPipeline(MockProvider()), "w")
+    items = c.get(f"/orgs/{org}/findings").json()
+    assert items and all(i["decision_id"] and i["simulated"] for i in items)
+    scores = [i["likelihood"] * i["impact"] for i in items]
+    assert scores == sorted(scores, reverse=True)
+    # Archived dossiers leave the organisation-wide views.
+    did = items[0]["decision_id"]
+    assert c.patch(f"/orgs/{org}/decisions/{did}", json={"status": "archived"}).status_code == 200
+    assert c.get(f"/orgs/{org}/findings").json() == []
+    other = make_client()
+    register(other, "x@beta.example.com")
+    assert other.get(f"/orgs/{org}/findings").status_code == 404
+    e = c.get("/engine").json()
+    assert e["status"] == "unavailable" and e["agents_active"] == []  # tests run with engine none
+    assert len(e["agents_planned"]) == 6
+    assert make_client().get("/engine").status_code == 401

@@ -188,3 +188,18 @@ export interface Usage {
   used: number;
   limit: number | null;
 }
+
+export interface OrgFinding extends Finding {
+  agent: string;
+  decision_id: string;
+  decision_title: string;
+  analysis_id: string;
+  simulated: boolean;
+  created_at: string;
+}
+
+export interface EngineStatus {
+  status: "active" | "simulated" | "unavailable";
+  agents_active: string[];
+  agents_planned: string[];
+}

@@ -4,7 +4,8 @@ import { Suspense, type ReactNode } from "react";
 import { DashboardChrome } from "@/components/dashboard/chrome";
 import { hasLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { getMe } from "@/lib/api";
+import { apiGet, getMe } from "@/lib/api";
+import type { EngineStatus } from "@/lib/types";
 
 async function Shell({
   lang,
@@ -13,11 +14,20 @@ async function Shell({
   lang: Locale;
   children: ReactNode;
 }) {
-  const [me, dict] = await Promise.all([getMe(), getDictionary(lang)]);
+  const [me, dict, engine] = await Promise.all([
+    getMe(),
+    getDictionary(lang),
+    apiGet<EngineStatus>("/engine"),
+  ]);
   if (!me)
     redirect(`/${lang}/login?next=${encodeURIComponent(`/${lang}/app`)}`);
   return (
-    <DashboardChrome d={dict.dash} lang={lang} me={me}>
+    <DashboardChrome
+      d={dict.dash}
+      lang={lang}
+      me={me}
+      engine={engine.data}
+    >
       {children}
     </DashboardChrome>
   );
@@ -25,7 +35,7 @@ async function Shell({
 
 function ShellSkeleton() {
   return (
-    <div className="theme-night flex min-h-dvh">
+    <div className="theme-night theme-cockpit flex min-h-dvh">
       <div className="hidden w-64 border-r border-line bg-abyss/60 lg:block" />
       <div className="flex-1 p-8">
         <div className="h-8 w-64 animate-pulse rounded-lg bg-line" />

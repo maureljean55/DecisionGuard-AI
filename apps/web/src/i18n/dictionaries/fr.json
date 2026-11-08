@@ -858,7 +858,20 @@
       "close": "Fermer",
       "workspace": "Espace de travail",
       "groupAnalysis": "Analyse",
-      "groupOrg": "Organisation"
+      "groupOrg": "Organisation",
+      "council": "Conseil des agents",
+      "riskMap": "Carte des risques",
+      "simulator": "Simulateur de scénarios",
+      "search": "Rechercher",
+      "searchPlaceholder": "Rechercher un dossier…",
+      "space": "Espace",
+      "engineLabel": "Moteur d'analyse",
+      "engine": {
+        "active": "Actif",
+        "simulated": "Simulé",
+        "unavailable": "En attente"
+      },
+      "agentsLive": "{n}/{total} agents"
     },
     "roles": {
       "owner": "Propriétaire",
@@ -1174,7 +1187,7 @@
     "results": {
       "title": "Lecture des agents",
       "simulatedTitle": "Résultats simulés",
-      "simulatedBody": "Ces résultats sont produits par des règles fixes, pour montrer le fonctionnement du service. Aucun modèle d'IA n'a analysé cette décision : ne vous appuyez pas dessus pour décider.",
+      "simulatedBody": "Ces résultats sont produits par des règles fixes, pour montrer le fonctionnement du service. Aucun modèle d'IA n'a analysé cette décision : ne vous appuyez pas dessus pour décider.",
       "producedBy": "Produit par {model}",
       "agents": {
         "finance": "Finance",
@@ -1201,6 +1214,198 @@
       "agentFailed": "Cet agent n'a pas pu rendre son analyse ({code}). Les autres résultats restent valables.",
       "noFindings": "Aucun risque relevé sous cet angle.",
       "scaleNote": "Probabilité et impact sont l'appréciation de chaque agent, sur une échelle de 1 à 5. Le score de risque calculé arrivera avec le moteur de risque."
+    },
+    "agentCatalog": {
+      "finance": {
+        "name": "Finance",
+        "angle": "Exposition financière, trésorerie, rentabilité, change."
+      },
+      "strategy": {
+        "name": "Stratégie",
+        "angle": "Position, concurrence, alternatives, réversibilité."
+      },
+      "operations": {
+        "name": "Opérations",
+        "angle": "Calendrier, capacités, fournisseurs, continuité."
+      },
+      "audit": {
+        "name": "Audit",
+        "angle": "Relit les autres agents et vérifie chaque affirmation."
+      },
+      "scenarios": {
+        "name": "Scénarios",
+        "angle": "Simule les issues favorables, médianes et défavorables."
+      },
+      "legal": {
+        "name": "Juridique",
+        "angle": "RGPD, OHADA, droit national et contrats."
+      },
+      "cyber": {
+        "name": "Cybersécurité",
+        "angle": "Données, systèmes, prestataires et exposition."
+      },
+      "people": {
+        "name": "Humain",
+        "angle": "Équipes, compétences, conduite du changement."
+      },
+      "foresight": {
+        "name": "Prospective",
+        "angle": "Tendances, signaux faibles, horizon long."
+      }
+    },
+    "levels": {
+      "low": "Faible",
+      "moderate": "Modéré",
+      "high": "Élevé",
+      "critical": "Critique"
+    },
+    "severityNote": "Gravité = probabilité × impact, chacun sur 5, tels qu'estimés par les agents. Le score de risque calculé arrivera avec le moteur de risque.",
+    "cockpit": {
+      "eyebrow": "Cockpit de décision",
+      "engineTitle": {
+        "active": "Moteur multi-agents actif",
+        "simulated": "Moteur en mode simulé",
+        "unavailable": "Moteur d'analyse en attente"
+      },
+      "engineBody": {
+        "active": "{n} agents spécialisés sur {total} analysent chaque décision soumise. Les autres arrivent avec les prochaines versions.",
+        "simulated": "Les analyses sont produites par des règles fixes, sans modèle d'IA, pour démonstration.",
+        "unavailable": "Les décisions soumises sont mises en file d'attente et seront analysées dès la mise en service."
+      },
+      "newDecision": "Nouvelle décision",
+      "majorRisks": "Risques majeurs",
+      "majorRisksSub": "gravité ≥ 15 sur {n} constats",
+      "activeDossiers": "Dossiers actifs",
+      "activeSub": "{a} en analyse · {q} en attente de réponses",
+      "usage": "Analyses ce mois",
+      "usageSub": "Offre {plan}",
+      "unlimited": "illimité",
+      "facts": "Faits établis",
+      "factsSub": "des constats reposent sur un fait fourni",
+      "councilEyebrow": "Conseil des agents",
+      "councilTitle": "Ce que relève chaque agent",
+      "radarNote": "Gravité la plus haute relevée par agent, sur 25",
+      "planned": "Prévu · {m}",
+      "agentFindings": "{n} constats · max {s}/25",
+      "agentNone": "Aucun constat",
+      "focusEyebrow": "Point d'attention prioritaire",
+      "focusEmpty": "Aucun constat pour l'instant. Soumettez une décision : le risque le plus sérieux relevé par les agents apparaîtra ici.",
+      "focusOpen": "Ouvrir le dossier",
+      "byAgent": "Relevé par l'agent {agent}",
+      "simulated": "Simulé",
+      "tableEyebrow": "Dossiers",
+      "tableTitle": "Décisions en cours",
+      "colDossier": "Dossier",
+      "colSeverity": "Gravité max",
+      "colAgents": "Agents",
+      "colPhase": "Étape",
+      "open": "Ouvrir",
+      "tableEmpty": "Aucune décision pour l'instant.",
+      "allDecisions": "Toutes les décisions",
+      "feedTitle": "Signaux récents",
+      "feedEmpty": "Les alertes des agents et l'activité de l'équipe apparaîtront ici.",
+      "feedAll": "Toute l'activité",
+      "alert": "Alerte {level}"
+    },
+    "dossiers": {
+      "eyebrow": "Gouvernance des décisions",
+      "title": "Dossiers de décision",
+      "subtitle": "Suivez chaque décision, de la saisie à la lecture des agents.",
+      "engaged": "Montant engagé",
+      "engagedSub": "dossiers actifs en {cur}",
+      "engagedOther": "+ {n} en autres devises",
+      "inAnalysis": "En analyse",
+      "inAnalysisSub": "dont {q} en attente de réponses",
+      "major": "Risques majeurs",
+      "majorSub": "gravité ≥ 15",
+      "done": "Analyses terminées",
+      "doneSub": "dossiers avec lecture des agents",
+      "search": "Rechercher un dossier",
+      "searchButton": "Rechercher",
+      "tabs": {
+        "all": "Tous",
+        "draft": "Brouillons",
+        "submitted": "Soumis",
+        "archived": "Archivés"
+      },
+      "featured": "Dossier le plus exposé",
+      "riskByAgent": "Gravité max par agent",
+      "topFindings": "Constats principaux",
+      "open": "Ouvrir le dossier",
+      "council": "Conseil des agents",
+      "others": "Autres dossiers",
+      "noMatch": "Aucun dossier ne correspond à ces critères.",
+      "amount": "Montant",
+      "severity": "Gravité",
+      "noAmount": "Non chiffré",
+      "notAnalysed": "Pas encore analysé"
+    },
+    "council": {
+      "eyebrow": "Conseil des agents",
+      "title": "Lecture croisée des agents",
+      "subtitle": "Chaque agent analyse la décision sous son angle. Chaque constat indique son fondement : fait, hypothèse, estimation ou hypothèse IA.",
+      "dossier": "Dossier analysé",
+      "show": "Afficher",
+      "findings": "Constats",
+      "findingsSub": "{n} agents ont rendu leur analyse",
+      "facts": "Faits établis",
+      "factsSub": "le reste : hypothèses et estimations",
+      "confidence": "Confiance déclarée",
+      "confidenceSub": "selon les informations disponibles",
+      "composition": "Composition du conseil",
+      "live": "{n}/{total} en service",
+      "plannedTag": "Prévu au {m}",
+      "plannedBody": "Cet agent rejoindra le conseil avec la version {m}.",
+      "maxSeverity": "Gravité max",
+      "findingsN": "{n} constats",
+      "failed": "Échec de l'agent",
+      "evidenceMix": "Répartition par type de preuve",
+      "empty": "Aucune analyse terminée pour l'instant. Soumettez une décision : la lecture des agents s'affichera ici.",
+      "queue": "Toutes les analyses",
+      "detail": "Voir le dossier"
+    },
+    "riskMap": {
+      "eyebrow": "Cartographie",
+      "title": "Carte des risques",
+      "subtitle": "Les constats de tous vos dossiers actifs, placés selon la probabilité et l'impact estimés par les agents.",
+      "likelihood": "Probabilité",
+      "impact": "Impact",
+      "cell": "{n} constats",
+      "selected": "Probabilité {l} · Impact {i}",
+      "pick": "Choisissez une case de la carte pour lister ses constats.",
+      "empty": "La carte se remplit dès qu'une décision a été analysée.",
+      "clear": "Tout afficher",
+      "top": "Constats les plus graves",
+      "scale": {
+        "l": [
+          "Rare",
+          "Peu probable",
+          "Possible",
+          "Probable",
+          "Quasi certain"
+        ],
+        "i": [
+          "Négligeable",
+          "Mineur",
+          "Modéré",
+          "Majeur",
+          "Critique"
+        ]
+      }
+    },
+    "simulator": {
+      "eyebrow": "Scénarios",
+      "title": "Simulateur de scénarios",
+      "subtitle": "Tester une décision face à des chocs : taux, demande, prix, délais.",
+      "emptyTitle": "Le simulateur arrive avec le moteur de risque",
+      "emptyBody": "Il utilisera les constats des agents et un modèle de risque calculé, pas des chiffres inventés. Il n'est donc pas encore disponible.",
+      "whatTitle": "Ce que vous pourrez faire",
+      "what": [
+        "Faire varier les hypothèses clés : taux, change, demande, délais, prix.",
+        "Comparer un scénario favorable, médian et défavorable.",
+        "Voir quels risques basculent en zone critique.",
+        "Joindre les scénarios au rapport de la décision."
+      ]
     }
   }
 }

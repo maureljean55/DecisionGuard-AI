@@ -84,3 +84,22 @@ class UsageOut(BaseModel):
     period_start: date
     used: int
     limit: int | None
+
+
+class OrgFindingOut(FindingOut):
+    """A finding with its dossier, for organisation-wide views (risk map, alerts)."""
+
+    agent: str
+    decision_id: uuid.UUID
+    decision_title: str
+    analysis_id: uuid.UUID
+    simulated: bool
+    created_at: datetime
+
+
+class EngineOut(BaseModel):
+    """What the analysis engine can actually do right now. Shown in the dashboard chrome."""
+
+    status: str  # active | simulated | unavailable
+    agents_active: list[str]
+    agents_planned: list[str]

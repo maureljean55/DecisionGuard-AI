@@ -5,6 +5,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request, status
 from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import distinct_on
 
 from app.agents.specs import AGENTS
 from app.analyses import service
@@ -12,11 +13,15 @@ from app.analyses.schemas import (
     AgentRunOut,
     AnalysisOut,
     AnswerIn,
+    EngineOut,
     FindingOut,
+    OrgFindingOut,
     QuestionOut,
     UsageOut,
 )
+from app.auth.deps import CurrentUser
 from app.core import audit
+from app.core.config import get_settings
 from app.core.errors import AppError, NotFound
 from app.core.permissions import Permission
 from app.db.base import utcnow
@@ -26,6 +31,7 @@ from app.models import (
     AnalysisStatus,
     Decision,
     DecisionQuestion,
+    DecisionStatus,
     Finding,
 )
 from app.orgs.deps import Member, OrgContext, require
@@ -170,3 +176,59 @@ def retry_analysis(analysis_id: uuid.UUID, ctx: CanWrite, request: Request):
     )
     ctx.db.commit()
     return _out(ctx, a)
+
+
+# Agents announced in the roadmap but not running yet (M6: audit, scenarios; M7: the rest).
+PLANNED_AGENTS = ["audit", "scenarios", "legal", "cyber", "people", "foresight"]
+
+
+@router.get("/engine", response_model=EngineOut)
+def engine_status(_: CurrentUser):
+    s = get_settings()
+    if s.analysis_engine == "none":
+        status_ = "unavailable"
+    elif s.llm_provider == "mock":
+        status_ = "simulated"
+    else:
+        status_ = "active"
+    active = [a.key for a in AGENTS] if status_ != "unavailable" else []
+    return EngineOut(status=status_, agents_active=active, agents_planned=PLANNED_AGENTS)
+
+
+@router.get("/orgs/{org_id}/findings", response_model=list[OrgFindingOut])
+def org_findings(ctx: CanRead):
+    """Findings of the latest completed analysis of each non-archived decision."""
+    latest = (
+        select(Analysis.id)
+        .join(Decision, Decision.id == Analysis.decision_id)
+        .where(
+            Analysis.organization_id == ctx.org_id,
+            Analysis.status == AnalysisStatus.COMPLETED,
+            Decision.status != DecisionStatus.ARCHIVED,
+        )
+        .ext(distinct_on(Analysis.decision_id))
+        .order_by(Analysis.decision_id, Analysis.finished_at.desc())
+    )
+    rows = ctx.db.execute(
+        select(Finding, Decision.id, Decision.title, Analysis.simulated)
+        .join(Analysis, Analysis.id == Finding.analysis_id)
+        .join(Decision, Decision.id == Analysis.decision_id)
+        .where(Finding.analysis_id.in_(latest))
+        .order_by((Finding.likelihood * Finding.impact).desc(), Finding.created_at.desc())
+        .limit(500)
+    ).all()
+    out = []
+    for f, decision_id, title, simulated in rows:
+        item = OrgFindingOut.model_validate(
+            {
+                **FindingOut.model_validate(f).model_dump(),
+                "agent": f.agent,
+                "decision_id": decision_id,
+                "decision_title": title,
+                "analysis_id": f.analysis_id,
+                "simulated": simulated,
+                "created_at": f.created_at,
+            }
+        )
+        out.append(item)
+    return out

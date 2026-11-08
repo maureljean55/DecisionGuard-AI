@@ -1,24 +1,26 @@
 "use client";
 
 /**
- * Dashboard chrome: sidebar (desktop), top bar with organisation switcher and account menu,
+ * Dashboard chrome: sidebar (desktop), top bar with search, engine status and account menu,
  * slide-in drawer on mobile and tablet.
  */
 import {
   Activity,
-  BarChart3,
   Check,
   ChevronsUpDown,
-  FileText,
+  FolderKanban,
+  Grid3x3,
   LayoutDashboard,
   LogOut,
   Menu,
   Plus,
-  Radar,
   ScrollText,
+  Search,
   Settings,
+  SlidersHorizontal,
   User,
   Users,
+  UsersRound,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -33,9 +35,11 @@ import {
 } from "react";
 
 import type { Dictionary } from "@/i18n/dictionaries";
+import { AGENT_CATALOG } from "@/lib/agents";
 import { api } from "@/lib/client-api";
+import { fmt } from "@/lib/format";
 import { canReadAudit } from "@/lib/permissions";
-import type { Me } from "@/lib/types";
+import type { EngineStatus, Me } from "@/lib/types";
 
 import { Avatar } from "./ui";
 
@@ -47,6 +51,13 @@ type NavItem = {
   exact?: boolean;
 };
 type NavGroup = { label?: string; items: NavItem[] };
+type Membership = Me["memberships"][number];
+
+const ENGINE_DOT: Record<EngineStatus["status"], string> = {
+  active: "bg-teal shadow-[0_0_8px_var(--teal)]",
+  simulated: "bg-risk-moderate",
+  unavailable: "bg-muted",
+};
 
 function useOutsideClose<T extends HTMLElement>(
   open: boolean,
@@ -69,142 +80,53 @@ function useOutsideClose<T extends HTMLElement>(
   return ref;
 }
 
-function Sidebar({
-  d,
-  lang,
-  nav,
-  pathname,
-  onNavigate,
-}: {
-  d: D;
-  lang: string;
-  nav: NavGroup[];
-  pathname: string;
-  onNavigate?: () => void;
-}) {
-  const isActive = (href: string, exact: boolean) =>
-    exact
-      ? pathname === href
-      : pathname === href || pathname.startsWith(`${href}/`);
-
-  return (
-    <div className="flex h-full flex-col">
-      <Link
-        href={`/${lang}`}
-        className="flex items-center gap-2.5 px-5 py-5"
-        onClick={onNavigate}
-      >
-        <Image
-          src="/brand/owl-emblem-480.png"
-          alt=""
-          width={44}
-          height={30}
-          className="h-auto w-11"
-        />
-        <span className="font-display text-lg font-semibold text-ink">
-          DecisionGuard
-        </span>
-      </Link>
-
-      <nav
-        aria-label={d.nav.workspace}
-        className="flex-1 space-y-6 overflow-y-auto px-3 pb-4"
-      >
-        {nav.map((group, gi) => (
-          <div key={gi}>
-            {group.label && (
-              <p className="mb-2 px-3 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-muted/70">
-                {group.label}
-              </p>
-            )}
-            <ul className="space-y-0.5">
-              {group.items.map((item) => {
-                const active = isActive(item.href, item.exact ?? false);
-                const Icon = item.icon;
-                return (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      onClick={onNavigate}
-                      aria-current={active ? "page" : undefined}
-                      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
-                        active
-                          ? "bg-white/[0.07] font-medium text-ink shadow-[inset_2px_0_0_0_var(--teal)]"
-                          : "text-muted hover:bg-white/[0.04] hover:text-ink"
-                      }`}
-                    >
-                      <Icon className={`size-4 ${active ? "text-teal" : ""}`} />
-                      {item.label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
-      </nav>
-
-      <div className="border-t border-line p-3">
-        <Link
-          href={`/${lang}/app/account`}
-          onClick={onNavigate}
-          aria-current={
-            pathname === `/${lang}/app/account` ? "page" : undefined
-          }
-          className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
-            pathname === `/${lang}/app/account`
-              ? "bg-white/[0.07] font-medium text-ink"
-              : "text-muted hover:bg-white/[0.04] hover:text-ink"
-          }`}
-        >
-          <User className="size-4" />
-          {d.nav.account}
-        </Link>
-      </div>
-    </div>
-  );
-}
-
 function OrgSwitcher({
   d,
   lang,
   me,
-  orgId,
+  current,
+  onNavigate,
 }: {
   d: D;
   lang: string;
   me: Me;
-  orgId: string | null;
+  current: Membership;
+  onNavigate?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useOutsideClose<HTMLDivElement>(open, () => setOpen(false));
-  const current =
-    me.memberships.find((m) => m.organization.id === orgId) ??
-    me.memberships[0];
-  if (!current) return null;
+  const go = () => {
+    setOpen(false);
+    onNavigate?.();
+  };
   return (
-    <div ref={ref} className="relative min-w-0">
+    <div ref={ref} className="relative">
       <button
         type="button"
         aria-expanded={open}
         aria-label={d.nav.switchOrg}
         onClick={() => setOpen((o) => !o)}
-        className="flex max-w-[16rem] items-center gap-2 rounded-full border border-line bg-white/[0.03] py-1.5 pl-2 pr-3 text-sm text-ink transition-colors hover:bg-white/[0.06]"
+        className="flex w-full items-center gap-3 rounded-xl border border-line bg-white/[0.03] px-3 py-2.5 text-left transition-colors hover:bg-white/[0.06]"
       >
-        <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-iris/30 text-[0.65rem] font-semibold">
-          {current.organization.name.slice(0, 1).toUpperCase()}
+        <span className="size-2 shrink-0 rounded-full bg-teal shadow-[0_0_8px_var(--teal)]" />
+        <span className="min-w-0 flex-1">
+          <span className="block font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
+            {d.nav.space}
+          </span>
+          <span className="block truncate text-sm font-medium text-ink">
+            {current.organization.name}
+          </span>
         </span>
-        <span className="truncate">{current.organization.name}</span>
-        <ChevronsUpDown className="size-3.5 shrink-0 text-muted" aria-hidden />
+        <ChevronsUpDown className="size-4 shrink-0 text-muted" aria-hidden />
       </button>
       {open && (
-        <div className="absolute left-0 top-12 z-50 w-72 rounded-2xl border border-line bg-abyss p-2 shadow-2xl shadow-black/60">
+        <div className="absolute inset-x-0 top-[calc(100%+0.4rem)] z-50 rounded-2xl border border-line bg-[#131d36] p-2 shadow-2xl shadow-black/60">
           <ul>
             {me.memberships.map((m) => (
               <li key={m.organization.id}>
                 <Link
                   href={`/${lang}/app/${m.organization.id}`}
-                  onClick={() => setOpen(false)}
+                  onClick={go}
                   className="flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm hover:bg-white/[0.05]"
                 >
                   <span className="min-w-0">
@@ -224,7 +146,7 @@ function OrgSwitcher({
           </ul>
           <Link
             href={`/${lang}/app/new`}
-            onClick={() => setOpen(false)}
+            onClick={go}
             className="mt-1 flex items-center gap-2 rounded-xl border-t border-line px-3 py-2.5 text-sm text-teal hover:bg-white/[0.05]"
           >
             <Plus className="size-4" aria-hidden />
@@ -232,6 +154,164 @@ function OrgSwitcher({
           </Link>
         </div>
       )}
+    </div>
+  );
+}
+
+function EngineCard({ d, engine }: { d: D; engine: EngineStatus | null }) {
+  if (!engine) return null;
+  return (
+    <div className="flex items-center justify-between gap-2 rounded-xl border border-line bg-white/[0.02] px-3 py-2.5">
+      <span className="flex min-w-0 items-center gap-2">
+        <span className={`size-1.5 shrink-0 rounded-full ${ENGINE_DOT[engine.status]}`} />
+        <span className="truncate font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted">
+          {d.nav.engineLabel}
+        </span>
+      </span>
+      <span className="shrink-0 font-mono text-[0.7rem] text-teal">
+        {engine.status === "unavailable"
+          ? d.nav.engine.unavailable
+          : fmt(d.nav.agentsLive, {
+              n: String(engine.agents_active.length),
+              total: String(AGENT_CATALOG.length),
+            })}
+      </span>
+    </div>
+  );
+}
+
+function Sidebar({
+  d,
+  lang,
+  me,
+  current,
+  engine,
+  nav,
+  pathname,
+  onNavigate,
+}: {
+  d: D;
+  lang: string;
+  me: Me;
+  current: Membership | null;
+  engine: EngineStatus | null;
+  nav: NavGroup[];
+  pathname: string;
+  onNavigate?: () => void;
+}) {
+  const router = useRouter();
+  const isActive = (href: string, exact: boolean) =>
+    exact
+      ? pathname === href
+      : pathname === href || pathname.startsWith(`${href}/`);
+
+  return (
+    <div className="flex h-full flex-col">
+      <Link
+        href={`/${lang}`}
+        className="flex items-center gap-2.5 px-5 pb-4 pt-5"
+        onClick={onNavigate}
+      >
+        <Image
+          src="/brand/owl-emblem-480.png"
+          alt=""
+          width={44}
+          height={30}
+          className="h-auto w-10"
+        />
+        <span className="font-display text-[1.15rem] font-semibold leading-none text-ink">
+          DecisionGuard
+        </span>
+      </Link>
+
+      {current && (
+        <div className="px-3 pb-4">
+          <OrgSwitcher
+            d={d}
+            lang={lang}
+            me={me}
+            current={current}
+            onNavigate={onNavigate}
+          />
+        </div>
+      )}
+
+      <nav
+        aria-label={d.nav.workspace}
+        className="flex-1 space-y-5 overflow-y-auto px-3 pb-4"
+      >
+        {nav.map((group, gi) => (
+          <div key={gi}>
+            {group.label && (
+              <p className="mb-1.5 px-3 font-mono text-[0.62rem] font-medium uppercase tracking-[0.14em] text-muted/70">
+                {group.label}
+              </p>
+            )}
+            <ul className="space-y-0.5">
+              {group.items.map((item) => {
+                const active = isActive(item.href, item.exact ?? false);
+                const Icon = item.icon;
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={onNavigate}
+                      aria-current={active ? "page" : undefined}
+                      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
+                        active
+                          ? "border border-electric/30 bg-electric/[0.12] font-medium text-ink"
+                          : "border border-transparent text-muted hover:bg-white/[0.04] hover:text-ink"
+                      }`}
+                    >
+                      <Icon
+                        className={`size-4 ${active ? "text-teal" : ""}`}
+                      />
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </nav>
+
+      <div className="space-y-2 border-t border-line p-3">
+        <EngineCard d={d} engine={engine} />
+        <div className="flex items-center gap-3 rounded-xl px-2 py-1.5">
+          <Link
+            href={`/${lang}/app/account`}
+            onClick={onNavigate}
+            className="flex min-w-0 flex-1 items-center gap-3 rounded-lg hover:opacity-90"
+          >
+            <Avatar name={me.user.full_name} />
+            <span className="min-w-0">
+              <span className="block truncate text-sm font-medium text-ink">
+                {me.user.full_name}
+              </span>
+              <span className="block truncate text-xs text-muted">
+                {current ? d.roles[current.role] : d.nav.account}
+              </span>
+            </span>
+          </Link>
+          <button
+            type="button"
+            aria-label={d.nav.logout}
+            title={d.nav.logout}
+            onClick={async () => {
+              try {
+                await api("/auth/logout", { method: "POST" });
+              } finally {
+                router.replace(`/${lang}/login`);
+                router.refresh();
+              }
+            }}
+            className="flex size-9 shrink-0 items-center justify-center rounded-lg text-muted hover:bg-white/[0.06] hover:text-ink"
+          >
+            <LogOut className="size-4" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -252,7 +332,7 @@ function UserMenu({ d, lang, me }: { d: D; lang: string; me: Me }) {
         <Avatar name={me.user.full_name} />
       </button>
       {open && (
-        <div className="absolute right-0 top-12 z-50 w-64 rounded-2xl border border-line bg-abyss p-2 shadow-2xl shadow-black/60">
+        <div className="absolute right-0 top-12 z-50 w-64 rounded-2xl border border-line bg-[#131d36] p-2 shadow-2xl shadow-black/60">
           <div className="px-3 py-2.5">
             <p className="truncate text-sm font-medium text-ink">
               {me.user.full_name}
@@ -289,15 +369,67 @@ function UserMenu({ d, lang, me }: { d: D; lang: string; me: Me }) {
   );
 }
 
+function SearchBox({ d, base }: { d: D; base: string }) {
+  return (
+    <form
+      action={`${base}/decisions`}
+      role="search"
+      className="relative hidden min-w-0 flex-1 sm:block sm:max-w-md"
+    >
+      <Search
+        className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted"
+        aria-hidden
+      />
+      <label htmlFor="dash-search" className="sr-only">
+        {d.nav.search}
+      </label>
+      <input
+        id="dash-search"
+        name="q"
+        type="search"
+        placeholder={d.nav.searchPlaceholder}
+        className="h-10 w-full rounded-xl border border-line bg-white/[0.03] pl-10 pr-3 text-sm text-ink placeholder:text-muted/80 focus:border-electric/50 focus:outline-none focus:ring-2 focus:ring-electric/20"
+      />
+    </form>
+  );
+}
+
+function EnginePill({ d, engine }: { d: D; engine: EngineStatus | null }) {
+  if (!engine) return null;
+  return (
+    <span className="hidden items-center gap-2 rounded-xl border border-line bg-white/[0.03] px-3 py-2 md:inline-flex">
+      <span className={`size-1.5 rounded-full ${ENGINE_DOT[engine.status]}`} />
+      <span className="font-mono text-[0.66rem] uppercase tracking-[0.12em] text-muted">
+        {d.nav.engineLabel}
+      </span>
+      <span
+        className={`font-mono text-[0.72rem] font-medium ${
+          engine.status === "active"
+            ? "text-teal"
+            : engine.status === "simulated"
+              ? "text-risk-moderate"
+              : "text-muted"
+        }`}
+      >
+        {d.nav.engine[engine.status]}
+        {engine.status !== "unavailable" &&
+          ` (${engine.agents_active.length}/${AGENT_CATALOG.length})`}
+      </span>
+    </span>
+  );
+}
+
 export function DashboardChrome({
   d,
   lang,
   me,
+  engine,
   children,
 }: {
   d: D;
   lang: string;
   me: Me;
+  engine: EngineStatus | null;
   children: ReactNode;
 }) {
   const pathname = usePathname();
@@ -333,19 +465,20 @@ export function DashboardChrome({
             {
               href: `${base}/decisions`,
               label: d.nav.decisions,
-              icon: FileText,
+              icon: FolderKanban,
             },
             {
-              href: `${base}/analyses`,
-              label: d.nav.analyses,
-              icon: BarChart3,
+              href: `${base}/council`,
+              label: d.nav.council,
+              icon: UsersRound,
+            },
+            { href: `${base}/risk-map`, label: d.nav.riskMap, icon: Grid3x3 },
+            {
+              href: `${base}/simulator`,
+              label: d.nav.simulator,
+              icon: SlidersHorizontal,
             },
             { href: `${base}/reports`, label: d.nav.reports, icon: ScrollText },
-            {
-              href: `${base}/monitoring`,
-              label: d.nav.monitoring,
-              icon: Radar,
-            },
           ],
         },
         {
@@ -367,10 +500,23 @@ export function DashboardChrome({
       ]
     : [];
 
+  const sidebar = (onNavigate?: () => void) => (
+    <Sidebar
+      d={d}
+      lang={lang}
+      me={me}
+      current={org}
+      engine={engine}
+      nav={nav}
+      pathname={pathname}
+      onNavigate={onNavigate}
+    />
+  );
+
   return (
-    <div className="theme-night min-h-dvh lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
-      <aside className="sticky top-0 hidden h-dvh border-r border-line bg-abyss/60 lg:block">
-        <Sidebar d={d} lang={lang} nav={nav} pathname={pathname} />
+    <div className="theme-night theme-cockpit min-h-dvh lg:grid lg:grid-cols-[16.5rem_minmax(0,1fr)]">
+      <aside className="sticky top-0 hidden h-dvh border-r border-line bg-[#0b1122] lg:block">
+        {sidebar()}
       </aside>
 
       {/* Mobile drawer */}
@@ -387,47 +533,38 @@ export function DashboardChrome({
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setDrawer(false)}
           />
-          <div className="absolute inset-y-0 left-0 w-72 border-r border-line bg-abyss shadow-2xl">
+          <div className="absolute inset-y-0 left-0 w-72 border-r border-line bg-[#0b1122] shadow-2xl">
             <button
               type="button"
               aria-label={d.nav.close}
               onClick={() => setDrawer(false)}
-              className="absolute right-3 top-4 flex size-9 items-center justify-center rounded-full text-muted hover:bg-white/[0.06] hover:text-ink"
+              className="absolute right-3 top-4 z-10 flex size-9 items-center justify-center rounded-full text-muted hover:bg-white/[0.06] hover:text-ink"
             >
               <X className="size-4" />
             </button>
-            <Sidebar
-              d={d}
-              lang={lang}
-              nav={nav}
-              pathname={pathname}
-              onNavigate={() => setDrawer(false)}
-            />
+            {sidebar(() => setDrawer(false))}
           </div>
         </div>
       )}
 
       <div className="flex min-w-0 flex-col">
-        <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-3 border-b border-line bg-night/80 px-4 backdrop-blur-xl sm:px-6">
-          <div className="flex min-w-0 items-center gap-2">
-            <button
-              type="button"
-              aria-label={d.nav.menu}
-              onClick={() => setDrawer(true)}
-              className="flex size-10 shrink-0 items-center justify-center rounded-full border border-line text-ink lg:hidden"
-            >
-              <Menu className="size-[1.1rem]" />
-            </button>
-            <OrgSwitcher
-              d={d}
-              lang={lang}
-              me={me}
-              orgId={org?.organization.id ?? null}
-            />
+        <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-line bg-night/80 px-4 backdrop-blur-xl sm:px-6">
+          <button
+            type="button"
+            aria-label={d.nav.menu}
+            onClick={() => setDrawer(true)}
+            className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-line text-ink lg:hidden"
+          >
+            <Menu className="size-[1.1rem]" />
+          </button>
+          {org ? <SearchBox d={d} base={base} /> : <span className="flex-1" />}
+          <span className="flex-1 sm:hidden" />
+          <div className="ml-auto flex items-center gap-3">
+            <EnginePill d={d} engine={engine} />
+            <UserMenu d={d} lang={lang} me={me} />
           </div>
-          <UserMenu d={d} lang={lang} me={me} />
         </header>
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+        <main className="mx-auto w-full max-w-[90rem] flex-1 px-4 py-7 sm:px-6 lg:px-8">
           {children}
         </main>
       </div>

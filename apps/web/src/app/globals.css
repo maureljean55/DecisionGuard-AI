@@ -21,6 +21,7 @@
   --teal: #35d0d6;
   --iris: #5b6cff;
   --violet: #a46bff;
+  --electric: #3478f6;
   --risk-low: #2f9e6e;
   --risk-moderate: #d9a521;
   --risk-high: #e07b2a;
@@ -38,6 +39,14 @@
 }
 
 /* Brand surfaces are always night, whatever the OS theme (the emblem is designed for it). */
+/* The dashboard ("cockpit") uses a slightly cooler navy with hairline borders. */
+.theme-cockpit {
+  --bg: #080d1a;
+  --night: #080d1a;
+  --abyss: #0d1426;
+  --line: rgb(255 255 255 / 0.08);
+  --muted: #94a3b8;
+}
 .theme-night {
   --bg: #060a1a;
   --surface: #0a1128;
@@ -64,6 +73,7 @@
   --color-teal: var(--teal);
   --color-iris: var(--iris);
   --color-violet: var(--violet);
+  --color-electric: var(--electric);
   --color-risk-low: var(--risk-low);
   --color-risk-moderate: var(--risk-moderate);
   --color-risk-high: var(--risk-high);
