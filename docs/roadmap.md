@@ -9,13 +9,13 @@
 | M3 | Espace entreprise responsive (ordinateur/tablette/mobile, PWA) : tableau de bord, navigation, gestion d'équipe, paramètres | ✅ Terminé |
 | M4 | Décisions, questions complémentaires, file d'analyse (worker, retries, reprise), quotas | ✅ Terminé |
 | M5 | Orchestrateur, interface LLM (Claude + mock simulé), agents Financier / Stratégique / Opérationnel | ✅ |
-| M6 | Moteur de risque déterministe, heatmap 5×5, agent d'audit, scénarios, rapport PDF de base | ⏳ Suivant |
+| M6 | Moteur de risque déterministe, heatmap 5×5, agent d'audit, scénarios, rapport PDF de base | ✅ |
 
 ## Phase V1 — commercialisable
 
 | # | Milestone |
 |---|---|
-| M7 | Agents Juridique (RGPD, OHADA, lois nationales), Cyber, Humain, Prospectif |
+| M7 | Agents Juridique (RGPD, OHADA, lois nationales), Cyber, Humain, Prospectif ⏳ Suivant |
 | M8 | Intelligence documentaire : upload sécurisé, extraction, pgvector, RAG avec sources |
 | M9 | Recommandations, feuille de route d'atténuation, rapports PDF complets FR/EN |
 

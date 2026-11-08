@@ -27,6 +27,8 @@ class AnalysisSummary(BaseModel):
     created_at: datetime
     finished_at: datetime | None
     open_questions: int = 0
+    risk_score: int | None = None
+    risk_level: str | None = None
 
 
 class FindingOut(BaseModel):
@@ -40,6 +42,8 @@ class FindingOut(BaseModel):
     likelihood: int
     impact: int
     mitigation: str
+    audit_status: str | None = None
+    audit_note: str | None = None
 
 
 class AgentRunOut(BaseModel):
@@ -65,6 +69,11 @@ class AnalysisOut(AnalysisSummary):
     provider: str | None = None
     model: str | None = None
     simulated: bool = False
+    risk_score: int | None = None
+    risk_level: str | None = None
+    risk_model: str | None = None
+    risk_breakdown: dict | None = None
+    scenarios: list | None = None
     agents: list[AgentRunOut] = []
 
 

@@ -28,6 +28,7 @@ import {
 } from "@/components/dashboard/cockpit";
 import { LocalTime } from "@/components/dashboard/local-time";
 import { PageSkeleton } from "@/components/dashboard/page-title";
+import { IndexChip } from "@/components/dashboard/risk";
 import { formatAmount, StatusBadge } from "@/components/dashboard/status";
 import { hasLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -318,12 +319,14 @@ async function Overview({
                     <span className="block truncate text-[0.72rem] text-muted">
                       {!a.live
                         ? fmt(C.planned, { m: a.milestone })
-                        : a.count
-                          ? fmt(C.agentFindings, {
-                              n: String(a.count),
-                              s: String(a.max),
-                            })
-                          : C.agentNone}
+                        : a.key === "audit" || a.key === "scenarios"
+                          ? d.agentCatalog[a.key].angle
+                          : a.count
+                            ? fmt(C.agentFindings, {
+                                n: String(a.count),
+                                s: String(a.max),
+                              })
+                            : C.agentNone}
                     </span>
                   </span>
                 </li>
@@ -437,7 +440,6 @@ async function Overview({
               {/* Phones: stacked cards */}
               <ul className="mt-4 divide-y divide-line sm:hidden">
                 {active.slice(0, 6).map((x) => {
-                  const agg = byDecision.get(x.id);
                   return (
                     <li key={x.id}>
                       <Link
@@ -448,7 +450,11 @@ async function Overview({
                           {x.title}
                         </span>
                         <span className="mt-2 flex flex-wrap items-center gap-3">
-                          <SeverityChip d={d} score={agg ? agg.max : null} />
+                          <IndexChip
+                            d={d}
+                            score={x.latest_analysis?.risk_score}
+                            levelKey={x.latest_analysis?.risk_level}
+                          />
                           <StatusBadge
                             status={x.status}
                             d={d}
@@ -468,7 +474,7 @@ async function Overview({
                         {C.colDossier}
                       </th>
                       <th className="px-3 py-2.5 font-medium">
-                        {C.colSeverity}
+                        {d.risk.colIndex}
                       </th>
                       <th className="px-3 py-2.5 font-medium">{C.colAgents}</th>
                       <th className="px-3 py-2.5 font-medium">{C.colPhase}</th>
@@ -498,7 +504,11 @@ async function Overview({
                             </p>
                           </td>
                           <td className="px-3 py-3.5">
-                            <SeverityChip d={d} score={agg ? agg.max : null} />
+                            <IndexChip
+                              d={d}
+                              score={x.latest_analysis?.risk_score}
+                              levelKey={x.latest_analysis?.risk_level}
+                            />
                           </td>
                           <td className="px-3 py-3.5 font-mono text-xs text-muted">
                             {agg

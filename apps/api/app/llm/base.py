@@ -17,6 +17,8 @@ class LLMRequest:
     output: type[BaseModel]
     # Structured input, for providers that do not read prose (the deterministic mock).
     brief: "DecisionBrief"
+    # Extra structured input for the deterministic mock (e.g. the findings under audit).
+    context: object = None
 
 
 @dataclass(frozen=True)

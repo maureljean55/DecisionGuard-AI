@@ -122,3 +122,18 @@ Migrations Alembic dans `apps/api/migrations/versions`. Extensions activées : `
   adaptative, repli serveur en cas de refus) et `mock`, déterministe, fondé sur des règles fixes.
   Les analyses produites par `mock` sont marquées `simulated` et l'interface l'affiche.
 - **Stockage** : tables `agent_runs` et `findings` (migration 0006), sous RLS comme le reste.
+
+## Moteur de risque, audit et rapport (M6)
+
+- **Audit** : après les agents spécialisés, l'agent d'audit relit chaque constat numéroté et rend
+  un verdict (`supported`, `weak`, `unsupported`) avec une note ; il peut corriger le type de preuve.
+  S'il échoue, l'analyse reste valable et les constats sont affichés « non audités ».
+- **Indice de risque** (`app/risk/engine.py`, modèle `risk-v1`) : calcul déterministe, sans IA,
+  `100 × (0,45 × pic + 0,30 × concentration + 0,15 × étendue + 0,10 × incertitude)`, seuils
+  25 / 45 / 65. Les constats `unsupported` sont exclus. Le détail (composantes, matrice 5×5,
+  entrées) est stocké dans `analyses.risk_breakdown`.
+- **Scénarios** : favorable, médian, défavorable, sévère, obtenus en décalant probabilités et
+  impacts ; le simulateur (`POST …/simulate`) recalcule à la demande, sans rien enregistrer.
+- **Rapport PDF** (`app/reports/pdf.py`, ReportLab) : généré à la demande depuis les données
+  stockées (`GET …/report.pdf`).
+- **Rattrapage** : `python -m app.risk.backfill` calcule l'indice des analyses antérieures au M6.

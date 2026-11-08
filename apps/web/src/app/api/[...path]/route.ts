@@ -20,7 +20,12 @@ const FORWARDED_REQUEST_HEADERS = [
   "user-agent",
   "x-csrf-token",
 ];
-const FORWARDED_RESPONSE_HEADERS = ["content-type", "cache-control", "retry-after"];
+const FORWARDED_RESPONSE_HEADERS = [
+  "content-type",
+  "cache-control",
+  "retry-after",
+  "content-disposition",
+];
 const MAX_BODY_BYTES = 1_000_000; // JSON API; file uploads will get a dedicated path
 // Writes that can queue an analysis: create/submit/update a decision, answer, retry.
 const QUEUEING_WRITE = /^orgs\/[^/]+\/(decisions|analyses)(\/|$)/;

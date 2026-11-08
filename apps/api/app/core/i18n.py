@@ -78,6 +78,10 @@ MESSAGES: dict[str, dict[Locale, str]] = {
         "fr": "Cette analyse n'attend plus de réponses.",
         "en": "This analysis is no longer waiting for answers.",
     },
+    "analysis.not_completed": {
+        "fr": "Cette analyse n'est pas terminée.",
+        "en": "This analysis is not complete.",
+    },
     "analysis.not_retryable": {
         "fr": "Seule une analyse en échec peut être relancée.",
         "en": "Only a failed analysis can be retried.",

@@ -5,7 +5,7 @@ analysis it produces is flagged `simulated` so the interface can say so plainly.
 """
 
 from app.agents.brief import DecisionBrief
-from app.agents.schema import AgentFinding, AgentReport
+from app.agents.schema import AgentFinding, AgentReport, AuditReport, FindingReview
 from app.llm.base import LLMRequest, LLMResult
 
 MODEL = "rules-v1"
@@ -267,11 +267,47 @@ _MISSING = {
 }
 
 
+def _audit(request: LLMRequest) -> AuditReport:
+    """Rule: AI hypotheses are flagged as weak; everything else is accepted as labelled."""
+    b = request.brief
+    reviews = []
+    for i, (_, f) in enumerate(request.context or [], start=1):
+        weak = f.evidence_type == "ai_hypothesis"
+        reviews.append(
+            FindingReview(
+                ref=i,
+                verdict="weak" if weak else "supported",
+                evidence_type=f.evidence_type,
+                note=_t(
+                    b,
+                    "Hypothèse générée, à confirmer avant d'en tenir compte."
+                    if weak
+                    else "Cohérent avec les informations fournies.",
+                    "Generated hypothesis, to confirm before relying on it."
+                    if weak
+                    else "Consistent with the information provided.",
+                ),
+            )
+        )
+    return AuditReport(
+        summary=_t(
+            b,
+            "Audit simulé par des règles fixes : les hypothèses générées sont signalées comme "
+            "fragiles. Aucun modèle d'IA n'a relu ces constats.",
+            "Simulated audit with fixed rules: generated hypotheses are flagged as weak. No AI "
+            "model reviewed these findings.",
+        ),
+        reviews=reviews,
+    )
+
+
 class MockProvider:
     name = "mock"
     simulated = True
 
     def complete(self, request: LLMRequest) -> LLMResult:
+        if request.agent == "audit":
+            return LLMResult(output=_audit(request), model=MODEL)
         b = request.brief
         findings = _RULES[request.agent](b)
         report = AgentReport(

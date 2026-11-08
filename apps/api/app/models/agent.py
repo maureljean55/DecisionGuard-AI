@@ -63,4 +63,7 @@ class Finding(UUIDPrimaryKey, Base):
     likelihood: Mapped[int] = mapped_column(SmallInteger)  # 1..5, as assessed by the agent
     impact: Mapped[int] = mapped_column(SmallInteger)  # 1..5, as assessed by the agent
     mitigation: Mapped[str] = mapped_column(Text)
+    # Set by the audit agent: supported | weak | unsupported (excluded from the risk score).
+    audit_status: Mapped[str | None] = mapped_column(String(16))
+    audit_note: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

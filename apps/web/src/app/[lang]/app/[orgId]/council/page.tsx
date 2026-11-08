@@ -21,6 +21,7 @@ import {
   SeverityChip,
 } from "@/components/dashboard/cockpit";
 import { PageSkeleton } from "@/components/dashboard/page-title";
+import { IndexChip } from "@/components/dashboard/risk";
 import { formatAmount } from "@/components/dashboard/status";
 import { hasLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -31,7 +32,12 @@ import { fmt } from "@/lib/format";
 import { level, LEVEL_FILL, severity } from "@/lib/risk";
 import type { Analysis, Decision, EvidenceType } from "@/lib/types";
 
-const EVIDENCE: EvidenceType[] = ["fact", "estimate", "assumption", "ai_hypothesis"];
+const EVIDENCE: EvidenceType[] = [
+  "fact",
+  "estimate",
+  "assumption",
+  "ai_hypothesis",
+];
 const EVIDENCE_FILL: Record<EvidenceType, string> = {
   fact: "bg-teal",
   estimate: "bg-iris",
@@ -57,13 +63,13 @@ async function Council({
   const K = d.council;
   const base = `/${lang}/app/${org.id}`;
 
-  const decisions = (await apiGet<Decision[]>(`/orgs/${org.id}/decisions`)).data ?? [];
+  const decisions =
+    (await apiGet<Decision[]>(`/orgs/${org.id}/decisions`)).data ?? [];
   const analysed = decisions.filter(
     (x) => x.latest_analysis?.status === "completed",
   );
   const wanted = typeof sp.decision === "string" ? sp.decision : null;
-  const selected =
-    analysed.find((x) => x.id === wanted) ?? analysed[0] ?? null;
+  const selected = analysed.find((x) => x.id === wanted) ?? analysed[0] ?? null;
 
   const header = (
     <PageHeader
@@ -106,7 +112,11 @@ async function Council({
 
   const runs = new Map(analysis.agents.map((r) => [r.agent, r]));
   const all = analysis.agents.flatMap((r) => r.findings);
-  const done = analysis.agents.filter((r) => r.status === "completed");
+  const done = analysis.agents.filter(
+    (r) => r.status === "completed" && r.agent !== "audit",
+  );
+  const liveCount =
+    analysis.agents.length + (analysis.scenarios?.length ? 1 : 0);
   const facts = all.filter((f) => f.evidence_type === "fact").length;
   const confidences = done
     .map((r) => r.confidence)
@@ -201,7 +211,7 @@ async function Council({
         </h2>
         <span className="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-muted">
           {fmt(K.live, {
-            n: String(analysis.agents.length),
+            n: String(liveCount),
             total: String(AGENT_CATALOG.length),
           })}
         </span>
@@ -210,6 +220,78 @@ async function Council({
         {AGENT_CATALOG.map((a) => {
           const run = runs.get(a.key);
           const info = d.agentCatalog[a.key];
+          if (a.key === "scenarios" && analysis.scenarios?.length) {
+            return (
+              <li
+                key={a.key}
+                className="relative flex flex-col overflow-hidden rounded-2xl border border-line bg-abyss/80 p-5"
+              >
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-0.5 bg-iris"
+                />
+                <p className="font-display text-lg font-semibold text-ink">
+                  {info.name}
+                </p>
+                <p className="text-xs text-muted">{info.angle}</p>
+                <ul className="mt-4 space-y-2">
+                  {analysis.scenarios.map((sc) => (
+                    <li
+                      key={sc.key}
+                      className="flex items-center justify-between gap-3 text-sm"
+                    >
+                      <span className="text-ink/85">
+                        {d.risk.scenario[sc.key]}
+                      </span>
+                      <IndexChip d={d} score={sc.score} levelKey={sc.level} />
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href={`${base}/simulator?analysis=${analysis.id}`}
+                  className="mt-auto pt-4 text-xs text-teal hover:text-ink"
+                >
+                  {d.risk.simulate}
+                </Link>
+              </li>
+            );
+          }
+          if (a.key === "audit" && run) {
+            const verdicts = all.map((f) => f.audit_status);
+            return (
+              <li
+                key={a.key}
+                className="relative flex flex-col overflow-hidden rounded-2xl border border-line bg-abyss/80 p-5"
+              >
+                <span
+                  aria-hidden
+                  className={`absolute inset-x-0 top-0 h-0.5 ${run.status === "failed" ? "bg-risk-critical" : "bg-teal"}`}
+                />
+                <p className="font-display text-lg font-semibold text-ink">
+                  {info.name}
+                </p>
+                <p className="text-xs text-muted">{info.angle}</p>
+                <p className="mt-4 line-clamp-5 text-sm leading-relaxed text-ink/85">
+                  {run.status === "completed"
+                    ? run.summary
+                    : fmt(d.audit.failed, { code: run.error_code ?? "error" })}
+                </p>
+                {run.status === "completed" && (
+                  <p className="mt-auto pt-4 font-mono text-[0.68rem] text-muted">
+                    {fmt(d.audit.counts, {
+                      s: String(
+                        verdicts.filter((v) => v === "supported").length,
+                      ),
+                      w: String(verdicts.filter((v) => v === "weak").length),
+                      u: String(
+                        verdicts.filter((v) => v === "unsupported").length,
+                      ),
+                    })}
+                  </p>
+                )}
+              </li>
+            );
+          }
           if (!run) {
             return (
               <li
@@ -234,7 +316,10 @@ async function Council({
               </li>
             );
           }
-          const max = run.findings.reduce((m, f) => Math.max(m, severity(f)), 0);
+          const max = run.findings.reduce(
+            (m, f) => Math.max(m, severity(f)),
+            0,
+          );
           return (
             <li
               key={a.key}
@@ -257,7 +342,9 @@ async function Council({
                   </p>
                   <p className="text-xs text-muted">{info.angle}</p>
                 </div>
-                {run.status === "completed" && <SeverityChip d={d} score={max || null} />}
+                {run.status === "completed" && (
+                  <SeverityChip d={d} score={max || null} />
+                )}
               </div>
               {run.status === "failed" ? (
                 <p className="mt-4 flex gap-2 text-sm text-muted">
@@ -275,7 +362,9 @@ async function Council({
               <div className="mt-auto pt-4">
                 <div className="flex items-center justify-between font-mono text-[0.64rem] uppercase tracking-[0.12em] text-muted">
                   <span>{K.maxSeverity}</span>
-                  <span>{fmt(K.findingsN, { n: String(run.findings.length) })}</span>
+                  <span>
+                    {fmt(K.findingsN, { n: String(run.findings.length) })}
+                  </span>
                 </div>
                 <div className="mt-1.5 h-1.5 rounded-full bg-white/[0.06]">
                   {max > 0 && (

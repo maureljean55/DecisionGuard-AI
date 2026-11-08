@@ -3,7 +3,8 @@
 import uuid
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Request, status
+from fastapi import APIRouter, Depends, Request, Response, status
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import distinct_on
 
@@ -35,6 +36,7 @@ from app.models import (
     Finding,
 )
 from app.orgs.deps import Member, OrgContext, require
+from app.risk import engine as risk
 
 router = APIRouter(tags=["analyses"])
 
@@ -178,8 +180,8 @@ def retry_analysis(analysis_id: uuid.UUID, ctx: CanWrite, request: Request):
     return _out(ctx, a)
 
 
-# Agents announced in the roadmap but not running yet (M6: audit, scenarios; M7: the rest).
-PLANNED_AGENTS = ["audit", "scenarios", "legal", "cyber", "people", "foresight"]
+# Audit (agent) and scenarios (deterministic engine) run since M6; the rest arrive in M7.
+PLANNED_AGENTS = ["legal", "cyber", "people", "foresight"]
 
 
 @router.get("/engine", response_model=EngineOut)
@@ -191,7 +193,7 @@ def engine_status(_: CurrentUser):
         status_ = "simulated"
     else:
         status_ = "active"
-    active = [a.key for a in AGENTS] if status_ != "unavailable" else []
+    active = [a.key for a in AGENTS] + ["audit", "scenarios"] if status_ != "unavailable" else []
     return EngineOut(status=status_, agents_active=active, agents_planned=PLANNED_AGENTS)
 
 
@@ -232,3 +234,84 @@ def org_findings(ctx: CanRead):
         )
         out.append(item)
     return out
+
+
+class Shift(BaseModel):
+    likelihood: int = Field(default=0, ge=-2, le=2)
+    impact: int = Field(default=0, ge=-2, le=2)
+
+
+class SimulateIn(BaseModel):
+    """Offsets applied to the agents' estimates. `all` applies to every agent first."""
+
+    all: Shift = Shift()
+    agents: dict[str, Shift] = Field(default_factory=dict, max_length=20)
+
+
+@router.post("/orgs/{org_id}/analyses/{analysis_id}/simulate")
+def simulate(analysis_id: uuid.UUID, body: SimulateIn, ctx: CanRead) -> dict:
+    """Recompute the risk index under adjusted assumptions. Read-only: nothing is stored."""
+    a = _get(ctx, analysis_id)
+    if a.status != AnalysisStatus.COMPLETED or a.risk_breakdown is None:
+        raise AppError(409, "analysis.not_completed")
+    rows = ctx.db.scalars(select(Finding).where(Finding.analysis_id == a.id))
+    counted, excluded = [], 0
+    for f in rows:
+        if f.audit_status == "unsupported":
+            excluded += 1
+            continue
+        counted.append(risk.Item(f.agent, f.likelihood, f.impact))
+    shifts = {
+        agent: (body.all.likelihood + sh.likelihood, body.all.impact + sh.impact)
+        for agent, sh in body.agents.items()
+    }
+    moved = risk.shift(counted, shifts, default=(body.all.likelihood, body.all.impact))
+    inputs = risk.Inputs(**a.risk_breakdown.get("inputs", {}))
+    result = risk.compute(moved, inputs, excluded)
+    return {**result.as_dict(), "baseline": a.risk_score}
+
+
+@router.get("/orgs/{org_id}/analyses/{analysis_id}/report.pdf")
+def report_pdf(analysis_id: uuid.UUID, ctx: CanRead) -> Response:
+    """PDF report of a completed analysis, built from stored data only."""
+    from app.reports.pdf import ReportData, render
+
+    a = _get(ctx, analysis_id)
+    if a.status != AnalysisStatus.COMPLETED or a.risk_score is None:
+        raise AppError(409, "analysis.not_completed")
+    d = ctx.db.get(Decision, a.decision_id)
+    if d is None:
+        raise NotFound()
+    amount = None
+    if d.amount is not None:
+        amount = f"{d.amount:,.0f}".replace(",", "\u00a0") + (
+            f" {d.currency}" if d.currency else ""
+        )
+    data = ReportData(
+        locale=ctx.org.default_locale,
+        org_name=ctx.org.name,
+        title=d.title,
+        description=d.description,
+        category=str(getattr(d.category, "value", d.category)),
+        amount=amount,
+        deadline=d.deadline.strftime("%d/%m/%Y") if d.deadline else None,
+        finished_at=a.finished_at,
+        provider=a.provider,
+        model=a.model,
+        simulated=a.simulated,
+        risk_score=a.risk_score,
+        risk_level=a.risk_level or "low",
+        breakdown=a.risk_breakdown or {},
+        scenarios=a.scenarios or [],
+        runs=[r.model_dump(mode="json") for r in _agents(ctx, a.id)],
+    )
+    slug = "".join(c if c.isalnum() else "-" for c in d.title.lower())[:50].strip("-")
+    slug = slug.encode("ascii", "ignore").decode() or "decision"
+    return Response(
+        content=render(data),
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="decisionguard-{slug}.pdf"',
+            "Cache-Control": "private, no-store",
+        },
+    )

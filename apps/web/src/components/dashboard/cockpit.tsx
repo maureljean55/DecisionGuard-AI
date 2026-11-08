@@ -134,7 +134,14 @@ export function Ring({ value, label }: { value: number; label: string }) {
       role="img"
       aria-label={label}
     >
-      <circle cx="22" cy="22" r={r} fill="none" stroke="var(--line)" strokeWidth="4" />
+      <circle
+        cx="22"
+        cy="22"
+        r={r}
+        fill="none"
+        stroke="var(--line)"
+        strokeWidth="4"
+      />
       <circle
         cx="22"
         cy="22"
@@ -167,13 +174,24 @@ export function SeverityChip({ d, score }: { d: D; score: number | null }) {
   );
 }
 
-export type RadarAxis = { key: string; label: string; value: number; live: boolean };
+export type RadarAxis = {
+  key: string;
+  label: string;
+  value: number;
+  live: boolean;
+};
 
 /**
  * One axis per agent; the polygon joins each live agent's highest severity (out of 25).
  * Agents that are not live yet sit at the centre with a hollow marker.
  */
-export function AgentRadar({ axes, label }: { axes: RadarAxis[]; label: string }) {
+export function AgentRadar({
+  axes,
+  label,
+}: {
+  axes: RadarAxis[];
+  label: string;
+}) {
   const size = 240;
   const c = size / 2;
   const R = 92;
@@ -185,7 +203,9 @@ export function AgentRadar({ axes, label }: { axes: RadarAxis[]; label: string }
   const ring = (ratio: number) =>
     axes.map((_, i) => point(i, ratio).join(",")).join(" ");
   const shape = axes
-    .map((a, i) => point(i, a.live ? Math.max(a.value / 25, 0.06) : 0.06).join(","))
+    .map((a, i) =>
+      point(i, a.live ? Math.max(a.value / 25, 0.06) : 0.06).join(","),
+    )
     .join(" ");
   return (
     <svg

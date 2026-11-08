@@ -163,7 +163,9 @@ function EngineCard({ d, engine }: { d: D; engine: EngineStatus | null }) {
   return (
     <div className="flex items-center justify-between gap-2 rounded-xl border border-line bg-white/[0.02] px-3 py-2.5">
       <span className="flex min-w-0 items-center gap-2">
-        <span className={`size-1.5 shrink-0 rounded-full ${ENGINE_DOT[engine.status]}`} />
+        <span
+          className={`size-1.5 shrink-0 rounded-full ${ENGINE_DOT[engine.status]}`}
+        />
         <span className="truncate font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted">
           {d.nav.engineLabel}
         </span>
@@ -263,9 +265,7 @@ function Sidebar({
                           : "border border-transparent text-muted hover:bg-white/[0.04] hover:text-ink"
                       }`}
                     >
-                      <Icon
-                        className={`size-4 ${active ? "text-teal" : ""}`}
-                      />
+                      <Icon className={`size-4 ${active ? "text-teal" : ""}`} />
                       {item.label}
                     </Link>
                   </li>

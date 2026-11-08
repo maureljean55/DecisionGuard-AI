@@ -25,6 +25,7 @@ import {
 } from "@/components/dashboard/cockpit";
 import { LocalTime } from "@/components/dashboard/local-time";
 import { PageSkeleton } from "@/components/dashboard/page-title";
+import { IndexChip } from "@/components/dashboard/risk";
 import { formatAmount, StatusBadge } from "@/components/dashboard/status";
 import { hasLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -38,7 +39,13 @@ import type { Decision, EngineStatus, OrgFinding } from "@/lib/types";
 
 const TABS = ["active", "draft", "submitted", "archived"] as const;
 type Tab = (typeof TABS)[number];
-const RUNNING = ["pending", "analyzing", "simulating", "verifying", "reporting"];
+const RUNNING = [
+  "pending",
+  "analyzing",
+  "simulating",
+  "verifying",
+  "reporting",
+];
 
 async function Decisions({
   params,
@@ -98,7 +105,10 @@ async function Decisions({
 
   const byDecision = new Map<string, OrgFinding[]>();
   for (const f of findings)
-    byDecision.set(f.decision_id, [...(byDecision.get(f.decision_id) ?? []), f]);
+    byDecision.set(f.decision_id, [
+      ...(byDecision.get(f.decision_id) ?? []),
+      f,
+    ]);
   const maxOf = (id: string) =>
     (byDecision.get(id) ?? []).reduce((m, f) => Math.max(m, severity(f)), 0);
 
@@ -125,8 +135,12 @@ async function Decisions({
     tab === "archived"
       ? null
       : ([...items]
-          .filter((x) => maxOf(x.id) > 0)
-          .sort((a, b) => maxOf(b.id) - maxOf(a.id))[0] ?? null);
+          .filter((x) => (x.latest_analysis?.risk_score ?? null) !== null)
+          .sort(
+            (a, b) =>
+              (b.latest_analysis?.risk_score ?? 0) -
+              (a.latest_analysis?.risk_score ?? 0),
+          )[0] ?? null);
   const others = items.filter((x) => x.id !== featured?.id);
   const href = (t: Tab) => {
     const params = new URLSearchParams();
@@ -194,7 +208,9 @@ async function Decisions({
       {/* Filters */}
       <Plate className="mt-5 flex flex-col gap-3 p-3 lg:flex-row lg:items-center lg:justify-between">
         <form action={base} role="search" className="relative lg:w-80">
-          {tab !== "active" && <input type="hidden" name="status" value={tab} />}
+          {tab !== "active" && (
+            <input type="hidden" name="status" value={tab} />
+          )}
           <Search
             className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted"
             aria-hidden
@@ -283,6 +299,16 @@ async function Decisions({
                 </div>
                 <div className="text-right">
                   <p className="font-mono text-[0.64rem] uppercase tracking-[0.12em] text-muted">
+                    {d.risk.title}
+                  </p>
+                  <div className="mt-1.5 flex justify-end">
+                    <IndexChip
+                      d={d}
+                      score={featured.latest_analysis?.risk_score}
+                      levelKey={featured.latest_analysis?.risk_level}
+                    />
+                  </div>
+                  <p className="mt-3 font-mono text-[0.64rem] uppercase tracking-[0.12em] text-muted">
                     {S.amount}
                   </p>
                   <p className="mt-1 font-display text-2xl font-semibold text-teal">
@@ -334,26 +360,29 @@ async function Decisions({
                     {S.topFindings}
                   </p>
                   <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-                    {(byDecision.get(featured.id) ?? []).slice(0, 4).map((f) => (
-                      <li
-                        key={f.id}
-                        className="rounded-lg border border-line bg-white/[0.02] p-2.5"
-                      >
-                        <p className="flex items-start justify-between gap-2">
-                          <span className="text-[0.8rem] font-medium leading-snug text-ink">
-                            {f.title}
-                          </span>
-                          <span
-                            className={`mt-1 size-1.5 shrink-0 rounded-full ${LEVEL_FILL[level(severity(f))]}`}
-                          />
-                        </p>
-                        <p className="mt-1 text-[0.7rem] text-muted">
-                          {d.agentCatalog[f.agent as keyof typeof d.agentCatalog]
-                            ?.name ?? f.agent}{" "}
-                          · {severity(f)}/25
-                        </p>
-                      </li>
-                    ))}
+                    {(byDecision.get(featured.id) ?? [])
+                      .slice(0, 4)
+                      .map((f) => (
+                        <li
+                          key={f.id}
+                          className="rounded-lg border border-line bg-white/[0.02] p-2.5"
+                        >
+                          <p className="flex items-start justify-between gap-2">
+                            <span className="text-[0.8rem] font-medium leading-snug text-ink">
+                              {f.title}
+                            </span>
+                            <span
+                              className={`mt-1 size-1.5 shrink-0 rounded-full ${LEVEL_FILL[level(severity(f))]}`}
+                            />
+                          </p>
+                          <p className="mt-1 text-[0.7rem] text-muted">
+                            {d.agentCatalog[
+                              f.agent as keyof typeof d.agentCatalog
+                            ]?.name ?? f.agent}{" "}
+                            · {severity(f)}/25
+                          </p>
+                        </li>
+                      ))}
                   </ul>
                 </div>
               </div>
@@ -420,9 +449,15 @@ async function Decisions({
                         </span>
                         <span className="text-xs">
                           <span className="block font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted">
-                            {S.severity}
+                            {d.risk.colIndex}
                           </span>
-                          {max ? (
+                          {x.latest_analysis?.risk_score != null ? (
+                            <IndexChip
+                              d={d}
+                              score={x.latest_analysis.risk_score}
+                              levelKey={x.latest_analysis.risk_level}
+                            />
+                          ) : max ? (
                             <SeverityChip d={d} score={max} />
                           ) : (
                             <span className="text-muted">{S.notAnalysed}</span>

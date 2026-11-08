@@ -39,3 +39,23 @@ class AgentReport(BaseModel):
     missing_information: list[str] = Field(
         description="Up to 5 facts that would most change your assessment if known."
     )
+
+
+class FindingReview(BaseModel):
+    ref: int = Field(description="Number of the finding being reviewed, as listed.")
+    verdict: Literal["supported", "weak", "unsupported"] = Field(
+        description=(
+            "supported: the finding follows from the decision as written. weak: plausible but "
+            "thinly supported, to be checked. unsupported: contradicted by the decision or "
+            "resting on an invented fact."
+        )
+    )
+    evidence_type: Literal["fact", "assumption", "estimate", "ai_hypothesis"] = Field(
+        description="The correct evidence type. Change it if the agent mislabelled the finding."
+    )
+    note: str = Field(description="One sentence explaining the verdict.")
+
+
+class AuditReport(BaseModel):
+    summary: str = Field(description="Overall quality of the agents' work, 2 to 3 sentences.")
+    reviews: list[FindingReview] = Field(description="One review per finding listed.")

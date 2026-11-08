@@ -135,6 +135,8 @@ export interface AnalysisSummary {
   created_at: string;
   finished_at: string | null;
   open_questions: number;
+  risk_score: number | null;
+  risk_level: RiskLevel | null;
 }
 
 export interface Question {
@@ -155,7 +157,35 @@ export interface Analysis extends AnalysisSummary {
   provider: string | null;
   model: string | null;
   simulated: boolean;
+  risk_score: number | null;
+  risk_level: RiskLevel | null;
+  risk_model: string | null;
+  risk_breakdown: RiskBreakdown | null;
+  scenarios: Scenario[] | null;
   agents: AgentRun[];
+}
+
+export type RiskLevel = "low" | "moderate" | "high" | "critical";
+export type RiskComponent = "peak" | "concentration" | "breadth" | "uncertainty";
+
+export interface RiskBreakdown {
+  score: number;
+  level: RiskLevel;
+  model: string;
+  components: Record<RiskComponent, number>;
+  weights: Record<RiskComponent, number>;
+  per_agent: Record<string, number>;
+  matrix: number[][]; // [impact-1][likelihood-1]
+  counted: number;
+  excluded: number;
+}
+
+export interface Scenario {
+  key: "favourable" | "median" | "adverse" | "severe";
+  likelihood_shift: number;
+  impact_shift: number;
+  score: number;
+  level: RiskLevel;
 }
 
 export type EvidenceType = "fact" | "assumption" | "estimate" | "ai_hypothesis";
@@ -169,6 +199,8 @@ export interface Finding {
   likelihood: number;
   impact: number;
   mitigation: string;
+  audit_status: "supported" | "weak" | "unsupported" | null;
+  audit_note: string | null;
 }
 
 export interface AgentRun {

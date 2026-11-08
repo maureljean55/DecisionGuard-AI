@@ -5,6 +5,7 @@ import { Suspense } from "react";
 
 import { AgentResults } from "@/components/dashboard/agent-results";
 import { AnalysisPanel } from "@/components/dashboard/analysis";
+import { RiskPanel } from "@/components/dashboard/risk";
 import { DecisionActions } from "@/components/dashboard/decisions";
 import { LocalTime } from "@/components/dashboard/local-time";
 import { PageSkeleton } from "@/components/dashboard/page-title";
@@ -90,6 +91,11 @@ async function DecisionPage({
             analysis={analysis}
             canWrite={canWriteDecisions(org.role)}
           />
+        </div>
+      )}
+      {analysis && analysis.status === "completed" && (
+        <div className="mb-6">
+          <RiskPanel d={d} lang={lang} orgId={org.id} analysis={analysis} />
         </div>
       )}
       {analysis && (

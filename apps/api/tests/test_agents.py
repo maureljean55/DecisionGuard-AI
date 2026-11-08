@@ -220,15 +220,29 @@ def test_mock_pipeline_end_to_end(make_client, owner_db) -> None:
     a = c.get(f"/orgs/{org}/analyses/{aid}").json()
     assert a["status"] == "completed"
     assert (a["provider"], a["model"], a["simulated"]) == ("mock", "rules-v1", True)
-    assert [r["agent"] for r in a["agents"]] == ["finance", "strategy", "operations"]
-    assert all(r["status"] == "completed" and r["findings"] for r in a["agents"])
-    kinds = {f["evidence_type"] for r in a["agents"] for f in r["findings"]}
+    assert [r["agent"] for r in a["agents"]] == ["finance", "strategy", "operations", "audit"]
+    specialists, audit = a["agents"][:3], a["agents"][3]
+    assert all(r["status"] == "completed" and r["findings"] for r in specialists)
+    # M6: every finding is audited; the mock flags AI hypotheses as weak.
+    assert audit["status"] == "completed" and audit["findings"] == []
+    every = [f for r in specialists for f in r["findings"]]
+    assert all(f["audit_status"] in ("supported", "weak") and f["audit_note"] for f in every)
+    assert all(
+        (f["audit_status"] == "weak") == (f["evidence_type"] == "ai_hypothesis") for f in every
+    )
+    # M6: deterministic risk index and scenarios.
+    assert 0 < a["risk_score"] <= 100 and a["risk_model"] == "risk-v1"
+    assert a["risk_level"] in ("low", "moderate", "high", "critical")
+    assert a["risk_breakdown"]["counted"] == len(every)
+    assert [x["key"] for x in a["scenarios"]] == ["favourable", "median", "adverse", "severe"]
+    assert a["scenarios"][1]["score"] == a["risk_score"]
+    kinds = {f["evidence_type"] for f in every}
     assert kinds <= {"fact", "assumption", "estimate", "ai_hypothesis"}
     # Lists stay light: no agent payload.
     assert c.get(f"/orgs/{org}/analyses").json()[0]["agents"] == []
     with owner_db.connect() as conn:
         n = conn.execute(text("SELECT count(*) FROM findings WHERE analysis_id=:a"), {"a": aid})
-        assert n.scalar_one() == sum(len(r["findings"]) for r in a["agents"])
+        assert n.scalar_one() == len(every)
 
 
 class Flaky:
@@ -267,7 +281,7 @@ def test_all_agents_failing_retries_then_starts_clean(make_client, owner_db) -> 
         conn.execute(text("UPDATE analyses SET next_attempt_at = now() WHERE id=:a"), {"a": aid})
     assert process_one(AgentPipeline(MockProvider()), "w") == "completed"
     with owner_db.connect() as conn:
-        assert conn.execute(text("SELECT count(*) FROM agent_runs")).scalar_one() == 3
+        assert conn.execute(text("SELECT count(*) FROM agent_runs")).scalar_one() == 4
 
 
 def test_non_retryable_failure_fails_immediately(make_client, owner_db) -> None:
@@ -303,5 +317,80 @@ def test_org_findings_and_engine_status(make_client) -> None:
     assert other.get(f"/orgs/{org}/findings").status_code == 404
     e = c.get("/engine").json()
     assert e["status"] == "unavailable" and e["agents_active"] == []  # tests run with engine none
-    assert len(e["agents_planned"]) == 6
+    assert e["agents_planned"] == ["legal", "cyber", "people", "foresight"]
     assert make_client().get("/engine").status_code == 401
+
+
+class Auditor:
+    """Real-looking audit: marks the first finding unsupported, relabels the second, and
+    references a finding that does not exist."""
+
+    name, simulated = "fake", False
+
+    def __init__(self, fail=False):
+        self.mock, self.fail = MockProvider(), fail
+
+    def complete(self, request: LLMRequest) -> LLMResult:
+        if request.agent != "audit":
+            return self.mock.complete(request)
+        if self.fail:
+            raise LLMError("llm_unavailable", retryable=True)
+        from app.agents.schema import AuditReport, FindingReview
+
+        n = len(request.context)
+        reviews = [
+            FindingReview(ref=1, verdict="unsupported", evidence_type="assumption", note="x"),
+            FindingReview(ref=2, verdict="supported", evidence_type="estimate", note="y"),
+            FindingReview(ref=n + 7, verdict="supported", evidence_type="fact", note="ghost"),
+        ]
+        assert "<findings>" in request.prompt and 'ref="1"' in request.prompt
+        return LLMResult(output=AuditReport(summary="ok", reviews=reviews), model="fake-1")
+
+
+def test_audit_verdicts_change_the_score(make_client) -> None:
+    c, org, aid = _submit(make_client)
+    assert process_one(AgentPipeline(Auditor()), "w") == "completed"
+    a = c.get(f"/orgs/{org}/analyses/{aid}").json()
+    every = [f for r in a["agents"] for f in r["findings"]]
+    assert every[0]["audit_status"] == "unsupported"
+    assert every[1]["evidence_type"] == "estimate" and every[1]["audit_status"] == "supported"
+    assert all(f["audit_status"] is None for f in every[2:])  # not reviewed: left as is
+    assert a["risk_breakdown"]["excluded"] == 1
+    assert a["risk_breakdown"]["counted"] == len(every) - 1
+
+
+def test_failed_audit_keeps_the_analysis(make_client) -> None:
+    c, org, aid = _submit(make_client)
+    assert process_one(AgentPipeline(Auditor(fail=True)), "w") == "completed"
+    a = c.get(f"/orgs/{org}/analyses/{aid}").json()
+    audit = next(r for r in a["agents"] if r["agent"] == "audit")
+    assert audit["status"] == "failed" and audit["error_code"] == "llm_unavailable"
+    assert a["risk_score"] is not None and a["risk_breakdown"]["excluded"] == 0
+
+
+def test_simulate_and_pdf_report(make_client) -> None:
+    c, org, aid = _submit(make_client)
+    assert c.post(f"/orgs/{org}/analyses/{aid}/simulate", json={}).status_code == 409
+    assert c.get(f"/orgs/{org}/analyses/{aid}/report.pdf").status_code == 409
+    process_one(AgentPipeline(MockProvider()), "w")
+    base = c.get(f"/orgs/{org}/analyses/{aid}").json()["risk_score"]
+    same = c.post(f"/orgs/{org}/analyses/{aid}/simulate", json={}).json()
+    assert same["score"] == same["baseline"] == base
+    worse = c.post(
+        f"/orgs/{org}/analyses/{aid}/simulate", json={"all": {"likelihood": 2, "impact": 1}}
+    ).json()
+    better = c.post(
+        f"/orgs/{org}/analyses/{aid}/simulate", json={"agents": {"finance": {"likelihood": -2}}}
+    ).json()
+    assert worse["score"] > base >= better["score"]
+    assert (
+        c.post(f"/orgs/{org}/analyses/{aid}/simulate", json={"all": {"likelihood": 3}}).status_code
+        == 422
+    )
+    r = c.get(f"/orgs/{org}/analyses/{aid}/report.pdf")
+    assert r.status_code == 200 and r.headers["content-type"] == "application/pdf"
+    assert r.content.startswith(b"%PDF") and len(r.content) > 3000
+    assert "decisionguard-ouvrir-une-filiale" in r.headers["content-disposition"]
+    other = make_client()
+    register(other, "y@beta.example.com")
+    assert other.get(f"/orgs/{org}/analyses/{aid}/report.pdf").status_code == 404

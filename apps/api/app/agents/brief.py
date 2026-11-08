@@ -100,3 +100,20 @@ def render(brief: DecisionBrief) -> str:
     lines.append(f"Today's date: {brief.today.isoformat()}.")
     lines.append("Analyse this decision from your specialist angle and return the report.")
     return "\n".join(lines)
+
+
+def render_findings(findings: list[tuple[str, object]]) -> str:
+    """Numbered findings for the audit agent. Each item is (agent key, AgentFinding)."""
+    lines = ["<findings>"]
+    for i, (agent, f) in enumerate(findings, start=1):
+        lines.append(
+            f'<finding ref="{i}" agent="{agent}" evidence_type="{f.evidence_type}" '  # type: ignore[attr-defined]
+            f'likelihood="{f.likelihood}" impact="{f.impact}">'  # type: ignore[attr-defined]
+        )
+        lines.append(f"<title>{_e(f.title)}</title>")  # type: ignore[attr-defined]
+        lines.append(f"<description>{_e(f.description)}</description>")  # type: ignore[attr-defined]
+        lines.append(f"<basis>{_e(f.basis)}</basis>")  # type: ignore[attr-defined]
+        lines.append("</finding>")
+    lines.append("</findings>")
+    lines.append("Review each finding by its ref and return the audit.")
+    return "\n".join(lines)

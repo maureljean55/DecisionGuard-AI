@@ -1108,17 +1108,19 @@
     },
     "reports": {
       "title": "Rapports",
-      "subtitle": "Les rapports de décision de votre organisation.",
+      "subtitle": "Un rapport PDF est disponible pour chaque analyse terminée.",
       "empty": "Aucun rapport pour l'instant.",
-      "emptyBody": "Un rapport est produit à la fin de chaque analyse. Il pourra être exporté en PDF, en français ou en anglais.",
-      "whatTitle": "Contenu d'un rapport",
+      "emptyBody": "Un rapport est produit à la fin de chaque analyse terminée.",
+      "download": "PDF",
+      "open": "Ouvrir le dossier",
+      "finished": "Terminée le",
+      "whatTitle": "Contenu du rapport",
       "what": [
-        "Synthèse pour la direction",
-        "Hypothèses et informations manquantes",
-        "Risques par catégorie et matrice 5 × 5",
-        "Scénarios et exposition financière",
-        "Recommandations et plan d'atténuation",
-        "Sources, niveau de confiance et limites"
+        "Synthèse et indice de risque expliqué",
+        "Carte des risques 5 × 5",
+        "Scénarios favorable, médian, défavorable et sévère",
+        "Risques principaux et constats par agent, avec l'avis de l'audit",
+        "Méthode de calcul et limites"
       ]
     },
     "monitoring": {
@@ -1151,8 +1153,8 @@
         "Informations",
         "File d'attente",
         "Analyse",
-        "Simulations",
         "Vérification",
+        "Simulations",
         "Rapport"
       ],
       "questionsTitle": "Quelques précisions avant l'analyse",
@@ -1259,7 +1261,7 @@
       "high": "Élevé",
       "critical": "Critique"
     },
-    "severityNote": "Gravité = probabilité × impact, chacun sur 5, tels qu'estimés par les agents. Le score de risque calculé arrivera avec le moteur de risque.",
+    "severityNote": "Gravité d'un constat = probabilité × impact, chacun sur 5, estimés par les agents. L'indice de risque sur 100 est calculé à partir de ces constats par une formule fixe, sans IA.",
     "cockpit": {
       "eyebrow": "Cockpit de décision",
       "engineTitle": {
@@ -1396,16 +1398,71 @@
     "simulator": {
       "eyebrow": "Scénarios",
       "title": "Simulateur de scénarios",
-      "subtitle": "Tester une décision face à des chocs : taux, demande, prix, délais.",
-      "emptyTitle": "Le simulateur arrive avec le moteur de risque",
-      "emptyBody": "Il utilisera les constats des agents et un modèle de risque calculé, pas des chiffres inventés. Il n'est donc pas encore disponible.",
-      "whatTitle": "Ce que vous pourrez faire",
-      "what": [
-        "Faire varier les hypothèses clés : taux, change, demande, délais, prix.",
-        "Comparer un scénario favorable, médian et défavorable.",
-        "Voir quels risques basculent en zone critique.",
-        "Joindre les scénarios au rapport de la décision."
-      ]
+      "subtitle": "Ajustez les estimations des agents et voyez l'indice de risque se recalculer. Rien n'est enregistré : l'analyse d'origine reste inchangée.",
+      "dossier": "Dossier",
+      "all": "Tous les agents",
+      "byAgent": "Par agent",
+      "likelihood": "Probabilité",
+      "impact": "Impact",
+      "reset": "Réinitialiser",
+      "baseline": "Analyse d'origine",
+      "simulated": "Indice simulé",
+      "delta": "{d} points",
+      "presets": "Scénarios types",
+      "computing": "Calcul…",
+      "help": "Chaque cran décale la probabilité ou l'impact de tous les constats concernés (bornés entre 1 et 5).",
+      "emptyTitle": "Aucune analyse terminée",
+      "emptyBody": "Le simulateur s'appuie sur les constats d'une analyse terminée. Soumettez une décision, puis revenez ici.",
+      "error": "Le calcul n'a pas abouti. Réessayez."
+    },
+    "risk": {
+      "eyebrow": "Moteur de risque",
+      "title": "Indice de risque",
+      "of": "/100",
+      "model": "Calculé sans IA (modèle {model})",
+      "components": {
+        "peak": "Pic",
+        "concentration": "Concentration",
+        "breadth": "Étendue",
+        "uncertainty": "Incertitude"
+      },
+      "componentsHelp": {
+        "peak": "Le risque le plus grave",
+        "concentration": "Les 5 risques les plus graves",
+        "breadth": "Part des risques de gravité ≥ 10",
+        "uncertainty": "Réponses inconnues et informations manquantes"
+      },
+      "counted": "{n} constats pris en compte · {x} écartés par l'audit",
+      "heatmap": "Carte des risques du dossier",
+      "scenarios": "Scénarios",
+      "scenario": {
+        "favourable": "Favorable",
+        "median": "Médian",
+        "adverse": "Défavorable",
+        "severe": "Sévère"
+      },
+      "scenarioHelp": {
+        "favourable": "Probabilités −1",
+        "median": "Estimations des agents",
+        "adverse": "Probabilités +1",
+        "severe": "Probabilités et impacts +1"
+      },
+      "pdf": "Télécharger le rapport PDF",
+      "simulate": "Ouvrir le simulateur",
+      "method": "Formule : 100 × (0,45 × pic + 0,30 × concentration + 0,15 × étendue + 0,10 × incertitude). Les constats jugés non étayés par l'audit sont exclus.",
+      "colIndex": "Indice"
+    },
+    "audit": {
+      "verdict": {
+        "supported": "Validé",
+        "weak": "Fragile",
+        "unsupported": "Non étayé"
+      },
+      "none": "Non audité",
+      "title": "Avis de l'agent d'audit",
+      "counts": "{s} validés · {w} fragiles · {u} non étayés",
+      "failed": "L'audit n'a pas pu être réalisé ({code}). Les constats sont affichés sans vérification.",
+      "excluded": "Exclu de l'indice"
     }
   }
 }

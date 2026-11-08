@@ -22,12 +22,13 @@ import { buttonGhost, buttonPrimary } from "./ui";
 
 type D = Dictionary["dash"];
 
+// Order of the pipeline since M6: the audit (verifying) runs before the scenarios.
 const ORDER: AnalysisStatus[] = [
   "collecting_info",
   "pending",
   "analyzing",
-  "simulating",
   "verifying",
+  "simulating",
   "reporting",
 ];
 const RUNNING: AnalysisStatus[] = [

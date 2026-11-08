@@ -1,4 +1,4 @@
-import { CircleAlert, FlaskConical } from "lucide-react";
+import { CircleAlert, FlaskConical, ShieldCheck } from "lucide-react";
 
 import type { Dictionary } from "@/i18n/dictionaries";
 import { fmt } from "@/lib/format";
@@ -26,7 +26,11 @@ function Scale({ label, value }: { label: string; value: number }) {
   return (
     <span className="inline-flex items-center gap-2 text-xs text-muted">
       <span className="w-[5.5rem] sm:w-auto">{label}</span>
-      <span className="flex gap-0.5" role="img" aria-label={`${label} ${value}/5`}>
+      <span
+        className="flex gap-0.5"
+        role="img"
+        aria-label={`${label} ${value}/5`}
+      >
         {[1, 2, 3, 4, 5].map((i) => (
           <span
             key={i}
@@ -39,10 +43,19 @@ function Scale({ label, value }: { label: string; value: number }) {
   );
 }
 
+const AUDIT_TONE = {
+  supported: "border-teal/40 text-teal",
+  weak: "border-risk-moderate/40 text-risk-moderate",
+  unsupported: "border-risk-critical/40 text-risk-critical",
+} as const;
+
 function FindingItem({ d, f }: { d: D; f: Finding }) {
   const R = d.results;
+  const excluded = f.audit_status === "unsupported";
   return (
-    <li className="border-t border-line py-4 first:border-t-0 first:pt-0 last:pb-0">
+    <li
+      className={`border-t border-line py-4 first:border-t-0 first:pt-0 last:pb-0 ${excluded ? "opacity-60" : ""}`}
+    >
       <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
         <h4 className="min-w-0 text-sm font-semibold text-ink">{f.title}</h4>
         <span
@@ -51,7 +64,9 @@ function FindingItem({ d, f }: { d: D; f: Finding }) {
           {R.evidence[f.evidence_type]}
         </span>
       </div>
-      <p className="mt-1.5 text-sm leading-relaxed text-ink/85">{f.description}</p>
+      <p className="mt-1.5 text-sm leading-relaxed text-ink/85">
+        {f.description}
+      </p>
       <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1.5">
         <Scale label={R.likelihood} value={f.likelihood} />
         <Scale label={R.impact} value={f.impact} />
@@ -62,6 +77,22 @@ function FindingItem({ d, f }: { d: D; f: Finding }) {
         <dt className="text-muted">{R.mitigation}</dt>
         <dd className="text-ink/80">{f.mitigation}</dd>
       </dl>
+      <p className="mt-3 flex flex-wrap items-start gap-2 text-xs leading-relaxed">
+        <span
+          className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium ${
+            f.audit_status
+              ? AUDIT_TONE[f.audit_status]
+              : "border-line text-muted"
+          }`}
+        >
+          <ShieldCheck className="size-3" aria-hidden />
+          {f.audit_status ? d.audit.verdict[f.audit_status] : d.audit.none}
+        </span>
+        {f.audit_note && <span className="text-muted">{f.audit_note}</span>}
+        {excluded && (
+          <span className="text-risk-critical">· {d.audit.excluded}</span>
+        )}
+      </p>
     </li>
   );
 }
@@ -81,13 +112,18 @@ function AgentCard({ d, run }: { d: D; run: AgentRun }) {
       </header>
       {run.status === "failed" ? (
         <p className="mt-3 flex gap-2 text-sm text-muted">
-          <CircleAlert className="mt-0.5 size-4 shrink-0 text-risk-high" aria-hidden />
+          <CircleAlert
+            className="mt-0.5 size-4 shrink-0 text-risk-high"
+            aria-hidden
+          />
           {fmt(R.agentFailed, { code: run.error_code ?? "error" })}
         </p>
       ) : (
         <>
           {run.summary && (
-            <p className="mt-2 text-sm leading-relaxed text-muted">{run.summary}</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted">
+              {run.summary}
+            </p>
           )}
           {run.findings.length > 0 ? (
             <ul className="mt-5">
@@ -117,7 +153,12 @@ function AgentCard({ d, run }: { d: D; run: AgentRun }) {
 /** Findings of a completed analysis, one card per specialist agent. */
 export function AgentResults({ d, analysis }: { d: D; analysis: Analysis }) {
   const R = d.results;
-  if (analysis.status !== "completed" || analysis.agents.length === 0) return null;
+  if (analysis.status !== "completed" || analysis.agents.length === 0)
+    return null;
+  const audit = analysis.agents.find((r) => r.agent === "audit") ?? null;
+  const specialists = analysis.agents.filter((r) => r.agent !== "audit");
+  const all = specialists.flatMap((r) => r.findings);
+  const count = (v: string) => all.filter((f) => f.audit_status === v).length;
   return (
     <section aria-labelledby="agent-results" className="space-y-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -132,14 +173,45 @@ export function AgentResults({ d, analysis }: { d: D; analysis: Analysis }) {
       </div>
       {analysis.simulated && (
         <div className="flex gap-3 rounded-xl border border-risk-moderate/40 bg-risk-moderate/[0.08] px-4 py-3 text-sm leading-relaxed text-ink">
-          <FlaskConical className="mt-0.5 size-4 shrink-0 text-risk-moderate" aria-hidden />
+          <FlaskConical
+            className="mt-0.5 size-4 shrink-0 text-risk-moderate"
+            aria-hidden
+          />
           <p>
-            <strong className="font-semibold">{R.simulatedTitle}.</strong> {R.simulatedBody}
+            <strong className="font-semibold">{R.simulatedTitle}.</strong>{" "}
+            {R.simulatedBody}
           </p>
         </div>
       )}
+      {audit && (
+        <div className="flex gap-3 rounded-xl border border-line bg-abyss/70 px-4 py-3 text-sm leading-relaxed">
+          <ShieldCheck
+            className="mt-0.5 size-4 shrink-0 text-teal"
+            aria-hidden
+          />
+          <div>
+            <p className="font-medium text-ink">
+              {d.audit.title}
+              {audit.status === "completed" && (
+                <span className="ml-2 font-normal text-muted">
+                  {fmt(d.audit.counts, {
+                    s: String(count("supported")),
+                    w: String(count("weak")),
+                    u: String(count("unsupported")),
+                  })}
+                </span>
+              )}
+            </p>
+            <p className="mt-0.5 text-muted">
+              {audit.status === "completed"
+                ? audit.summary
+                : fmt(d.audit.failed, { code: audit.error_code ?? "error" })}
+            </p>
+          </div>
+        </div>
+      )}
       <div className="grid gap-4 xl:grid-cols-3">
-        {analysis.agents.map((run) => (
+        {specialists.map((run) => (
           <AgentCard key={run.agent} d={d} run={run} />
         ))}
       </div>

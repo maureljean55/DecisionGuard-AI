@@ -1108,17 +1108,19 @@
     },
     "reports": {
       "title": "Reports",
-      "subtitle": "Your organisation's decision reports.",
+      "subtitle": "A PDF report is available for every completed analysis.",
       "empty": "No reports yet.",
-      "emptyBody": "A report is produced at the end of each analysis. It can be exported as a PDF, in French or English.",
-      "whatTitle": "What a report contains",
+      "emptyBody": "A report is produced at the end of every completed analysis.",
+      "download": "PDF",
+      "open": "Open dossier",
+      "finished": "Completed on",
+      "whatTitle": "What the report contains",
       "what": [
-        "Executive summary",
-        "Assumptions and missing information",
-        "Risks by category and 5 × 5 matrix",
-        "Scenarios and financial exposure",
-        "Recommendations and mitigation plan",
-        "Sources, confidence level and limitations"
+        "Summary and explained risk index",
+        "5 × 5 risk map",
+        "Favourable, median, adverse and severe scenarios",
+        "Main risks and findings per agent, with the audit's opinion",
+        "Calculation method and limits"
       ]
     },
     "monitoring": {
@@ -1151,8 +1153,8 @@
         "Information",
         "Queue",
         "Analysis",
-        "Simulations",
         "Verification",
+        "Simulations",
         "Report"
       ],
       "questionsTitle": "A few details before the analysis",
@@ -1259,7 +1261,7 @@
       "high": "High",
       "critical": "Critical"
     },
-    "severityNote": "Severity = likelihood × impact, each out of 5, as assessed by the agents. The calculated risk score arrives with the risk engine.",
+    "severityNote": "A finding's severity = likelihood × impact, each out of 5, as assessed by the agents. The risk index out of 100 is calculated from these findings by a fixed formula, without AI.",
     "cockpit": {
       "eyebrow": "Decision cockpit",
       "engineTitle": {
@@ -1396,16 +1398,71 @@
     "simulator": {
       "eyebrow": "Scenarios",
       "title": "Scenario simulator",
-      "subtitle": "Stress-test a decision against shocks: rates, demand, prices, delays.",
-      "emptyTitle": "The simulator arrives with the risk engine",
-      "emptyBody": "It will use the agents' findings and a calculated risk model, not invented figures, so it is not available yet.",
-      "whatTitle": "What you will be able to do",
-      "what": [
-        "Vary key assumptions: rates, currency, demand, delays, prices.",
-        "Compare favourable, median and adverse scenarios.",
-        "See which risks tip into the critical zone.",
-        "Attach scenarios to the decision report."
-      ]
+      "subtitle": "Adjust the agents' estimates and watch the risk index recalculate. Nothing is saved: the original analysis stays unchanged.",
+      "dossier": "Dossier",
+      "all": "All agents",
+      "byAgent": "Per agent",
+      "likelihood": "Likelihood",
+      "impact": "Impact",
+      "reset": "Reset",
+      "baseline": "Original analysis",
+      "simulated": "Simulated index",
+      "delta": "{d} points",
+      "presets": "Standard scenarios",
+      "computing": "Calculating…",
+      "help": "Each step shifts the likelihood or impact of every finding concerned (bounded between 1 and 5).",
+      "emptyTitle": "No completed analysis",
+      "emptyBody": "The simulator uses the findings of a completed analysis. Submit a decision, then come back here.",
+      "error": "The calculation failed. Please try again."
+    },
+    "risk": {
+      "eyebrow": "Risk engine",
+      "title": "Risk index",
+      "of": "/100",
+      "model": "Calculated without AI (model {model})",
+      "components": {
+        "peak": "Peak",
+        "concentration": "Concentration",
+        "breadth": "Breadth",
+        "uncertainty": "Uncertainty"
+      },
+      "componentsHelp": {
+        "peak": "The most severe risk",
+        "concentration": "The 5 most severe risks",
+        "breadth": "Share of risks with severity ≥ 10",
+        "uncertainty": "Unknown answers and missing information"
+      },
+      "counted": "{n} findings counted · {x} excluded by the audit",
+      "heatmap": "Dossier risk map",
+      "scenarios": "Scenarios",
+      "scenario": {
+        "favourable": "Favourable",
+        "median": "Median",
+        "adverse": "Adverse",
+        "severe": "Severe"
+      },
+      "scenarioHelp": {
+        "favourable": "Likelihood −1",
+        "median": "Agents' estimates",
+        "adverse": "Likelihood +1",
+        "severe": "Likelihood and impact +1"
+      },
+      "pdf": "Download PDF report",
+      "simulate": "Open the simulator",
+      "method": "Formula: 100 × (0.45 × peak + 0.30 × concentration + 0.15 × breadth + 0.10 × uncertainty). Findings the audit deems unsupported are excluded.",
+      "colIndex": "Index"
+    },
+    "audit": {
+      "verdict": {
+        "supported": "Supported",
+        "weak": "Weak",
+        "unsupported": "Unsupported"
+      },
+      "none": "Not audited",
+      "title": "Audit agent's opinion",
+      "counts": "{s} supported · {w} weak · {u} unsupported",
+      "failed": "The audit could not be completed ({code}). Findings are shown without review.",
+      "excluded": "Excluded from the index"
     }
   }
 }

@@ -1,0 +1,1 @@
+"""Generated documents (PDF reports)."""

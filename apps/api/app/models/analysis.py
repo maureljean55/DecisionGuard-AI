@@ -12,11 +12,13 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
+    SmallInteger,
     String,
     Text,
     UniqueConstraint,
     text,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Timestamps, UUIDPrimaryKey, utcnow
@@ -99,6 +101,12 @@ class Analysis(UUIDPrimaryKey, Timestamps, Base):
     provider: Mapped[str | None] = mapped_column(String(32))
     model: Mapped[str | None] = mapped_column(String(64))
     simulated: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"))
+    # Deterministic risk index (app.risk.engine), scenarios, and how they were computed.
+    risk_score: Mapped[int | None] = mapped_column(SmallInteger)
+    risk_level: Mapped[str | None] = mapped_column(String(16))
+    risk_model: Mapped[str | None] = mapped_column(String(16))
+    risk_breakdown: Mapped[dict | None] = mapped_column(JSONB)
+    scenarios: Mapped[list | None] = mapped_column(JSONB)
 
 
 class DecisionQuestion(UUIDPrimaryKey, Base):
