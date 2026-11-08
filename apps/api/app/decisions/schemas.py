@@ -50,5 +50,6 @@ class DecisionOut(BaseModel):
     created_at: datetime
     updated_at: datetime
     created_by_user_id: uuid.UUID | None
+    monitor_every_days: int | None = None
     created_by_name: str | None = None
     latest_analysis: AnalysisSummary | None = None

@@ -8,6 +8,7 @@ import time
 
 from app.core.config import get_settings
 from app.core.logging import configure_logging
+from app.worker.monitoring import schedule_due
 from app.worker.pipeline import get_pipeline
 from app.worker.queue import process_one, recover_stale
 
@@ -33,6 +34,7 @@ def main() -> None:
         try:
             if time.monotonic() - last_recovery > 60:
                 recover_stale(settings.analysis_timeout_seconds)
+                schedule_due()
                 last_recovery = time.monotonic()
             outcome = process_one(pipeline, worker_id)
         except Exception:  # noqa: BLE001 - keep the worker alive (DB restart, network blip)

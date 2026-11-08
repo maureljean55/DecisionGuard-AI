@@ -65,6 +65,8 @@ class DecisionBrief:
     locale: Locale
     country_code: str
     today: date
+    # Mitigation actions the organisation reports as done or under way: (title, status).
+    actions: tuple[tuple[str, str], ...] = ()
 
     def answer(self, key: str) -> Answer | None:
         return next((a for a in self.answers if a.key == key), None)
@@ -74,7 +76,9 @@ class DecisionBrief:
 
 
 def build_brief(job) -> DecisionBrief:  # type: ignore[no-untyped-def]
-    from app.models import Organization
+    from sqlalchemy import select
+
+    from app.models import MitigationAction, Organization
 
     d = job.decision
     org = job.db.get(Organization, job.organization_id)
@@ -94,6 +98,17 @@ def build_brief(job) -> DecisionBrief:  # type: ignore[no-untyped-def]
         locale=locale,
         country_code=org.country_code if org else "",
         today=utcnow().date(),
+        actions=tuple(
+            (m.title, m.status)
+            for m in job.db.scalars(
+                select(MitigationAction)
+                .where(
+                    MitigationAction.decision_id == d.id,
+                    MitigationAction.status.in_(("done", "in_progress")),
+                )
+                .order_by(MitigationAction.created_at)
+            )
+        ),
     )
 
 
@@ -123,6 +138,12 @@ def render(brief: DecisionBrief) -> str:
             value = "The decision maker does not know." if a.unknown else _e(a.answer or "")
             lines.append(f'<answer topic="{label}">{value}</answer>')
         lines.append("</follow_up_answers>")
+    if brief.actions:
+        lines.append("<actions_taken>")
+        for title, st in brief.actions:
+            label = "done" if st == "done" else "in progress"
+            lines.append(f'<action status="{label}">{_e(title)}</action>')
+        lines.append("</actions_taken>")
     lines.append("</decision>")
     lines.append(f"Today's date: {brief.today.isoformat()}.")
     lines.append("Analyse this decision from your specialist angle and return the report.")

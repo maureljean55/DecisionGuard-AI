@@ -14,6 +14,7 @@ from app.core.csrf import CSRFMiddleware
 from app.core.errors import install_error_handlers
 from app.core.logging import configure_logging
 from app.decisions.routes import router as decisions_router
+from app.monitoring.routes import router as monitoring_router
 from app.orgs.routes import router as orgs_router
 from app.worker.routes import router as worker_router
 
@@ -47,6 +48,7 @@ def create_app() -> FastAPI:
     app.include_router(contact_router)
     app.include_router(decisions_router)
     app.include_router(analyses_router)
+    app.include_router(monitoring_router)
     app.include_router(worker_router)
 
     logging.getLogger(__name__).info(

@@ -86,6 +86,10 @@ MESSAGES: dict[str, dict[Locale, str]] = {
         "fr": "Seule une analyse en échec peut être relancée.",
         "en": "Only a failed analysis can be retried.",
     },
+    "action.owner_not_member": {
+        "fr": "Le responsable doit être membre de l'organisation.",
+        "en": "The owner must be a member of the organisation.",
+    },
     "invitation.email_mismatch": {
         "fr": "Cette invitation a été envoyée à une autre adresse e-mail.",
         "en": "This invitation was sent to a different e-mail address.",

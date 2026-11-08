@@ -13,6 +13,7 @@ from fastapi import APIRouter, Header
 
 from app.core.config import get_settings
 from app.core.errors import NotFound
+from app.worker.monitoring import schedule_due
 from app.worker.pipeline import get_pipeline
 from app.worker.queue import process_one, recover_stale
 
@@ -38,6 +39,7 @@ def tick(
     s = get_settings()
     started = time.monotonic()
     recover_stale(s.analysis_timeout_seconds)
+    schedule_due()
     pipeline = get_pipeline(s.analysis_engine)
     worker_id = f"tick:{socket.gethostname()}:{os.getpid()}"[:64]
     outcomes: list[str] = []

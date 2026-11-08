@@ -977,7 +977,11 @@
         "decision.reopen": "moved a decision back to draft",
         "decision.delete": "deleted a decision",
         "analysis.answer": "answered an analysis question",
-        "analysis.retry": "retried an analysis"
+        "analysis.retry": "retried an analysis",
+        "decision.monitoring": "changed a decision's monitoring",
+        "action.create": "created a mitigation action",
+        "action.status": "changed an action's status",
+        "action.delete": "deleted a mitigation action"
       },
       "other": "performed an action ({code})",
       "forbidden": "Only owners and administrators can view the activity log."
@@ -1124,17 +1128,68 @@
       ]
     },
     "monitoring": {
+      "eyebrow": "Over time",
       "title": "Monitoring",
-      "subtitle": "Tracking risks after the decision.",
-      "empty": "No active monitoring.",
-      "emptyBody": "Once a decision has been analysed, you can switch on monitoring: DecisionGuard will follow the sources you approve and alert you when a risk changes.",
-      "whatTitle": "How monitoring will work",
-      "what": [
-        "You choose which sources to follow and how often",
-        "Every change detected is dated and sourced",
-        "Scores are recalculated and compared with previous ones",
-        "You are alerted, with how certain the information is"
-      ]
+      "subtitle": "Decisions in progress, how their risk evolves, and mitigation actions.",
+      "kpi": {
+        "watched": "Monitored dossiers",
+        "watchedSub": "automatic re-analysis on",
+        "alerts": "Alerts",
+        "alertsSub": "to handle",
+        "overdue": "Overdue actions",
+        "overdueSub": "past their due date",
+        "done": "Completed actions",
+        "doneSub": "out of {n} actions"
+      },
+      "alertsTitle": "Alerts",
+      "alertsEmpty": "No alerts. Dossiers in the critical zone, rising, close to their deadline or analysed long ago will show here.",
+      "alert": {
+        "critical": "In the critical zone: index {score}/100.",
+        "rising": "Index up {d} points since the previous analysis.",
+        "deadline": "Deadline in {n} days.",
+        "deadlinePast": "Deadline passed {n} days ago.",
+        "stale": "Last analysed {n} days ago.",
+        "overdue": "Overdue action: {title}"
+      },
+      "watchTitle": "Watch list",
+      "watchEmpty": "No submitted decision yet.",
+      "col": {
+        "dossier": "Dossier",
+        "index": "Index",
+        "trend": "Trend",
+        "last": "Last analysis",
+        "next": "Next re-analysis",
+        "actions": "Actions"
+      },
+      "never": "—",
+      "manual": "Manual",
+      "off": "Off",
+      "actionsTitle": "Mitigation actions",
+      "actionsEmpty": "No actions yet. From a finding, click 'Create an action'.",
+      "status": {
+        "todo": "To do",
+        "in_progress": "In progress",
+        "done": "Done"
+      },
+      "panel": {
+        "title": "Dossier follow-up",
+        "frequency": "Automatic re-analysis",
+        "every30": "Every 30 days",
+        "every90": "Every 90 days",
+        "none": "Off",
+        "frequencyHelp": "Re-analyses count towards your monthly quota. Actions done or in progress are passed to the agents.",
+        "saved": "Saved.",
+        "add": "Add an action",
+        "titleField": "Action",
+        "owner": "Owner",
+        "noOwner": "Nobody",
+        "due": "Due date",
+        "create": "Create action",
+        "delete": "Delete",
+        "deleteConfirm": "Delete this action?",
+        "fromFinding": "Create an action",
+        "created": "Action created: find it under 'Dossier follow-up'."
+      }
     },
     "analysis": {
       "title": "Analysis",

@@ -5,6 +5,7 @@ from app.models.analysis import ACTIVE, RUNNING, Analysis, AnalysisStatus, Decis
 from app.models.audit import AuditLog
 from app.models.decision import Decision, DecisionCategory, DecisionStatus
 from app.models.identity import AuthSession, TokenPurpose, User, UserToken
+from app.models.monitoring import ACTION_STATUSES, MitigationAction
 from app.models.ratelimit import RateLimit
 from app.models.tenancy import Invitation, Membership, Organization
 
@@ -24,6 +25,8 @@ __all__ = [
     "DecisionStatus",
     "Invitation",
     "Membership",
+    "MitigationAction",
+    "ACTION_STATUSES",
     "Organization",
     "RateLimit",
     "TokenPurpose",

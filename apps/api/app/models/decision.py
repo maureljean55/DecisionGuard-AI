@@ -5,7 +5,7 @@ from datetime import date, datetime
 from decimal import Decimal
 from enum import StrEnum
 
-from sqlalchemy import Date, DateTime, Enum, ForeignKey, Index, Numeric, String, Text
+from sqlalchemy import Date, DateTime, Enum, ForeignKey, Index, Numeric, SmallInteger, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Timestamps, UUIDPrimaryKey
@@ -51,3 +51,5 @@ class Decision(UUIDPrimaryKey, Timestamps, Base):
     currency: Mapped[str | None] = mapped_column(String(3))
     deadline: Mapped[date | None] = mapped_column(Date)
     submitted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Periodic re-analysis (30 or 90 days), run by the scheduled worker tick.
+    monitor_every_days: Mapped[int | None] = mapped_column(SmallInteger)

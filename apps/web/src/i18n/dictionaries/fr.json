@@ -977,7 +977,11 @@
         "decision.reopen": "a repassé une décision en brouillon",
         "decision.delete": "a supprimé une décision",
         "analysis.answer": "a répondu à une question d'analyse",
-        "analysis.retry": "a relancé une analyse"
+        "analysis.retry": "a relancé une analyse",
+        "decision.monitoring": "a modifié le suivi d'une décision",
+        "action.create": "a créé une action d'atténuation",
+        "action.status": "a changé le statut d'une action",
+        "action.delete": "a supprimé une action d'atténuation"
       },
       "other": "a effectué une action ({code})",
       "forbidden": "Seuls les propriétaires et administrateurs peuvent consulter le journal d'activité."
@@ -1124,17 +1128,68 @@
       ]
     },
     "monitoring": {
+      "eyebrow": "Suivi dans le temps",
       "title": "Surveillance",
-      "subtitle": "Le suivi des risques après la décision.",
-      "empty": "Aucune surveillance active.",
-      "emptyBody": "Une fois une décision analysée, vous pourrez activer sa surveillance : DecisionGuard suivra les sources que vous approuvez et vous alertera quand un risque évolue.",
-      "whatTitle": "Comment fonctionnera la surveillance",
-      "what": [
-        "Vous choisissez les sources à suivre et la fréquence",
-        "Chaque changement détecté est daté et sourcé",
-        "Les scores sont recalculés et comparés aux précédents",
-        "Vous êtes alerté, avec le niveau de certitude de l'information"
-      ]
+      "subtitle": "Les décisions en cours, l'évolution de leur risque et les actions d'atténuation.",
+      "kpi": {
+        "watched": "Dossiers suivis",
+        "watchedSub": "réanalyse automatique activée",
+        "alerts": "Alertes",
+        "alertsSub": "à traiter",
+        "overdue": "Actions en retard",
+        "overdueSub": "échéance dépassée",
+        "done": "Actions terminées",
+        "doneSub": "sur {n} actions"
+      },
+      "alertsTitle": "Alertes",
+      "alertsEmpty": "Aucune alerte. Les dossiers en zone critique, en hausse, proches de leur échéance ou analysés il y a longtemps apparaîtront ici.",
+      "alert": {
+        "critical": "En zone critique : indice {score}/100.",
+        "rising": "Indice en hausse de {d} points depuis l'analyse précédente.",
+        "deadline": "Échéance dans {n} jours.",
+        "deadlinePast": "Échéance dépassée depuis {n} jours.",
+        "stale": "Dernière analyse il y a {n} jours.",
+        "overdue": "Action en retard : {title}"
+      },
+      "watchTitle": "Liste de suivi",
+      "watchEmpty": "Aucune décision soumise pour l'instant.",
+      "col": {
+        "dossier": "Dossier",
+        "index": "Indice",
+        "trend": "Tendance",
+        "last": "Dernière analyse",
+        "next": "Prochaine réanalyse",
+        "actions": "Actions"
+      },
+      "never": "—",
+      "manual": "Manuelle",
+      "off": "Désactivée",
+      "actionsTitle": "Actions d'atténuation",
+      "actionsEmpty": "Aucune action pour l'instant. Depuis un constat, cliquez sur « Créer une action ».",
+      "status": {
+        "todo": "À faire",
+        "in_progress": "En cours",
+        "done": "Terminée"
+      },
+      "panel": {
+        "title": "Suivi du dossier",
+        "frequency": "Réanalyse automatique",
+        "every30": "Tous les 30 jours",
+        "every90": "Tous les 90 jours",
+        "none": "Désactivée",
+        "frequencyHelp": "La réanalyse compte dans votre quota mensuel. Les actions terminées ou en cours sont transmises aux agents.",
+        "saved": "Enregistré.",
+        "add": "Ajouter une action",
+        "titleField": "Action",
+        "owner": "Responsable",
+        "noOwner": "Personne",
+        "due": "Échéance",
+        "create": "Créer l'action",
+        "delete": "Supprimer",
+        "deleteConfirm": "Supprimer cette action ?",
+        "fromFinding": "Créer une action",
+        "created": "Action créée : retrouvez-la dans « Suivi du dossier »."
+      }
     },
     "analysis": {
       "title": "Analyse",

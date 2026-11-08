@@ -4,6 +4,8 @@ import type { Dictionary } from "@/i18n/dictionaries";
 import { fmt } from "@/lib/format";
 import type { AgentRun, Analysis, EvidenceType, Finding } from "@/lib/types";
 
+import { CreateActionButton } from "./followup";
+
 type D = Dictionary["dash"];
 
 // How firmly a statement is grounded, from supplied fact to model conjecture.
@@ -49,7 +51,9 @@ const AUDIT_TONE = {
   unsupported: "border-risk-critical/40 text-risk-critical",
 } as const;
 
-function FindingItem({ d, f }: { d: D; f: Finding }) {
+type Target = { orgId: string; decisionId: string } | null;
+
+function FindingItem({ d, f, target }: { d: D; f: Finding; target: Target }) {
   const R = d.results;
   const excluded = f.audit_status === "unsupported";
   return (
@@ -93,11 +97,30 @@ function FindingItem({ d, f }: { d: D; f: Finding }) {
           <span className="text-risk-critical">· {d.audit.excluded}</span>
         )}
       </p>
+      {target && !excluded && (
+        <div className="mt-2.5">
+          <CreateActionButton
+            d={d}
+            orgId={target.orgId}
+            decisionId={target.decisionId}
+            findingId={f.id}
+            title={f.mitigation}
+          />
+        </div>
+      )}
     </li>
   );
 }
 
-function AgentCard({ d, run }: { d: D; run: AgentRun }) {
+function AgentCard({
+  d,
+  run,
+  target,
+}: {
+  d: D;
+  run: AgentRun;
+  target: Target;
+}) {
   const R = d.results;
   const name = (R.agents as Record<string, string>)[run.agent] ?? run.agent;
   return (
@@ -128,7 +151,7 @@ function AgentCard({ d, run }: { d: D; run: AgentRun }) {
           {run.findings.length > 0 ? (
             <ul className="mt-5">
               {run.findings.map((f) => (
-                <FindingItem key={f.id} d={d} f={f} />
+                <FindingItem key={f.id} d={d} f={f} target={target} />
               ))}
             </ul>
           ) : (
@@ -151,7 +174,16 @@ function AgentCard({ d, run }: { d: D; run: AgentRun }) {
 }
 
 /** Findings of a completed analysis, one card per specialist agent. */
-export function AgentResults({ d, analysis }: { d: D; analysis: Analysis }) {
+export function AgentResults({
+  d,
+  analysis,
+  target = null,
+}: {
+  d: D;
+  analysis: Analysis;
+  /** When set, each finding offers "Create an action" on this decision. */
+  target?: Target;
+}) {
   const R = d.results;
   if (analysis.status !== "completed" || analysis.agents.length === 0)
     return null;
@@ -212,7 +244,7 @@ export function AgentResults({ d, analysis }: { d: D; analysis: Analysis }) {
       )}
       <div className="grid gap-4 xl:grid-cols-3">
         {specialists.map((run) => (
-          <AgentCard key={run.agent} d={d} run={run} />
+          <AgentCard key={run.agent} d={d} run={run} target={target} />
         ))}
       </div>
       <p className="text-xs leading-relaxed text-muted">{R.scaleNote}</p>

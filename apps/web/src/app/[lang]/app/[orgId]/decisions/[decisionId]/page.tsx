@@ -11,6 +11,11 @@ import {
   ScoreHistory,
   Tornado,
 } from "@/components/dashboard/charts";
+import { Plate } from "@/components/dashboard/cockpit";
+import {
+  ActionsPanel,
+  MonitoringSelect,
+} from "@/components/dashboard/followup";
 import { RiskPanel } from "@/components/dashboard/risk";
 import { DecisionActions } from "@/components/dashboard/decisions";
 import { LocalTime } from "@/components/dashboard/local-time";
@@ -23,7 +28,7 @@ import { apiGet, getMe } from "@/lib/api";
 import { loadOrg } from "@/lib/dash-data";
 import { fmt } from "@/lib/format";
 import { canDeleteDecision, canWriteDecisions } from "@/lib/permissions";
-import type { Analysis, Decision } from "@/lib/types";
+import type { Analysis, Decision, Member, MitigationAction } from "@/lib/types";
 
 async function DecisionPage({
   params,
@@ -48,6 +53,12 @@ async function DecisionPage({
     (await apiGet<Analysis[]>(`/orgs/${org.id}/decisions/${x.id}/analyses`))
       .data ?? [];
   const analysis = history[0] ?? null;
+  const [actionsRes, membersRes] = await Promise.all([
+    apiGet<MitigationAction[]>(`/orgs/${org.id}/actions?decision_id=${x.id}`),
+    apiGet<Member[]>(`/orgs/${org.id}/members`),
+  ]);
+  const actions = actionsRes.data ?? [];
+  const members = membersRes.data ?? [];
   const sensitivity =
     analysis?.status === "completed" && analysis.risk_score !== null
       ? ((
@@ -151,9 +162,47 @@ async function DecisionPage({
             />
           </div>
         )}
+      {x.status === "submitted" && (
+        <Plate className="mb-6 p-5 sm:p-6">
+          <h2 className="font-display text-xl font-semibold text-ink">
+            {d.monitoring.panel.title}
+          </h2>
+          <div className="mt-5 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+            <MonitoringSelect
+              d={d}
+              orgId={org.id}
+              decisionId={x.id}
+              value={x.monitor_every_days}
+              canWrite={canWriteDecisions(org.role)}
+            />
+            <div>
+              <p className="mb-3 text-sm font-medium text-ink">
+                {d.monitoring.actionsTitle}
+              </p>
+              <ActionsPanel
+                d={d}
+                lang={lang}
+                orgId={org.id}
+                decisionId={x.id}
+                actions={actions}
+                members={members}
+                canWrite={canWriteDecisions(org.role)}
+              />
+            </div>
+          </div>
+        </Plate>
+      )}
       {analysis && (
         <div className="mb-8">
-          <AgentResults d={d} analysis={analysis} />
+          <AgentResults
+            d={d}
+            analysis={analysis}
+            target={
+              canWriteDecisions(org.role)
+                ? { orgId: org.id, decisionId: x.id }
+                : null
+            }
+          />
         </div>
       )}
       {x.status === "draft" && (

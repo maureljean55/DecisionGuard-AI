@@ -112,7 +112,24 @@ export interface Decision {
   updated_at: string;
   created_by_user_id: string | null;
   created_by_name: string | null;
+  monitor_every_days: 30 | 90 | null;
   latest_analysis: AnalysisSummary | null;
+}
+
+export type ActionStatus = "todo" | "in_progress" | "done";
+
+export interface MitigationAction {
+  id: string;
+  decision_id: string;
+  decision_title: string | null;
+  finding_id: string | null;
+  title: string;
+  owner_user_id: string | null;
+  owner_name: string | null;
+  due_date: string | null;
+  status: ActionStatus;
+  done_at: string | null;
+  created_at: string;
 }
 
 export type AnalysisStatus =
