@@ -377,10 +377,14 @@ async function Council({
               </li>
             );
           }
-          const max = run.findings.reduce(
-            (m, f) => Math.max(m, severity(f)),
-            0,
-          );
+          // Worst finding the risk index counts (the audit's rejects are left out).
+          const top = run.findings
+            .filter((f) => f.audit_status !== "unsupported")
+            .reduce<(typeof run.findings)[number] | null>(
+              (best, f) => (!best || severity(f) > severity(best) ? f : best),
+              null,
+            );
+          const max = top ? severity(top) : 0;
           return (
             <li
               key={a.key}
@@ -435,6 +439,24 @@ async function Council({
                     />
                   )}
                 </div>
+                {top && (
+                  <a
+                    href={`#finding-${top.id}`}
+                    className="group mt-3 block rounded-lg border border-line px-3 py-2 text-xs transition-colors hover:border-electric/40 hover:bg-white/[0.03]"
+                  >
+                    <span className="block text-muted">{K.worstFinding}</span>
+                    <span className="mt-0.5 block line-clamp-2 text-ink group-hover:underline">
+                      {top.title}
+                    </span>
+                    <span className="mt-1 block font-mono text-[0.68rem] text-muted">
+                      {fmt(K.worstCalc, {
+                        l: String(top.likelihood),
+                        i: String(top.impact),
+                        s: String(max),
+                      })}
+                    </span>
+                  </a>
+                )}
               </div>
             </li>
           );

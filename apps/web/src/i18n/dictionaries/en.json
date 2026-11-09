@@ -1481,6 +1481,8 @@
       "plannedBody": "This agent joins the council with release {m}.",
       "maxSeverity": "Max severity",
       "findingsN": "{n} findings",
+      "worstFinding": "Most serious finding",
+      "worstCalc": "Likelihood {l} × impact {i} = {s}/25",
       "failed": "Agent failed",
       "evidenceMix": "Findings by evidence type",
       "empty": "No completed analysis yet. Submit a decision: the agents' reading will show here.",

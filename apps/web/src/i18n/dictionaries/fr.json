@@ -1481,6 +1481,8 @@
       "plannedBody": "Cet agent rejoindra le conseil avec la version {m}.",
       "maxSeverity": "Gravité max",
       "findingsN": "{n} constats",
+      "worstFinding": "Constat le plus grave",
+      "worstCalc": "Probabilité {l} × impact {i} = {s}/25",
       "failed": "Échec de l'agent",
       "evidenceMix": "Répartition par type de preuve",
       "empty": "Aucune analyse terminée pour l'instant. Soumettez une décision : la lecture des agents s'affichera ici.",
